@@ -40,7 +40,7 @@ const Stepper = () => {
   return (
     <div
       ref={stepperRef}
-      className={`fixed top-20 left-5 z-40 flex flex-col gap-2 py-3 px-2
+      className={`fixed top-20 left-5 z-40 flex flex-col gap-2 py-3 px-2 mt-15
         ${isExpanded ? 'w-60 bg-white/60 rounded-4xl border border-white ' : 'w-16 bg-white/60 border border-white rounded-full'}
         backdrop-blur-sm shadow-lg transition-all duration-80`}
     >

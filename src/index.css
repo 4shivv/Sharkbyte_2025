@@ -10,6 +10,12 @@
   --font-roboto: "Roboto", sans-serif;
   --font-inter: "Inter", sans-serif;
   --font-rubik: "Rubik", sans-serif;  
+  --color-mint: #20B892;
+  --color-darkGreen: #133930;
+  --color-jungle: #2CAC8C;
+  --color-pine: #2CAC8C;
+  --color-forest: #226C5A;
+  --color-turquoise: #45A079;
 }
 
 @layer utilities {
@@ -20,4 +26,6 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  
 }

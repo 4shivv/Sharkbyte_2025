@@ -1,100 +1,98 @@
-import React, { useEffect, useState } from 'react'; 
-import { Link, useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
 
 const HeroSection = () => {
   const [showArrow, setShowArrow] = useState(false);
-  const [blobs, setBlobs] = useState([
-    { id: 1, color: "from-blue-600 to-blue-500/80" },
-    { id: 2, color: "from-red-700 to-red-600/90" },
-    { id: 3, color: "from-green-600 to-green-500/80" },
-    { id: 4, color: "from-purple-600 to-purple-500/80" },
-    { id: 5, color: "from-pink-600 to-pink-500/80" },
-  ]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowArrow(true), 5000);
+    const timer = setTimeout(() => setShowArrow(true), 4000);
     return () => clearTimeout(timer);
   }, []);
 
-  const triggerExit = () => {
-    setTimeout(() => navigate('/SignIn'), 600);
-  };
-
-  useEffect(() => {
-    const handleScroll = () => showArrow && triggerExit();
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [showArrow]);
-
-
-  const generateRandomStyle = () => {
-    const baseWidth = 80 + Math.random() * 150; 
-    const baseHeight = 80 + Math.random() * 120;
-    return {
-      top: `${Math.random() * 80}vh`,
-      left: `${Math.random() * 90}vw`,
-      width: `${baseWidth}px`,
-      height: `${baseHeight}px`,
-      opacity: 1.0, 
-    };
-  };
-
-
-  useEffect(() => {
-    setBlobs(prev => prev.map(blob => ({ ...blob, style: generateRandomStyle() })));
-    const interval = setInterval(() => {
-      setBlobs(prev => prev.map(blob => ({ ...blob, style: generateRandomStyle() })));
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <>
-    
-      <div className="absolute w-full h-auto pointer-events-none -z-10">
-        {blobs.map(blob => (
-          <div
-            key={blob.id}
-            className={`rounded-full blur-3xl fixed transition-all duration-3000 ease-in-out bg-gradient-to-r ${blob.color}`}
-            style={blob.style}
-          ></div>
-        ))}
-      </div>
+    <div className="relative w-screen bg-white ">
+      {/* Background base — gives it its own color */}
+     
 
-      <section className="min-h-[90vh] xl:h-vh flex flex-col items-center justify-center text-center px-5 gap-5 w-auto h-auto ">
-        <h1 className="text-2xl md:text-6xl sm:text-5xl font-montserrat font-medium mb-2 flex flex-col gap-2 tracking-[0.02em] ">
-          <span>Clinix: Seamless Care </span>
-          <span>Starts Here.</span>
-        </h1>
-        <p className="text-xs sm:text-xs md:text-base font-inter text-gray-700 max-w-md w-full sm:w-sm lg:w-md mb-6 leading-relaxed">
-          Appointments made fast. Records made simple. Care made awesome.
-        </p>
-        <div className="flex flex-row gap-5 font-inter">
+      {/* Moving grid lines layered above bg but below content */}
+     
+
+      {/* Foreground content */}
+      <section className="relative z-20 min-h-[90vh] flex flex-col items-center justify-center text-center px-6">
+        <div className="flex flex-col items-center justify-center gap-3 animate-fadeInUp">
+          <h1 className="flex flex-col text-5xl md:text-6xl font-poppins font-semibold text-darkGreen mb-1 tracking-tight leading-tight">
+
+            <span>Move with <span className="text-pine">purpose</span>, spend </span>
+            <span> with meaning.</span>
+          </h1>
+          <p className="text-base md:text-lg font-inter text-gray-600 max-w-md leading-relaxed">
+            Navigate your finances with clarity and confidence.
+          </p>
+        </div>
+
+        {/* CTA Buttons */}
+        <div className="mt-8 flex flex-row gap-5 font-inter animate-fadeInSlow">
           <Link
-            to="/SignIn"
-            className="flex items-center px-6 py-2 bg-black text-white rounded-full hover:bg-zinc-700 transition-colors whitespace-nowrap"
+            to="/checkin"
+            className="flex items-center px-8 py-2.5 bg-forest text-white rounded-full hover:bg-[#1a5547] transition-all duration-300 shadow-sm hover:shadow-md"
           >
             Get Started
           </Link>
           <Link
-            to="/Login"
-            className="flex items-center px-6 py-2 bg-transparent text-black rounded-full border-2 border-black hover:bg-zinc-300/50 transition-colors whitespace-nowrap"
+            to="/"
+            className="flex items-center px-8 py-2.5 bg-transparent text-forest rounded-full border-2 border-forest hover:bg-forest/10 transition-all duration-300"
           >
             Learn More
           </Link>
         </div>
+
+        {/* Bounce Arrow */}
         {showArrow && (
-          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-5 cursor-pointer">
-            <button onClick={() => navigate('/SignIn')} className="cursor-pointer">
-              <FontAwesomeIcon icon={faArrowDown} className="animate-bounce hover:scale-120 transition-all" />
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 animate-fadeInSlow">
+            <button
+              onClick={() => navigate("/")}
+              className="cursor-pointer"
+            >
+              <FontAwesomeIcon
+                icon={faArrowDown}
+                className="animate-bounce text-forest text-2xl hover:scale-110 transition-transform"
+              />
             </button>
           </div>
         )}
       </section>
-    </>
+
+      {/* Tailwind animations */}
+      <style>
+        {`
+          @keyframes gridMove {
+            0% { background-position: 0 0, 0 0; }
+            100% { background-position: 40px 40px, 40px 40px; }
+          }
+
+          @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+          }
+
+          @keyframes fadeInSlow {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+          }
+
+          .animate-fadeInUp {
+            animation: fadeInUp 1s ease-out forwards;
+          }
+
+          .animate-fadeInSlow {
+            animation: fadeInSlow 1.6s ease-out forwards;
+          }
+        `}
+      </style>
+    </div>
   );
 };
 

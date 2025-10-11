@@ -12,7 +12,6 @@ export const Records = () => {
   const [openDropdown, setOpenDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
-
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -39,18 +38,29 @@ export const Records = () => {
   };
 
   return (
-    <div className="flex justify-center items-start px-4">
-      <form className="w-full max-w-lg p-6 flex flex-col gap-6 font-inter" onSubmit={handleSubmit}>
-        <h2 className="text-xl font-medium font-roboto text-gray-900">Medical Records</h2>
-        <p className="text-sm text-gray-500">Please complete all required fields.</p>
+    <div className="flex justify-center items-start px-4 mt-20">
+      <form className="w-full max-w-md md:max-w-lg p-4 md:p-6 flex flex-col gap-4 md:gap-5 font-inter" onSubmit={handleSubmit}>
+        <h2 className="text-lg md:text-xl font-medium font-roboto text-gray-900">Medical Records</h2>
+        <p className="text-sm md:text-md text-gray-500">Please complete all required fields.</p>
 
-       
         <div className="flex flex-col gap-1 relative" ref={dropdownRef}>
-          <label className="text-gray-800 font-medium">Record Type</label>
+          <div className="flex-1 flex flex-col gap-1 mb-2">
+            <label className="text-gray-800 font-medium text-sm md:text-md">Id</label>
+            <input
+              type="text"
+              name="provider"
+              placeholder="#123456"
+              value={formData.id}
+              onChange={handleChange}
+              className="rounded-lg w-full py-1 md:py-2 px-2 md:px-3 text-sm md:text-md text-gray-900 bg-white/30 border border-gray-300 hover:border-gray-700/50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-50"
+              required
+            />
+          </div>
+          <label className="text-gray-800 font-medium text-sm md:text-md">Record Type</label>
           <button
             type="button"
             onClick={() => setOpenDropdown((prev) => !prev)}
-            className="rounded-lg w-full py-1 px-2 text-gray-900 bg-white/30 border border-gray-300 hover:border-gray-700/50 focus:outline-none focus:ring-4 focus:ring-blue-400/50 flex justify-between items-center transition-all duration-50"
+            className="rounded-lg w-full py-1 md:py-2 px-2 md:px-3 text-sm md:text-md text-gray-900 bg-white/30 border border-gray-300 hover:border-gray-700/50 focus:outline-none focus:ring-2 focus:ring-blue-400 flex justify-between items-center transition-all duration-50"
           >
             <span className={formData.recordType ? "text-gray-900" : "text-gray-400"}>
               {formData.recordType || "Select type"}
@@ -68,12 +78,12 @@ export const Records = () => {
           </button>
 
           {openDropdown && (
-            <ul className="absolute top-full w-full mt-4 rounded-lg border border-gray-300 bg-white shadow-md z-20 overflow-hidden transition-all duration-50">
+            <ul className="absolute top-full w-full mt-2 rounded-lg border border-gray-300 bg-white shadow-md z-20 overflow-hidden transition-all duration-50">
               {["Visit", "Lab Results", "Imaging", "Other"].map((option) => (
                 <li
                   key={option}
                   onClick={() => handleSelect(option)}
-                  className="px-2 py-1 text-gray-900 hover:bg-gray-200 cursor-pointer transition-all duration-50"
+                  className="px-2 py-1 text-sm md:text-md text-gray-900 hover:bg-gray-200 cursor-pointer transition-all duration-50"
                 >
                   {option}
                 </li>
@@ -82,78 +92,49 @@ export const Records = () => {
           )}
         </div>
 
-        
-        <div className="flex flex-col md:flex-row gap-3">
+        <div className="flex flex-col md:flex-row gap-2 md:gap-3">
           <div className="flex-1 flex flex-col gap-1">
-            <label className="text-gray-800 font-medium">Provider</label>
+            <label className="text-gray-800 font-medium text-sm md:text-md">Provider</label>
             <input
               type="text"
               name="provider"
               placeholder="Dr. Smith"
               value={formData.provider}
               onChange={handleChange}
-              className="rounded-lg w-full py-1 px-2 text-gray-900 bg-white/30 border border-gray-300 hover:border-gray-700/50 focus:outline-none focus:ring-4 focus:ring-blue-400/50 transition-all duration-50"
+              className="rounded-lg w-full py-1 md:py-2 px-2 md:px-3 text-sm md:text-md text-gray-900 bg-white/30 border border-gray-300 hover:border-gray-700/50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-50"
               required
             />
           </div>
           <div className="flex-1 flex flex-col gap-1">
-            <label className="text-gray-800 font-medium">Date of Visit</label>
+            <label className="text-gray-800 font-medium text-sm md:text-md">Date of Visit</label>
             <input
               type="date"
               name="dateOfVisit"
               value={formData.dateOfVisit}
               onChange={handleChange}
-              className="rounded-lg w-full py-1 px-2 text-gray-900 bg-white/30 border border-gray-300 hover:border-gray-700/50 focus:outline-none focus:ring-4 focus:ring-blue-400/50 transition-all duration-50"
+              className="rounded-lg w-full py-1 md:py-2 px-2 md:px-3 text-sm md:text-md text-gray-900 bg-white/30 border border-gray-300 hover:border-gray-700/50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-50"
               required
             />
           </div>
         </div>
 
-       
         <div className="flex flex-col gap-1">
-          <label className="text-gray-800 font-medium">Diagnosis</label>
-          <input
-            type="text"
-            name="diagnosis"
-            placeholder="E.g. Hypertension"
-            value={formData.diagnosis}
-            onChange={handleChange}
-            className="rounded-lg w-full py-1 px-2 text-gray-900 bg-white/30 border border-gray-300 hover:border-gray-700/50 focus:outline-none focus:ring-4 focus:ring-blue-400/50 transition-all duration-50"
-          />
-        </div>
-
-        
-        <div className="flex flex-col gap-1">
-          <label className="text-gray-800 font-medium">Medications</label>
-          <textarea
-            name="medications"
-            placeholder="List prescribed medications"
-            value={formData.medications}
-            onChange={handleChange}
-            rows={2}
-            className="rounded-lg w-full py-1 px-2 text-gray-900 bg-white/30 border border-gray-300 hover:border-gray-700/50 focus:outline-none focus:ring-4 focus:ring-blue-400/50 transition-all duration-50 resize-none"
-          />
-        </div>
-
-       
-        <div className="flex flex-col gap-1">
-          <label className="text-gray-800 font-medium">Notes</label>
+          <label className="text-gray-800 font-medium text-sm md:text-md">Notes</label>
           <textarea
             name="notes"
             placeholder="Additional notes or comments"
             value={formData.notes}
             onChange={handleChange}
             rows={3}
-            className="rounded-lg w-full py-1 px-2 text-gray-900 bg-white/30 border border-gray-300 hover:border-gray-700/50 focus:outline-none focus:ring-4 focus:ring-blue-400/50 transition-all duration-50 resize-none"
+            className="rounded-lg w-full py-1 md:py-2 px-2 md:px-3 text-sm md:text-md text-gray-900 bg-white/30 border border-gray-300 hover:border-gray-700/50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-50 resize-none"
           />
         </div>
 
-       
         <button
           type="submit"
-          className="w-full py-2 px-4 rounded-full bg-black hover:bg-gray-900 cursor-pointer text-white font-inter font-medium transition-all duration-50"
+          className="w-full py-1.5 md:py-2 px-3 rounded-full bg-black hover:bg-gray-900 cursor-pointer text-white text-sm md:text-md font-inter font-medium transition-all duration-50"
         >
-          Save Record
+          Look Up
         </button>
       </form>
     </div>

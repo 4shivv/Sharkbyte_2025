@@ -48,7 +48,7 @@ export const ChatBot = () => {
 
   return (
     <div className="fixed top-15 inset-x-0 bottom-0 z-50 flex w-screen font-inter">
-      <div className="flex flex-col w-screen bg-gray-100/25 backdrop-blur-sm shadow-lg transition-all duration-150">
+      <div className="flex flex-col w-screen transition-all duration-150">
         
        
         <div className="flex items-center justify-between px-6 py-4 border-gray-300">
