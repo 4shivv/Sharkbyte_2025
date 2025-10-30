@@ -16,6 +16,7 @@ import { Map } from './Pages/Map'
 import SpendingPage from './Pages/Spending'
 import { Analytics } from './Pages/Analytics'
 import { Footer } from './components/Footer'
+import CollaborationBoard from './Pages/Collboration'
 
 
 
@@ -30,7 +31,7 @@ function App() {
           <Route path='/signup' element={<SignInPage/>}/>
           <Route path='/chat' element={<Chat/>}/>
           <Route path='/spending' element={<SpendingPage/>}/>
-          <Route path='/analytics' element={<Analytics/>}/>
+          <Route path='/collab' element={<CollaborationBoard/>}/>
           <Route path="/map" element={<Map />}>
             
           </Route>
