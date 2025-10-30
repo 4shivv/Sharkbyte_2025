@@ -2,6 +2,8 @@ import React, { createContext } from 'react'
 import NavBar from '../components/NavBar'
 import { Outlet } from 'react-router-dom'
 import { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
 
 export const ScreenContext = createContext({isMobile:false});
 
@@ -20,6 +22,9 @@ export const RootLayout = () => {
     <ScreenContext.Provider value={{isMobile}}>
         <NavBar/>
         <Outlet/>
+        <div className="fixed bottom-6 right-6 text-md text-gray-600 z-10 hover:text-gray-500  rounded-full p-3 cursor-pointer hover:bg-gray-100 transition-colors">
+          <FontAwesomeIcon icon={faCircleQuestion} className="text-2xl" />
+        </div>
     </ScreenContext.Provider>
   )
 }

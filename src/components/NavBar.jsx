@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faXmark, faStickyNote } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faXmark, faStickyNote, } from '@fortawesome/free-solid-svg-icons';
+import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
+
 import { ScreenContext } from '../Layouts/RootLayout';
 
 const NavBar = () => {
@@ -59,7 +61,10 @@ const NavBar = () => {
   }, [activeIndex]);
 
   return (
-    !['/login', '/signup', '/collab'].includes(location.pathname) && (<nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] md:w-auto font-inter">
+    <>
+    
+
+    {!['/login', '/signup', '/collab'].includes(location.pathname) && (<nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] md:w-auto font-inter">
       {/* Entire nav pill container */}
       <div className="relative flex items-center gap-6 px-3 py-2.5 bg-gray-100/50  backdrop-blur-lg border border-gray-300 shadow- rounded-full transition-all duration-300">
         {/* Brand */}
@@ -173,7 +178,8 @@ const NavBar = () => {
           </div>
         </div>
       )}
-    </nav>)
+    </nav>)}
+    </>
   );
 };
 
