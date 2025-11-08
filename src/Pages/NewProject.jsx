@@ -323,7 +323,7 @@ const ProjectOverview = () => {
 
                 <button
                   onClick={() => setViewMode((v) => (v === "cards" ? "table" : "cards"))}
-                  className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-white border text-sm"
+                  className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-white border border-gray-300 cursor-pointer hover:bg-gray-100 transition-colors text-sm"
                 >
                   <FontAwesomeIcon icon={faTachometerAlt} />
                   {viewMode === "cards" ? "Table view" : "Card view"}

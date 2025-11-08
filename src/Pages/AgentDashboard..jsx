@@ -336,7 +336,7 @@ const AgentDashboard = () => {
             {/* right visual - MacBook-like card */}
             <div className="col-span-12 lg:col-span-5">
               <div
-                className="rounded-3xl   p-6 relative overflow-hidden border border-gray-300"
+                className="rounded-3xl   p-6 relative overflow-hidden border border-gray-200"
                 
                 
               >
@@ -352,9 +352,10 @@ const AgentDashboard = () => {
                         <div className="text-xs text-gray-500 uppercase">Live Cloud Scan</div>
                         <div className="text-lg text-gray-800 font-semibold mt-1">Instruction Hierarchy Audit</div>
                       </div>
-                      <div className="text-right">
-                        <div className="text-xs text-gray-500">Risk score</div>
-                        <div className="text-xl font-bold text-gray-900">7.2 / 10</div>
+                      <div className="text-right flex items-center gap-3 justify-center">
+                        <div className="text-xs text-gray-500">Risk</div>
+                        <div className="px-3 py-1 rounded-full bg-green-50 text-green-800 text-sm border border-green-100">Low</div>
+
                       </div>
                     </div>
 
@@ -510,13 +511,13 @@ const AgentDashboard = () => {
               return (
                 <article
                   key={agent.id}
-                  className={`p-6 bg-white rounded-2xl soft-shadow glass-card card-reveal ${idx < 6 ? "visible" : ""}`}
+                  className={`p-6 bg-white rounded-2xl border border-gray-300  card-reveal ${idx < 6 ? "visible" : ""}`}
                   tabIndex={0}
                   aria-labelledby={`agent-${agent.id}`}
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-gray-50 to-white flex items-center justify-center border border-gray-100">
-                      <FontAwesomeIcon icon={faBrain} className="text-gray-700 text-2xl" />
+                    <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-gray-50 to-white flex items-center border-gray-100 bg-gray-100 justify-center border">
+                      <FontAwesomeIcon icon={faBrain} className="text-gray-700 text-2xl " />
                     </div>
 
                     <div className="flex-1">
@@ -544,7 +545,7 @@ const AgentDashboard = () => {
                           <div className={`text-2xl font-bold ${risk.text}`}>{agent.score}</div>
                         </div>
 
-                        <div className="text-xs text-gray-500 text-right">
+                        <div className="text-xs text-gray-500 text-left">
                           <div>Last scan</div>
                           <div className="mt-1 font-medium">{agent.lastScan}</div>
                           <div className="text-xs text-gray-400">{agent.scans} scans</div>
@@ -554,25 +555,25 @@ const AgentDashboard = () => {
                       <div className="mt-4 flex items-center gap-3">
                         <button
                           onClick={() => openAgent(agent)}
-                          className="px-3 py-2 rounded-md bg-gray-900 text-white text-sm"
+                          className="px-3 py-1 rounded-md bg-gray-900 text-white text-sm"
                         >
                           View
                         </button>
                         <button
                           onClick={() => scanNow(agent.id)}
-                          className="px-3 py-2 rounded-md border text-sm"
+                          className="px-3 py-1 rounded-md border border-gray-300 text-sm"
                         >
-                          Scan now
+                          Scan 
                         </button>
 
                         <div className="ml-auto flex items-center gap-2">
                           <button
                             onClick={() => exportCSV()}
-                            className="text-xs px-3 py-2 rounded-md bg-white border"
+                            className="text-xs px-3 py-1.5 rounded-md bg-white border border-gray-300"
                           >
                             Export
                           </button>
-                          <Link to={`/agent/${agent.id}`} className="text-xs px-3 py-2 rounded-md border bg-white">
+                          <Link to={`/agent/${agent.id}`} className="text-xs px-3 py-1.5 rounded-md border border-gray-300 bg-white">
                             Manage
                           </Link>
                         </div>
@@ -589,7 +590,7 @@ const AgentDashboard = () => {
             )}
           </section>
         ) : (
-          <section aria-label="Agent table" className="bg-white rounded-2xl soft-shadow overflow-hidden">
+          <section aria-label="Agent table" className="bg-white rounded-2xl border border-gray-300 overflow-hidden">
             <div className="p-4 border-b border-gray-100 flex items-center justify-between">
               <div>
                 <div className="text-sm text-gray-500">Showing</div>
@@ -597,7 +598,7 @@ const AgentDashboard = () => {
               </div>
 
               <div className="flex items-center gap-3">
-                <button onClick={exportCSV} className="px-3 py-2 rounded-md bg-gray-900 text-white">Export CSV</button>
+                <button onClick={exportCSV} className="px-3 py-1.5 text-sm rounded-md bg-gray-900 text-white">Export CSV</button>
                 <div className="text-xs text-gray-500">Tip: click a row to open details</div>
               </div>
             </div>
@@ -625,7 +626,7 @@ const AgentDashboard = () => {
                       >
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-9 h-9 rounded-lg bg-gray-50 flex items-center justify-center border border-gray-100">
+                            <div className="w-14 h-14 rounded-lg bg-gray-50 flex items-center justify-center border border-gray-100">
                               <FontAwesomeIcon icon={faBrain} />
                             </div>
                             <div>
@@ -660,7 +661,7 @@ const AgentDashboard = () => {
 
         {/* Large visual analytics block (SVG chart + long caption) */}
         <section className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 p-6 bg-white rounded-2xl soft-shadow glass-card">
+          <div className="lg:col-span-2 p-6 bg-gray-50 rounded-2xl ">
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-xs text-gray-500">Risk over time</div>
@@ -717,29 +718,29 @@ const AgentDashboard = () => {
 
             <div className="mt-6 flex items-center gap-3">
               <button className="px-4 py-2 rounded-md bg-gray-900 text-white">Open analytics</button>
-              <button className="px-4 py-2 rounded-md border">Compare periods</button>
+              <button className="px-4 py-2 rounded-md border border-gray-300 cursor-pointer">Compare periods</button>
             </div>
           </div>
 
-          <aside className="p-6 bg-white rounded-2xl soft-shadow glass-card">
+          <aside className="p-6 bg-gray-50 rounded-2xl">
             <div className="text-xs text-gray-500">Quick actions</div>
             <div className="mt-3 grid gap-3">
-              <button onClick={() => setAgents((s)=>[...s, { id: `AGNT-${Math.floor(Math.random()*900)+100}`, name: "New Agent "+(s.length+1), owner: "You", score: 78, risk: "Medium", scans: 0, lastScan: new Date().toISOString().slice(0,10) }])} className="px-3 py-2 rounded-md bg-white border text-sm">Create test agent</button>
-              <button onClick={() => setAgents((s)=>s.slice(0, Math.max(1,s.length-1)))} className="px-3 py-2 rounded-md border text-sm">Remove last agent</button>
-              <button onClick={() => exportCSV()} className="px-3 py-2 rounded-md bg-gray-900 text-white text-sm">Export all</button>
+              <button onClick={() => setAgents((s)=>[...s, { id: `AGNT-${Math.floor(Math.random()*900)+100}`, name: "New Agent "+(s.length+1), owner: "You", score: 78, risk: "Medium", scans: 0, lastScan: new Date().toISOString().slice(0,10) }])} className="px-3 py-2 rounded-md bg-white border text-sm hover:bg-gray-200 transition-colors border-gray-300 cursor-pointer">Create test agent</button>
+              <button onClick={() => setAgents((s)=>s.slice(0, Math.max(1,s.length-1)))} className="px-3 py-2 rounded-md text-sm border border-gray-300 cursor-pointer hover:bg-gray-200 transition-colors">Remove last agent</button>
+              <button onClick={() => exportCSV()} className="px-3 py-2 rounded-md bg-gray-900 text-white text-sm cursor-pointer hover:bg-black/85 ">Export all</button>
             </div>
 
             <div className="mt-6 text-xs text-gray-500">Integrations</div>
             <div className="mt-2 flex items-center gap-2">
-              <div className="p-2 rounded-md bg-gray-50 border text-xs">Slack</div>
-              <div className="p-2 rounded-md bg-gray-50 border text-xs">PagerDuty</div>
-              <div className="p-2 rounded-md bg-gray-50 border text-xs">S3</div>
+              <div className="p-2 rounded-md bg-gray-50 border border-gray-300 text-xs">Slack</div>
+              <div className="p-2 rounded-md bg-gray-50 border border-gray-300 text-xs">PagerDuty</div>
+              <div className="p-2 rounded-md bg-gray-50 border border-gray-300 text-xs">S3</div>
             </div>
           </aside>
         </section>
 
         {/* Large table of agents w/ simulated pagination controls (longer file) */}
-        <section className="mt-12 bg-white rounded-2xl soft-shadow p-6 glass-card">
+        <section className="mt-12 bg-white rounded-2xl border border-gray-300 p-6">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-xs text-gray-500">Fleet overview</div>
@@ -748,7 +749,7 @@ const AgentDashboard = () => {
 
             <div className="flex items-center gap-3">
               <div className="text-xs text-gray-500">Rows per page</div>
-              <select className="p-2 rounded-md border bg-white text-sm">
+              <select className="px-2 py-1 rounded-md border text-sm border-gray-300 bg-white cursor-pointer">
                 <option>10</option>
                 <option>25</option>
                 <option>50</option>
@@ -775,7 +776,7 @@ const AgentDashboard = () => {
                 {visibleAgents.map((a) => {
                   const risk = getRiskColor(a.score);
                   return (
-                    <tr key={a.id} className="hover:bg-gray-50">
+                    <tr key={a.id} className="hover:bg-gray-50 rounded-xl">
                       <td className="px-4 py-3 text-sm font-mono">{a.id}</td>
                       <td className="px-4 py-3">
                         <div className="font-medium">{a.name}</div>
@@ -791,7 +792,7 @@ const AgentDashboard = () => {
                       <td className="px-4 py-3 text-sm">{a.scans}</td>
                       <td className="px-4 py-3 text-sm">{a.lastScan}</td>
                       <td className="px-4 py-3 text-right">
-                        <button onClick={() => openAgent(a)} className="px-3 py-2 rounded-md border text-sm">Details</button>
+                        <button onClick={() => openAgent(a)} className="px-3 py-2 text-xs rounded-md border border-gray-300 cursor-pointer">Details</button>
                       </td>
                     </tr>
                   );
@@ -803,10 +804,10 @@ const AgentDashboard = () => {
           {/* pagination */}
           <div className="mt-6 flex items-center justify-between">
             <div className="text-sm text-gray-500">Showing {visibleAgents.length} of {agents.length}</div>
-            <div className="flex items-center gap-2 text-sm">
-              <button className="px-3 py-2 rounded-md border">Prev</button>
-              <div className="px-3 py-2 rounded-md border">1</div>
-              <button className="px-3 py-2 rounded-md border">Next</button>
+            <div className="flex items-center gap-2 text-xs">
+              <button className="px-3 py-2 rounded-md border border-gray-300 cursor-pointer">Prev</button>
+              <div className="px-3 py-2 rounded-md border border-gray-300 cursor-pointer">1</div>
+              <button className="px-3 py-2 rounded-md border border-gray-300 cursor-pointer">Next</button>
             </div>
           </div>
         </section>
@@ -816,9 +817,9 @@ const AgentDashboard = () => {
       {selectedAgent && (
         <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={closeAgent} />
-          <div className="relative max-w-4xl w-full bg-white rounded-3xl p-6 soft-shadow z-50">
+          <div className="relative max-w-4xl w-full bg-white rounded-3xl p-6  z-50">
             <div className="flex items-start gap-4">
-              <div className="w-16 h-16 rounded-xl bg-gray-50 flex items-center justify-center border">
+              <div className="w-16 h-16 rounded-xl border-gray-100 bg-gray-100 flex items-center justify-center border">
                 <FontAwesomeIcon icon={faBrain} className="text-2xl" />
               </div>
               <div className="flex-1">
@@ -889,12 +890,12 @@ const AgentDashboard = () => {
       {/* Export toast */}
       {showingExportToast && (
         <div className="export-toast">
-          <div className="bg-white rounded-md p-3 shadow-md border">
+          <div className="bg-white rounded-lg p-3 shadow-md border  border-gray-300">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-gray-50 border flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-gray-50 border border-gray-400 flex items-center justify-center">
                 <FontAwesomeIcon icon={faDownload} />
               </div>
-              <div>
+              <div className="text-sm">
                 <div className="font-semibold">Export started</div>
                 <div className="text-sm text-gray-500">Your CSV is downloading — check your downloads folder.</div>
               </div>
@@ -908,8 +909,9 @@ const AgentDashboard = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gray-900 text-white flex items-center justify-center font-semibold">AG</div>
-              <div>
+                <div className="w-10 h-10 rounded-full bg-gray-900 text-white flex items-center justify-center">
+                  <FontAwesomeIcon icon={faShieldHalved} />
+                </div>              <div>
                 <div className="font-semibold">AgentGuard</div>
                 <div className="text-sm text-gray-500">Operationalized security for agents</div>
               </div>

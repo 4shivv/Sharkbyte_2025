@@ -475,7 +475,9 @@ const AppleLikeHero = () => {
           <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gray-900 text-white flex items-center justify-center">AG</div>
+                <div className="w-10 h-10 md:w-12 rounded-full bg-gray-900 text-white flex items-center justify-center">
+                  <FontAwesomeIcon icon={faShieldHalved} />
+                </div>
                 <div>
                   <div className="font-semibold">AgentGuard</div>
                   <div className="text-sm text-gray-500">Operationalized security for AI agents</div>
