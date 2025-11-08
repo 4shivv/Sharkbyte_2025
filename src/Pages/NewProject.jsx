@@ -138,7 +138,7 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
         className="bg-white rounded-2xl soft-shadow w-full max-w-lg p-6 lg:p-8 transform transition-transform scale-100 opacity-100"
         onClick={e => e.stopPropagation()} // Prevent closing on modal content click
       >
-        <div className="flex items-center justify-between border-b border-gray-300 pb-4 mb-4">
+        <div className="flex items-center justify-between pb-4 mb-4">
           <h2 className="text-xl font-bold text-gray-900 flex items-center gap-3">
             <FontAwesomeIcon icon={faPlus} className="text-sky-700 " />
             Start New Project
@@ -165,7 +165,7 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-lg "
+              className="mt-1 block w-full px-3 py-1.5 border border-gray-200 rounded-lg "
               placeholder="e.g., Q1 Billing System Upgrade"
             />
           </div>
@@ -181,7 +181,7 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
               value={owner}
               onChange={(e) => setOwner(e.target.value)}
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-lg"
+              className="mt-1 block w-full px-3 py-1.5 border border-gray-200 rounded-lg"
               placeholder="Full Name"
             />
           </div>
@@ -200,7 +200,7 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
                 required
                 min="0"
                 step="1000"
-                className="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-lg"
+                className="mt-1 block w-full px-3 py-1.5 border border-gray-200 rounded-lg"
                 placeholder="e.g., 250000"
               />
             </div>
@@ -215,7 +215,7 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
                 onChange={(e) => setTeamSize(e.target.value)}
                 required
                 min="1"
-                className="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-lg"
+                className="mt-1 block w-full px-3 py-1.5 border border-gray-200 rounded-lg"
                 placeholder="e.g., 5"
               />
             </div>
@@ -232,7 +232,7 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
               value={deadline}
               onChange={(e) => setDeadline(e.target.value)}
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-lg"
+              className="mt-1 block w-full px-3 py-1.5 border border-gray-200 rounded-lg"
             />
           </div>
 
@@ -484,18 +484,18 @@ const ProjectOverview = () => {
       {selectedProject && (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4 transition-opacity" onClick={closeProject}>
            {/* Simulate the look of the existing modal: Uses soft-shadow and rounded-2xl */}
-          <div className="bg-white rounded-2xl soft-shadow w-full max-w-xl p-6 lg:p-8 transform transition-transform scale-100 opacity-100" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between border-b pb-4 mb-4">
+          <div className="bg-white rounded-2xl w-full max-w-xl p-6 lg:p-8 transform transition-transform scale-100 opacity-100" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between pb-4 mb-4">
               <h2 className="text-xl font-bold text-gray-900 flex items-center gap-3">
                 <FontAwesomeIcon icon={faHistory} className="text-sky-700" />
                 Project Details: {selectedProject.id}
               </h2>
               <button 
                 onClick={closeProject} 
-                className="p-2 text-gray-400 hover:text-gray-900 transition-colors rounded-full"
+                className="p-2 text-gray-400 cursor-pointer hover:text-gray-900 transition-colors rounded-full"
                 aria-label="Close project details"
               >
-                <FontAwesomeIcon icon={faTimes} />
+                <FontAwesomeIcon icon={faXmark} />
               </button>
             </div>
             {/* Project Details Content */}
@@ -517,7 +517,7 @@ const ProjectOverview = () => {
                 </div>
             </div>
             <div className="mt-6 flex justify-end">
-                 <button onClick={closeProject} className="px-4 py-2 bg-gray-100 rounded-full text-sm font-semibold hover:bg-gray-200">
+                 <button onClick={closeProject} className="px-4 py-2 cursor-pointer bg-gray-100 rounded-full text-sm font-semibold hover:bg-gray-200">
                     Close
                 </button>
             </div>

@@ -15,7 +15,8 @@ import {
   faChevronDown,
   faDownload,
   faEllipsisV,
-  faTimes, // Added for the modal close button
+  faTimes,
+  faXmark, // Added for the modal close button
 } from "@fortawesome/free-solid-svg-icons";
 
 
@@ -91,20 +92,20 @@ const RegisterAgentModal = ({ isOpen, onClose, onRegister }) => {
         onClick={onClose} // Close on backdrop click
     >
       <div 
-        className="bg-white rounded-3xl p-8 w-full max-w-lg mx-auto transform transition-all duration-300 scale-100"
+        className="bg-white rounded-2xl p-8 w-full max-w-lg mx-auto transform transition-all duration-300 scale-100"
         onClick={(e) => e.stopPropagation()} // Prevent clicking modal content from closing it
       >
-        <div className="flex justify-between items-start border-b pb-4 mb-4">
+        <div className="flex justify-between items-center pb-4 mb-4">
           <h2 className="text-xl font-bold text-gray-900 flex items-center gap-3">
             <FontAwesomeIcon icon={faPlus} className="text-sky-700" />
             Register New Agent
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-700 transition"
+            className="text-gray-400 cursor-pointer hover:text-gray-700 transition flex items-center hover:bg-gray-100 px-2 py-2.5 rounded-full"
             aria-label="Close registration form"
           >
-            <FontAwesomeIcon icon={faTimes} className="text-xl" />
+            <FontAwesomeIcon icon={faXmark} className="text-lg" />
           </button>
         </div>
 
@@ -120,7 +121,7 @@ const RegisterAgentModal = ({ isOpen, onClose, onRegister }) => {
               value={agentName}
               onChange={(e) => setAgentName(e.target.value)}
               placeholder="e.g., Internal QA Agent"
-              className="mt-1 block w-full rounded-lg border-gray-200 p-2 border"
+              className="mt-1 block w-full rounded-lg border-gray-200 px-2 py-1.5 border"
             />
           </div>
           
@@ -135,7 +136,7 @@ const RegisterAgentModal = ({ isOpen, onClose, onRegister }) => {
               value={agentOwner}
               onChange={(e) => setAgentOwner(e.target.value)}
               placeholder="e.g., Alice Johnson"
-              className="mt-1 block w-full rounded-lg border-gray-200 p-2 border"
+              className="mt-1 block w-full rounded-lg border-gray-200 px-2 py-1.5 border"
             />
           </div>
 
@@ -147,7 +148,7 @@ const RegisterAgentModal = ({ isOpen, onClose, onRegister }) => {
               id="agent-type"
               value={agentType}
               onChange={(e) => setAgentType(e.target.value)}
-              className="mt-1 block w-full rounded-lg border-gray-200 p-2 border bg-white"
+              className="mt-1 block w-full rounded-lg border-gray-200 px-2 py-1.5 border bg-white"
             >
               <option value="LLM">LLM-based (Large Language Model)</option>
               <option value="RAG">RAG System (Retrieval-Augmented)</option>
@@ -172,13 +173,13 @@ const RegisterAgentModal = ({ isOpen, onClose, onRegister }) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-full hover:bg-gray-50 transition"
+              className="px-4 py-2 text-sm cursor-pointer font-medium text-gray-700 bg-white border border-gray-300 rounded-full hover:bg-gray-50 transition"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-sm font-semibold text-white bg-sky-700 rounded-full hover:bg-sky-800 transition flex items-center gap-2"
+              className="px-4 py-2 text-sm cursor-pointer font-semibold text-white bg-sky-700 rounded-full hover:bg-sky-800 transition flex items-center gap-2"
             >
               <FontAwesomeIcon icon={faPlus} />
               Start Monitoring
@@ -871,26 +872,26 @@ const AgentDashboard = () => {
       {/* Agent Detail Modal (Simulated) */}
       {selectedAgent && (
         <div 
-          className="fixed inset-0 z-[100] overflow-y-auto bg-gray-900 bg-opacity-70 flex items-center justify-center p-4 transition-opacity duration-300"
+          className="fixed inset-0 z-[100] overflow-y-auto bg-black/40 bg-opacity-70 flex items-center justify-center p-4 transition-opacity duration-300"
           aria-modal="true"
           role="dialog"
           onClick={closeAgent}
         >
           <div 
-            className="bg-white rounded-3xl p-8 w-full max-w-2xl mx-auto shadow-2xl transform transition-all duration-300 scale-100"
+            className="bg-white rounded-2xl p-8 w-full max-w-2xl mx-auto transform transition-all duration-300 scale-100"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex justify-between items-start border-b pb-4 mb-4">
+            <div className="flex justify-between items-center pb-4 mb-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
                 <FontAwesomeIcon icon={faBrain} className="text-sky-700" />
                 {selectedAgent.name}
               </h2>
               <button
                 onClick={closeAgent}
-                className="text-gray-400 hover:text-gray-700 transition"
+                className="text-gray-400 cursor-pointer hover:text-gray-700 hover:bg-gray-100 px-2.5 py-1.5 rounded-full  transition"
                 aria-label="Close agent details"
               >
-                <FontAwesomeIcon icon={faTimes} className="text-xl" />
+                <FontAwesomeIcon icon={faXmark} className="text-md" />
               </button>
             </div>
 
@@ -918,7 +919,7 @@ const AgentDashboard = () => {
                 </div>
             </div>
 
-            <h3 className="text-lg font-semibold mt-6 border-t pt-4">Recent Activity</h3>
+            <h3 className="text-lg font-semibold mt-6 border-t border-gray-200 pt-4">Recent Activity</h3>
             <ul className="mt-3 space-y-2 text-sm max-h-48 overflow-y-auto p-2 bg-gray-50 rounded-lg">
                 <li className="flex justify-between items-center p-2 rounded-md hover:bg-white">
                     <span>Scan Completed: Prompt Injection Audit</span>
@@ -943,7 +944,7 @@ const AgentDashboard = () => {
             <div className="flex justify-end pt-6 gap-3">
                 <button
                     onClick={() => scanNow(selectedAgent.id)}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-full hover:bg-gray-50 transition"
+                    className="px-4 py-2 text-sm font-medium cursor-pointer text-gray-700 bg-white border border-gray-300 rounded-full hover:bg-gray-50 transition"
                 >
                     Run New Scan
                 </button>
