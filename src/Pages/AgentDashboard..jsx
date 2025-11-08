@@ -219,7 +219,7 @@ const AgentDashboard = () => {
       .card-reveal.visible { opacity: 1; transform: none; }
 
       /* long accessibility focus ring area */
-      :focus { outline: 2px solid rgba(59,130,246,0.12); outline-offset: 4px; }
+      
 
       /* make table rows alternate with very subtle background */
       .table-row-alt:nth-child(odd) { background: rgba(2,6,23,0.02); }
@@ -316,17 +316,17 @@ const AgentDashboard = () => {
 
               {/* subtle visual cues */}
               <div className="mt-8 grid grid-cols-3 gap-4 max-w-md">
-                <div className="rounded-lg p-3 bg-gray-50 border border-gray-100 ">
+                <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 ">
                   <div className="text-xs uppercase text-gray-500">Average Score</div>
                   <div className="mt-2 text-lg font-semibold">{
                     Math.round(agents.reduce((s, a) => s + a.score, 0) / agents.length)
                   }</div>
                 </div>
-                <div className="rounded-lg p-3 bg-gray-50 border border-gray-100 ">
+                <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 ">
                   <div className="text-xs uppercase text-gray-500">Total Scans</div>
                   <div className="mt-2 text-lg font-semibold">{agents.reduce((s, a) => s + a.scans, 0)}</div>
                 </div>
-                <div className="rounded-lg p-3 bg-gray-50 border border-gray-100 ">
+                <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 ">
                   <div className="text-xs uppercase text-gray-500">Last Activity</div>
                   <div className="mt-2 text-lg font-semibold">{agents.sort((a,b)=>new Date(b.lastScan)-new Date(a.lastScan))[0].lastScan}</div>
                 </div>
@@ -359,8 +359,14 @@ const AgentDashboard = () => {
                       </div>
                     </div>
 
-                    <div className="mt-4 rounded-lg border border-gray-100 p-3 bg-gradient-to-b from-white to-gray-50">
-                      <pre className="text-xs font-mono text-gray-700 overflow-x-auto">
+                    <div className="mt-4 rounded-lg border border-gray-100 p-3 bg-gray-900">
+                      <div className="flex items-center gap-3">
+                      <span className="inline-block w-2 h-2 rounded-full bg-red-400" />
+                      <span className="inline-block w-2 h-2 rounded-full bg-yellow-400" />
+                      <span className="inline-block w-2 h-2 rounded-full bg-green-400" />
+                      <div className="ml-auto text-[10px] text-gray-400">Live</div>
+                    </div>
+                      <pre className="text-xs font-mono text-white overflow-x-auto">
 {`> run: agent-audit --id AGNT-001
 > step 1 : validate inputs
 > step 2 : inspect instruction chain
@@ -371,16 +377,16 @@ const AgentDashboard = () => {
                     </div>
 
                     <div className="mt-4 flex items-center gap-3">
-                      <button className="text-sm inline-flex items-center gap-2 px-4 py-2 rounded-md bg-sky-700 text-white">Open Scan</button>
-                      <button className="text-sm inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gray-50 border border-gray-200">View Diff</button>
+                      <button className="text-sm inline-flex items-center gap-2 px-4 py-2 rounded-md bg-sky-700 text-white cursor-pointer">Open Scan</button>
+                      <button className="text-sm inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gray-100 border border-gray-200 cursor-pointer">View Diff</button>
                     </div>
                   </div>
 
                   {/* small badges */}
                   <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
-                    <div className="rounded-lg p-3 bg-gray-50 border border-gray-100 text-center">Uptime <div className="font-semibold">99.9%</div></div>
-                    <div className="rounded-lg p-3 bg-gray-50 border border-gray-100 text-center">Avg RT <div className="font-semibold">14ms</div></div>
-                    <div className="rounded-lg p-3 bg-gray-50 border border-gray-100 text-center">Scans/day <div className="font-semibold">1.4k</div></div>
+                    <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 text-center"><span className="text-gray-500">Uptime</span> <div className="font-semibold">99.9%</div></div>
+                    <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 text-center"><span className="text-gray-500">Avg RT </span><div className="font-semibold">14ms</div></div>
+                    <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 text-center"><span className="text-gray-500">Scans/day </span><div className="font-semibold">1.4k</div></div>
                   </div>
                 </div>
 
@@ -424,7 +430,7 @@ const AgentDashboard = () => {
                   aria-label="Filter by risk"
                   value={filterRisk}
                   onChange={(e) => setFilterRisk(e.target.value)}
-                  className="px-2 py-1.5 rounded-md border border-gray-300 bg-white text-sm"
+                  className="px-2 py-1.5 rounded-md border border-gray-300 bg-white text-sm cursor-pointer"
                 >
                   <option value="all">All</option>
                   <option value="low">Low</option>
@@ -440,7 +446,7 @@ const AgentDashboard = () => {
                   aria-label="Sort agents"
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="px-2 py-1.5 rounded-md border border-gray-300 bg-white text-sm"
+                  className="px-2 py-1.5 rounded-md border border-gray-300 bg-white text-sm cursor-pointer"
                 >
                   <option value="score_desc">Score (high → low)</option>
                   <option value="score_asc">Score (low → high)</option>
@@ -455,14 +461,14 @@ const AgentDashboard = () => {
                 <div className="inline-flex rounded-md px-1 bg-white border border-gray-100">
                   <button
                     onClick={() => setViewMode("cards")}
-                    className={`px-3 py-1 rounded-md text-sm ${viewMode === "cards" ? "bg-gray-900 text-white" : "bg-white text-gray-700"}`}
+                    className={`px-3 py-1 rounded-md text-sm cursor-pointer ${viewMode === "cards" ? "bg-gray-900 text-white" : "bg-white text-gray-700"}`}
                     aria-pressed={viewMode === "cards"}
                   >
                     Cards
                   </button>
                   <button
                     onClick={() => setViewMode("table")}
-                    className={`px-3 py-1 rounded-md text-sm ${viewMode === "table" ? "bg-gray-900 text-white" : "bg-white text-gray-700"}`}
+                    className={`px-3 py-1 rounded-md text-sm cursor-pointer ${viewMode === "table" ? "bg-gray-900 text-white" : "bg-white text-gray-700"}`}
                     aria-pressed={viewMode === "table"}
                   >
                     Table
@@ -481,22 +487,22 @@ const AgentDashboard = () => {
       <main className="max-w-7xl mx-auto px-6 lg:px-8 py-8">
         {/* Stats strip */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="p-5 bg-gray-50 rounded-2xl">
+          <div className="p-5 bg-gray-100 rounded-2xl">
             <div className="text-xs text-gray-500">Total Agents</div>
             <div className="mt-2 text-2xl font-semibold">{agents.length}</div>
             <div className="mt-3 text-sm text-gray-500">Active and monitored</div>
           </div>
-          <div className="p-5 bg-gray-50 rounded-2x">
+          <div className="p-5 bg-gray-100 rounded-2xl">
             <div className="text-xs text-gray-500">Avg Security Score</div>
             <div className="mt-2 text-2xl font-semibold">{Math.round(agents.reduce((s,a)=>s+a.score,0)/agents.length)}</div>
             <div className="mt-3 text-sm text-gray-500">Higher is safer</div>
           </div>
-          <div className="p-5 bg-gray-50 rounded-2xl">
+          <div className="p-5 bg-gray-100 rounded-2xl">
             <div className="text-xs text-gray-500">Scans / day</div>
             <div className="mt-2 text-2xl font-semibold">1.4k</div>
             <div className="mt-3 text-sm text-gray-500">Automated & scheduled</div>
           </div>
-          <div className="p-5 bg-gray-50 rounded-2x">
+          <div className="p-5 bg-gray-100 rounded-2xl">
             <div className="text-xs text-gray-500">Exported</div>
             <div className="mt-2 text-2xl font-semibold">512</div>
             <div className="mt-3 text-sm text-gray-500">Reports generated</div>
@@ -555,13 +561,13 @@ const AgentDashboard = () => {
                       <div className="mt-4 flex items-center gap-3">
                         <button
                           onClick={() => openAgent(agent)}
-                          className="px-3 py-1 rounded-md bg-gray-900 text-white text-sm"
+                          className="px-3 py-1 rounded-md bg-gray-900 cursor-pointer text-white text-sm"
                         >
                           View
                         </button>
                         <button
                           onClick={() => scanNow(agent.id)}
-                          className="px-3 py-1 rounded-md border border-gray-300 text-sm"
+                          className="px-3 py-1 rounded-md border cursor-pointer border-gray-300 text-sm"
                         >
                           Scan 
                         </button>
@@ -626,7 +632,7 @@ const AgentDashboard = () => {
                       >
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-14 h-14 rounded-lg bg-gray-50 flex items-center justify-center border border-gray-100">
+                            <div className="w-14 h-14 rounded-lg bg-gray-100 flex items-center justify-center border border-gray-100">
                               <FontAwesomeIcon icon={faBrain} />
                             </div>
                             <div>
@@ -661,7 +667,7 @@ const AgentDashboard = () => {
 
         {/* Large visual analytics block (SVG chart + long caption) */}
         <section className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 p-6 bg-gray-50 rounded-2xl ">
+          <div className="lg:col-span-2 p-6 bg-gray-100 rounded-2xl ">
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-xs text-gray-500">Risk over time</div>
@@ -722,7 +728,7 @@ const AgentDashboard = () => {
             </div>
           </div>
 
-          <aside className="p-6 bg-gray-50 rounded-2xl">
+          <aside className="p-6 bg-gray-100 rounded-2xl">
             <div className="text-xs text-gray-500">Quick actions</div>
             <div className="mt-3 grid gap-3">
               <button onClick={() => setAgents((s)=>[...s, { id: `AGNT-${Math.floor(Math.random()*900)+100}`, name: "New Agent "+(s.length+1), owner: "You", score: 78, risk: "Medium", scans: 0, lastScan: new Date().toISOString().slice(0,10) }])} className="px-3 py-2 rounded-md bg-white border text-sm hover:bg-gray-200 transition-colors border-gray-300 cursor-pointer">Create test agent</button>
@@ -834,22 +840,22 @@ const AgentDashboard = () => {
                     <div className="text-xs text-gray-500">Score</div>
                     <div className="text-xl font-bold">{selectedAgent.score}</div>
                     <div className="mt-3 flex items-center gap-2">
-                      <button onClick={()=>scanNow(selectedAgent.id)} className="px-3 py-2 rounded-md bg-gray-900 text-white">Scan now</button>
-                      <button onClick={closeAgent} className="px-3 py-2 rounded-md border">Close</button>
+                      <button onClick={()=>scanNow(selectedAgent.id)} className="px-3 py-1 text-sm cursor-pointer hover:bg-black/80 transition-colors rounded-md bg-gray-900 text-white">Scan now</button>
+                      <button onClick={closeAgent} className="px-3 py-1 text-sm cursor-pointer rounded-md border hover:bg-gray-100 transition-colors">Close</button>
                     </div>
                   </div>
                 </div>
 
                 <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="p-3 rounded-lg border bg-gray-50">
+                  <div className="p-3 rounded-lg border border-gray-400 bg-gray-50">
                     <div className="text-xs text-gray-500">Creation</div>
                     <div className="mt-1 text-sm">2024-06-28</div>
                   </div>
-                  <div className="p-3 rounded-lg border bg-gray-50">
+                  <div className="p-3 rounded-lg border border-gray-400 bg-gray-50">
                     <div className="text-xs text-gray-500">Last scanned</div>
                     <div className="mt-1 text-sm">{selectedAgent.lastScan}</div>
                   </div>
-                  <div className="p-3 rounded-lg border bg-gray-50">
+                  <div className="p-3 rounded-lg border border-gray-400 bg-gray-50">
                     <div className="text-xs text-gray-500">Scans</div>
                     <div className="mt-1 text-sm">{selectedAgent.scans}</div>
                   </div>
@@ -857,7 +863,7 @@ const AgentDashboard = () => {
 
                 <div className="mt-6">
                   <div className="text-sm font-semibold">Recent findings</div>
-                  <div className="mt-3 bg-white border rounded-lg p-3 text-sm font-mono">
+                  <div className="mt-3 bg-white border border-gray-400 rounded-lg p-3 text-sm font-mono">
 {`> flagged: possible prompt dilution at step 2
 > suggested: add instruction role-scope & sandboxing
 > confidence: 0.83
@@ -865,11 +871,11 @@ const AgentDashboard = () => {
                   </div>
 
                   <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div className="p-3 rounded-lg border">
+                    <div className="p-3 rounded-lg border border-gray-400">
                       <div className="text-xs text-gray-500">Containment</div>
                       <div className="mt-2 text-sm">Sandbox + rate limits</div>
                     </div>
-                    <div className="p-3 rounded-lg border">
+                    <div className="p-3 rounded-lg border border-gray-400">
                       <div className="text-xs text-gray-500">Mitigation</div>
                       <div className="mt-2 text-sm">Add mandatory input validation & approve externally fetched data</div>
                     </div>
@@ -877,9 +883,9 @@ const AgentDashboard = () => {
                 </div>
 
                 <div className="mt-6 flex items-center gap-3">
-                  <button className="px-4 py-2 rounded-md bg-gray-900 text-white">Open Run</button>
-                  <button className="px-4 py-2 rounded-md border">Download Report</button>
-                  <button className="px-4 py-2 rounded-md bg-white border">Edit Agent</button>
+                  <button className="px-3 py-1 text-sm cursor-pointer hover:bg-black/80 transition-colors rounded-md bg-gray-900 text-white">Open Run</button>
+                  <button className="px-3 py-1 text-sm cursor-pointer rounded-md border hover:bg-gray-100 transition-colors">Download Report</button>
+                  <button className="px-3 py-1 text-sm cursor-pointer rounded-md border hover:bg-gray-100 transition-colors">Edit Agent</button>
                 </div>
               </div>
             </div>
@@ -892,7 +898,7 @@ const AgentDashboard = () => {
         <div className="export-toast">
           <div className="bg-white rounded-lg p-3 shadow-md border  border-gray-300">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-gray-50 border border-gray-400 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-green-50 border border-green-400 flex items-center justify-center">
                 <FontAwesomeIcon icon={faDownload} />
               </div>
               <div className="text-sm">

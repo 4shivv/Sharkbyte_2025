@@ -18,6 +18,7 @@ import { Analytics } from './Pages/Analytics'
 import { Footer } from './components/Footer'
 
 import AgentDashboard from './Pages/AgentDashboard.'
+import AgentHistory from './Pages/History'
 import ProjectOverview from './Pages/NewProject'
 
 
@@ -34,6 +35,7 @@ function App() {
           <Route path='/chat' element={<Chat/>}/>
           <Route path='/newproject' element={<ProjectOverview/>}/>
           <Route path='/dashboard' element={<AgentDashboard/>}/>
+          <Route path='/history' element={<AgentHistory/>}/>
           <Route path="/map" element={<Map />}>
             
           </Route>

@@ -37,7 +37,7 @@ import {
    --------------------------- */
 const MOCK_PROJECTS = [
   { id: "PROJ-101", name: "Q4 API Security Update", owner: "Mia Chen", budget: 150000, status: "Critical", team: 5, deadline: "2025-11-20" },
-  { id: "PROJ-102", name: "Customer Portal Redesign", owner: "Alex Ray", budget: 450000, status: "On Track", team: 12, deadline: "2025-12-31" },
+  { id: "PROJ-102", name: " Portal Redesign", owner: "Alex Ray", budget: 450000, status: "On Track", team: 12, deadline: "2025-12-31" },
   { id: "PROJ-103", name: "Internal Data Migration", owner: "Sam Lopex", budget: 80000, status: "Delayed", team: 3, deadline: "2025-10-30" },
   { id: "PROJ-104", name: "Next-Gen Dashboard", owner: "Eva King", budget: 220000, status: "On Track", team: 8, deadline: "2026-01-15" },
   // extra items to lengthen the UI
@@ -277,7 +277,8 @@ const ProjectOverview = () => {
      --------------------------- */
 
   return (
-    <div className="min-h-screen bg-gradient-to-b pt-20 from-white via-white to-gray-50 text-gray-900 antialiased">
+  <div className="font-inter">
+    <div className="min-h-screen bg-gradient-to-b pt-[8%] from-white via-white to-gray-50 text-gray-900 antialiased">
       <InlineStyles />
 
       {/* Export Toast */}
@@ -295,11 +296,11 @@ const ProjectOverview = () => {
             <div className="col-span-12 lg:col-span-7">
               
 
-              <h1 className="hero-title font-bold text-gray-900 tracking-tight leading-tight max-w-3xl">
+              <h1 className="hero-title text-5xl font-bold text-gray-900 tracking-tight leading-tight max-w-3xl">
                 Unified <span className="text-sky-700">Project Health</span> Overview — <span className="text-gray-700 font-medium">real-time insights, effortless management</span>
               </h1>
 
-              <p className="mt-6 text-lg text-gray-600 max-w-xl">
+              <p className="mt-6 text-md text-gray-600 max-w-xl">
                 Track budget, monitor deadlines, and visualize team progress across your entire portfolio.
                 Empower your stakeholders with clarity and predictable outcomes.
               </p>
@@ -315,7 +316,7 @@ const ProjectOverview = () => {
 
                 <button
                   onClick={exportCSV}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl border border-gray-200 bg-white"
+                  className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-2xl border border-gray-200 bg-white hover:bg-gray-100 transition-colors cursor-pointer "
                 >
                   <FontAwesomeIcon icon={faDownload} />
                   Export CSV
@@ -337,18 +338,18 @@ const ProjectOverview = () => {
 
               {/* subtle visual cues */}
               <div className="mt-8 grid grid-cols-3 gap-4 max-w-md">
-                <div className="p-4 glass-card soft-shadow micro-detail-1">
+                <div className="p-4 bg-gray-100 rounded-lg">
                   <div className="text-xs uppercase text-gray-500">Total Budget</div>
                   <div className="mt-2 text-lg font-semibold">{
                     formatNumberShort(projects.reduce((s, p) => s + p.budget, 0))
                   }</div>
                 </div>
-                <div className="p-4 glass-card soft-shadow micro-detail-2">
-                  <div className="text-xs uppercase text-gray-500">Total Team Members</div>
+                <div className="p-4 bg-gray-100 rounded-lg">
+                  <div className="text-xs uppercase text-gray-500">Team Members</div>
                   <div className="mt-2 text-lg font-semibold">{projects.reduce((s, p) => s + p.team, 0)}</div>
                 </div>
-                <div className="p-4 glass-card soft-shadow micro-detail-3">
-                  <div className="text-xs uppercase text-gray-500">Nearest Deadline</div>
+                <div className="p-4 bg-gray-100 rounded-lg">
+                  <div className="text-xs uppercase text-gray-500"> Deadline</div>
                   <div className="mt-2 text-lg font-semibold">{projects.sort((a,b)=>new Date(a.deadline)-new Date(b.deadline))[0].deadline}</div>
                 </div>
               </div>
@@ -362,8 +363,8 @@ const ProjectOverview = () => {
                 
               >
                 {/* decorative top lights */}
-                <div className="absolute -left-24 -top-24 w-[420px] h-[420px] rounded-full hero-sheen opacity-30 bg-gradient-to-tr from-pink-100 to-transparent" />
-                <div className="absolute -right-20 top-8 w-[260px] h-[260px] rounded-full hero-sheen opacity-20 bg-gradient-to-br from-indigo-100 to-transparent" />
+                <div className="absolute -left-24 -top-24 w-[420px] h-[420px] rounded-full hero-sheen opacity-30 " />
+                <div className="absolute -right-20 top-8 w-[260px] h-[260px] rounded-full hero-sheen opacity-20 " />
 
                 {/* simulated device visual */}
                 <div className="relative">
@@ -379,8 +380,15 @@ const ProjectOverview = () => {
                       </div>
                     </div>
 
-                    <div className="mt-4 rounded-lg border border-gray-100 p-3 bg-gradient-to-b from-white to-gray-50">
-                      <pre className="text-xs font-mono text-gray-700 overflow-x-auto">
+                     <div className="mt-4 rounded-lg border border-gray-100 p-3 bg-gray-900">
+                      <div className="flex items-center gap-3">
+                      <span className="inline-block w-2 h-2 rounded-full bg-red-400" />
+                      <span className="inline-block w-2 h-2 rounded-full bg-yellow-400" />
+                      <span className="inline-block w-2 h-2 rounded-full bg-green-400" />
+                      <div className="ml-auto text-[10px] text-gray-400">Live</div>
+                    </div>
+                      <pre className="text-xs font-mono text-white overflow-x-auto">
+                      
 {`> task: security-review --module auth-api
 > status : code-review pending for 2 days
 > flagged 1 high-risk ticket: JWT vulnerability
@@ -392,15 +400,15 @@ const ProjectOverview = () => {
 
                     <div className="mt-4 flex items-center gap-3">
                       <button className="text-sm inline-flex items-center gap-2 px-4 py-2 rounded-md bg-sky-700 text-white">View Details</button>
-                      <button className="text-sm inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gray-50 border border-gray-200">Open Tickets</button>
+                      <button className="text-sm inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gray-100 border border-gray-300">Open Tickets</button>
                     </div>
                   </div>
 
                   {/* small badges */}
                   <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
-                    <div className="rounded-lg p-3 bg-gray-50 border border-gray-100 text-center">Open Tickets <div className="font-semibold">47</div></div>
-                    <div className="rounded-lg p-3 bg-gray-50 border border-gray-100 text-center">Burndown <div className="font-semibold">Stable</div></div>
-                    <div className="rounded-lg p-3 bg-gray-50 border border-gray-100 text-center">Risk Index <div className="font-semibold">3.8 / 5</div></div>
+                    <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 text-center">Open Tickets <div className="font-semibold">47</div></div>
+                    <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 text-center">Burndown <div className="font-semibold">Stable</div></div>
+                    <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 text-center">Risk Index <div className="font-semibold">3.8 / 5</div></div>
                   </div>
                 </div>
 
@@ -419,13 +427,13 @@ const ProjectOverview = () => {
 
       {/* Controls: Search, status filter, sort */}
       <section className="max-w-7xl mx-auto px-6 lg:px-8 -mt-8">
-        <div className="bg-white/80 glass-card border border-gray-100 rounded-2xl p-4 shadow-sm">
+        <div className="bg-white/80 border border-gray-300 rounded-2xl p-4">
           <div className="flex flex-col md:flex-row items-center gap-4">
             <label htmlFor="search" className="sr-only">Search projects</label>
             <div className="flex items-center gap-3 flex-1">
-              <div className="p-2 rounded-md border border-gray-100 bg-white">
-                <FontAwesomeIcon icon={faSearch} className="text-gray-500" />
-              </div>
+              <div className="px-3 py-2 rounded-lg border border-gray-100 bg-gray-100">
+                <FontAwesomeIcon icon={faSearch} className="text-gray-500" />
+              </div>
               <input
                 id="search"
                 ref={inputRef}
@@ -444,7 +452,7 @@ const ProjectOverview = () => {
                   aria-label="Filter by status"
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value.toLowerCase())}
-                  className="p-2 rounded-md border bg-white text-sm"
+                   className="px-2 py-1.5 rounded-md border border-gray-300 bg-white text-sm cursor-pointer"
                 >
                   <option value="all">All</option>
                   <option value="on track">On Track</option>
@@ -460,7 +468,7 @@ const ProjectOverview = () => {
                   aria-label="Sort projects"
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="p-2 rounded-md border bg-white text-sm"
+                  className="px-2 py-1.5 rounded-md border border-gray-300 bg-white text-sm cursor-pointer"
                 >
                   <option value="budget_desc">Budget (high → low)</option>
                   <option value="budget_asc">Budget (low → high)</option>
@@ -475,14 +483,14 @@ const ProjectOverview = () => {
                 <div className="inline-flex rounded-md p-1 bg-white border border-gray-100">
                   <button
                     onClick={() => setViewMode("cards")}
-                    className={`px-3 py-2 rounded-md ${viewMode === "cards" ? "bg-gray-900 text-white" : "bg-white text-gray-700"}`}
+                    className={`px-3 py-1 rounded-md text-sm cursor-pointer ${viewMode === "cards" ? "bg-gray-900 text-white" : "bg-white text-gray-700"}`}
                     aria-pressed={viewMode === "cards"}
                   >
                     Cards
                   </button>
                   <button
                     onClick={() => setViewMode("table")}
-                    className={`px-3 py-2 rounded-md ${viewMode === "table" ? "bg-gray-900 text-white" : "bg-white text-gray-700"}`}
+                    className={`px-3 py-1 rounded-md text-sm cursor-pointer${viewMode === "table" ? "bg-gray-900 text-white" : "bg-white text-gray-700"}`}
                     aria-pressed={viewMode === "table"}
                   >
                     Table
@@ -501,22 +509,22 @@ const ProjectOverview = () => {
       <main className="max-w-7xl mx-auto px-6 lg:px-8 py-8">
         {/* Stats strip */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="p-5 bg-white rounded-2xl soft-shadow glass-card">
+          <div className="p-5 bg-gray-100 rounded-2xl ">
             <div className="text-xs text-gray-500">Total Projects</div>
             <div className="mt-2 text-2xl font-semibold">{projects.length}</div>
             <div className="mt-3 text-sm text-gray-500">Active and In Review</div>
           </div>
-          <div className="p-5 bg-white rounded-2xl soft-shadow glass-card">
+          <div className="p-5 bg-gray-100 rounded-2xl ">
             <div className="text-xs text-gray-500">Average Team Size</div>
             <div className="mt-2 text-2xl font-semibold">{Math.round(projects.reduce((s,p)=>s+p.team,0)/projects.length)}</div>
             <div className="mt-3 text-sm text-gray-500">Members across all teams</div>
           </div>
-          <div className="p-5 bg-white rounded-2xl soft-shadow glass-card">
+          <div className="p-5 bg-gray-100 rounded-2xl">
             <div className="text-xs text-gray-500">Critical Status</div>
             <div className="mt-2 text-2xl font-semibold text-red-600">{projects.filter(p => p.status === 'Critical').length}</div>
             <div className="mt-3 text-sm text-gray-500">Require immediate attention</div>
           </div>
-          <div className="p-5 bg-white rounded-2xl soft-shadow glass-card">
+          <div className="p-5 bg-gray-100 rounded-2xl">
             <div className="text-xs text-gray-500">Total Budget (USD)</div>
             <div className="mt-2 text-2xl font-semibold">{formatNumberShort(projects.reduce((s, p) => s + p.budget, 0))}</div>
             <div className="mt-3 text-sm text-gray-500">Allocated to projects</div>
@@ -531,7 +539,7 @@ const ProjectOverview = () => {
               return (
                 <article
                   key={project.id}
-                  className={`p-6 bg-white rounded-2xl soft-shadow glass-card card-reveal ${idx < 6 ? "visible" : ""}`}
+                  className={`px-4 py-6  bg-white rounded-2xl border border-gray-300  card-reveal ${idx < 6 ? "visible" : ""}`}
                   tabIndex={0}
                   aria-labelledby={`project-${project.id}`}
                 >
@@ -556,7 +564,7 @@ const ProjectOverview = () => {
 
                       <p className="mt-3 text-sm text-gray-600 flex items-center gap-3">
                         <FontAwesomeIcon icon={faUser} className="text-gray-400" />
-                        Owner: **{project.owner}**
+                        Owner: {project.owner}
                       </p>
 
                       <div className="mt-4 flex items-center justify-between gap-3">
@@ -575,25 +583,25 @@ const ProjectOverview = () => {
                       <div className="mt-4 flex items-center gap-3">
                         <button
                           onClick={() => openProject(project)}
-                          className="px-3 py-2 rounded-md bg-gray-900 text-white text-sm"
+                          className="px-3 py-1 rounded-md bg-gray-900 text-white text-sm"
                         >
                           View
                         </button>
                         <button
                           onClick={() => updateStatus(project.id)}
-                          className="px-3 py-2 rounded-md border text-sm"
+                          className="px-3 py-1 rounded-md bg-gray-900 text-white text-sm"
                         >
-                          Update Status
+                          Update
                         </button>
 
                         <div className="ml-auto flex items-center gap-2">
                           <button
                             onClick={() => exportCSV()}
-                            className="text-xs px-3 py-2 rounded-md bg-white border"
+                            className="px-3 py-1 rounded-md border border-gray-300 text-sm"
                           >
                             Report
                           </button>
-                          <Link to={`/project/${project.id}`} className="text-xs px-3 py-2 rounded-md border bg-white">
+                          <Link to={`/project/${project.id}`} className="px-3 py-1 rounded-md border border-gray-300 text-sm">
                             Settings
                           </Link>
                         </div>
@@ -618,7 +626,7 @@ const ProjectOverview = () => {
               </div>
 
               <div className="flex items-center gap-3">
-                <button onClick={exportCSV} className="px-3 py-2 rounded-md bg-gray-900 text-white">Export CSV</button>
+                <button onClick={exportCSV} className="px-3 py-1 rounded-md text-sm cursor-pointer hover:bg-black/80 bg-gray-900 text-white transition-colors">Export CSV</button>
                 <div className="text-xs text-gray-500">Tip: click a row to open details</div>
               </div>
             </div>
@@ -681,7 +689,7 @@ const ProjectOverview = () => {
 
         {/* Large visual analytics block (SVG chart + long caption) */}
         <section className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 p-6 bg-white rounded-2xl soft-shadow glass-card">
+          <div className="lg:col-span-2 p-6 bg-gray-100 rounded-2xl soft-shadow glass-card">
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-xs text-gray-500">Resource Allocation</div>
@@ -691,7 +699,7 @@ const ProjectOverview = () => {
             </div>
 
             {/* Placeholder for SVG/Chart - intentionally simple to keep the monolithic style without external libraries */}
-            <div className="mt-6 h-64 bg-gray-50 rounded-lg border border-gray-100 flex items-center justify-center">
+            <div className="mt-6 h-64 bg-white/80 rounded-xl border border-gray-100 flex items-center justify-center">
               <svg width="90%" height="80%" viewBox="0 0 100 50" preserveAspectRatio="none">
                 {/* Budget Line (Blue) */}
                 <polyline points="0,35 15,30 30,25 45,20 60,15 75,10 90,8" fill="none" stroke="#3b82f6" strokeWidth="1" strokeLinecap="round" />
@@ -705,7 +713,7 @@ const ProjectOverview = () => {
             </div>
           </div>
 
-          <div className="p-6 bg-white rounded-2xl soft-shadow glass-card">
+          <div className="p-6 bg-gray-100 rounded-2xl">
             <div className="text-sm font-semibold">Project Risk Breakdown</div>
             <ul className="mt-4 space-y-3 text-sm">
               <li className="flex items-center justify-between">
@@ -762,6 +770,7 @@ const ProjectOverview = () => {
         </div>
       </footer>
     </div>
+</div>
   );
 };
 

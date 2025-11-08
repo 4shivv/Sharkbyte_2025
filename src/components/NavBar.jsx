@@ -129,7 +129,7 @@ const NavBar = () => {
             {isMobile && (
               <button
                 onClick={() => setIsMobileOpen(prev => !prev)}
-                className="ml-auto p-2 rounded-full hover:bg-gray-200 transition-colors"
+                className="ml-auto p-2 rounded-full hover:bg-gray-200 transition-colors cursor-pointer"
               >
                 <FontAwesomeIcon icon={isMobileOpen ? faXmark : faBars} size="lg" />
               </button>
