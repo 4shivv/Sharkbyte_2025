@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faXmark, faDiagramProject } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faXmark, faDiagramProject, faShieldHalved } from '@fortawesome/free-solid-svg-icons';
 import { ScreenContext } from '../Layouts/RootLayout';
 
 const NavBar = () => {
@@ -61,15 +61,15 @@ const NavBar = () => {
   return (
     <>
       {!['/login', '/signup', '/new-project'].includes(location.pathname) && (
-        <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center backdrop-blur-md bg-white/60 border-b border-gray-200/50 font-inter">
+        <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center backdrop-blur-md bg-black/80 border-b border-gray-200 font-inter">
           <div className="flex items-center justify-between w-full max-w-7xl px-6 py-2.5">
             {/* Brand */}
             <NavLink
               to="/"
-              className="flex items-center gap-2 text-gray-800 hover:text-black transition-all duration-300"
+              className="flex items-center gap-2 text-gray-50 hover:text-white transition-all duration-300"
             >
-              <FontAwesomeIcon icon={faDiagramProject} className="text-gray-700" />
-              <span className="font-semibold text-[15px] tracking-tight">EnTec</span>
+              <FontAwesomeIcon icon={faShieldHalved} className="text-white" />
+              <span className="font-semibold text-[15px] tracking-tight">AgentGuard</span>
             </NavLink>
 
             {/* Desktop Nav */}
@@ -77,7 +77,7 @@ const NavBar = () => {
               <div className="relative flex items-center gap-8">
                 {/* Highlight */}
                 <span
-                  className={`absolute bottom-0 h-[2px] bg-gray-900/70 transition-all duration-500 ease-out ${
+                  className={`absolute bottom-0 h-[2px] bg-white rounded-full transition-all duration-500 ease-out ${
                     bgStyle.visible ? 'opacity-100' : 'opacity-0'
                   }`}
                   style={{ left: bgStyle.left, width: bgStyle.width }}
@@ -88,8 +88,8 @@ const NavBar = () => {
                     key={item.path}
                     to={item.path}
                     ref={el => (navRefs.current[index] = el)}
-                    className={`relative z-10 text-[14px] tracking-tight font-light text-gray-700 hover:text-black transition-all duration-300 ${
-                      activeIndex === index ? 'text-black font-normal' : ''
+                    className={`relative z-10 text-[12px] tracking-tight font-light text-gray-50 hover:text-white transition-all duration-300 ${
+                      activeIndex === index ? 'text-white font-normal' : ''
                     }`}
                     onClick={() => setActiveIndex(index)}
                     onMouseEnter={() => moveHighlightTo(navRefs.current[index])}
@@ -112,13 +112,13 @@ const NavBar = () => {
               <div className="flex items-center gap-3">
                 <NavLink
                   to="/login"
-                  className="text-[14px] font-light text-gray-700 hover:text-black transition-all duration-300"
+                  className="text-[14px] font-light text-gray-50 hover:text-white transition-all duration-300"
                 >
                   Log in
                 </NavLink>
                 <NavLink
                   to="/signup"
-                  className="text-[14px] font-light text-gray-700 hover:text-black transition-all duration-300"
+                  className="text-[14px] font-light text-gray-50 hover:text-white transition-all duration-300"
                 >
                   Sign up
                 </NavLink>
@@ -129,7 +129,7 @@ const NavBar = () => {
             {isMobile && (
               <button
                 onClick={() => setIsMobileOpen(prev => !prev)}
-                className="ml-auto p-2 rounded-full hover:bg-gray-200 transition-colors cursor-pointer"
+                className="ml-auto p-2 rounded-full hover:bg-black/70 text-white transition-colors cursor-pointer"
               >
                 <FontAwesomeIcon icon={isMobileOpen ? faXmark : faBars} size="lg" />
               </button>

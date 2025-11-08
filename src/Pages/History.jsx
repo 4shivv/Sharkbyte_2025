@@ -284,7 +284,7 @@ const AgentHistory = () => {
             
             <button
               onClick={exportHistory}
-              className="px-4 py-2 bg-sky-700 text-white rounded-lg hover:bg-sky-800 transition-colors flex items-center gap-2"
+              className="px-4 py-2 bg-sky-700 text-white rounded-full text-sm cursor-pointer hover:bg-sky-800 transition-colors flex items-center gap-2"
             >
               <FontAwesomeIcon icon={faDownload} />
               Export History

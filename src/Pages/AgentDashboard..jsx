@@ -17,18 +17,7 @@ import {
   faEllipsisV,
 } from "@fortawesome/free-solid-svg-icons";
 
-/**
- * AgentDashboard.jsx
- * - Monolithic Apple.com-like bright design (MacBook showcase mood)
- * - Tailwind CSS + FontAwesome
- * - Long, intentionally complex file with layered sections:
- *    Hero (large, glassmorphic), Stats strip, Filter + Search, Agent Cards,
- *    Table view, Modal (Agent details), Chart-like SVG visuals,
- *    Footer and many inlined animation keyframes and helper utilities.
- *
- * NOTE: Keep this single-file pattern if you want the "very long & complicated" file.
- * If you later want to split into components, I can refactor.
- */
+
 
 /* ---------------------------
    Mock Data & Helpers
@@ -241,7 +230,7 @@ const AgentDashboard = () => {
       .micro-detail-2 { border-radius: 6px; padding: 4px; }
       .micro-detail-3 { transition: all 260ms ease; }
 
-      /* dense "apple-like" focus states for interactive controls */
+      
       .control-pill { border: 1px solid rgba(2,6,23,0.06); background: white; padding: 6px 10px; border-radius: 999px; box-shadow: 0 4px 14px rgba(2,6,23,0.04); }
       .control-pill.active { background: linear-gradient(180deg, #fff, #f8fafc); }
 
@@ -267,14 +256,14 @@ const AgentDashboard = () => {
 
       
 
-      {/* HERO Section - massive, Apple-like */}
+      
       <header ref={heroRef} className="relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-12 pb-12">
           <div className="grid grid-cols-12 gap-8 items-center">
             <div className="col-span-12 lg:col-span-7">
               
 
-              <h1 className="hero-title font-bold text-gray-900 tracking-tight leading-tight max-w-3xl">
+              <h1 className="hero-title text-[42px] md:text-[52px] font-bold text-gray-900 tracking-tight leading-tight max-w-3xl">
                 Beautifully simple agent oversight — <span className="text-gray-700 font-medium">built for high-trust teams</span>
               </h1>
 
@@ -286,7 +275,7 @@ const AgentDashboard = () => {
               <div className="mt-8 flex flex-wrap gap-4 items-center">
                 <button
                   onClick={() => navigate("/register-agent")}
-                  className="flex justify-center items-center gap-3 px-4 py-2.5 bg-sky-700 text-white rounded-2xl text-sm font-semibold cursor-pointer hover:bg-sky-800 transition"
+                  className="flex justify-center items-center gap-3 px-4 py-2.5 bg-sky-700 text-white rounded-full text-sm font-semibold cursor-pointer hover:bg-sky-800 transition"
                 >
                   <FontAwesomeIcon icon={faPlus} />
                   Register New Agent
@@ -294,7 +283,7 @@ const AgentDashboard = () => {
 
                 <button
                   onClick={exportCSV}
-                  className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-2xl border border-gray-200 bg-white hover:bg-gray-100 transition-colors cursor-pointer "
+                  className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full border border-gray-300 bg-white hover:bg-gray-100 transition-colors cursor-pointer "
                 >
                   <FontAwesomeIcon icon={faDownload} />
                   Export CSV
@@ -302,7 +291,7 @@ const AgentDashboard = () => {
 
                 <button
                   onClick={() => setViewMode((v) => (v === "cards" ? "table" : "cards"))}
-                  className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-white border border-gray-300 cursor-pointer hover:bg-gray-100 transition-colors text-sm"
+                  className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-gray-50 border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors text-sm"
                 >
                   <FontAwesomeIcon icon={faTachometerAlt} />
                   {viewMode === "cards" ? "Table view" : "Card view"}
@@ -910,7 +899,7 @@ const AgentDashboard = () => {
         </div>
       )}
 
-      {/* Footer (Apple-style minimal) */}
+      
       <footer className="mt-20 border-t border-gray-100 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>

@@ -1,4 +1,4 @@
-// src/components/AppleLikeHero.jsx
+
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -25,17 +25,9 @@ import {
   faShareAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
-/**
- * AppleLikeHero.jsx (Apple-inspired, not exact)
- *
- * - Very long, complicated single-file component with many subcomponents.
- * - Includes mega-menu, animated carousel, accessible modal, FAQ accordion,
- *   keyboard nav, parallax, IntersectionObserver reveal, and dense inline CSS.
- *
- * Tailwind must be present. FontAwesome icons used as placeholders.
- */
 
-const AppleLikeHero = () => {
+
+const HeroPage = () => {
   const navigate = useNavigate();
 
   // UI state
@@ -215,17 +207,17 @@ const AppleLikeHero = () => {
               </p>
 
               <div className="mt-8 flex flex-wrap gap-4 items-center">
-                <button onClick={() => setModalOpen(true)} className="inline-flex items-center gap-3 px-4 py-2.5 bg-sky-700 text-white rounded-2xl text-sm font-semibold tracking-wide cursor-pointer transition-color duration-200">
+                <button onClick={() => setModalOpen(true)} className="inline-flex items-center gap-3 px-4 py-2.5 bg-sky-700 text-white rounded-full text-sm font-semibold tracking-wide cursor-pointer transition-color duration-200">
                   <FontAwesomeIcon icon={faPlay} />
                   Watch overview
                 </button>
 
-                <Link to="/docs" className="inline-flex items-center gap-3  px-4 py-2.5 bg-white text-gray-800 rounded-2xl text-sm font-semibold border border-gray-200 hover:bg-gray-50 transition">
+                <Link to="/docs" className="inline-flex items-center gap-3  px-4 py-2.5 bg-white text-gray-800 rounded-full text-sm font-semibold border border-gray-200 hover:bg-gray-50 transition">
                   View docs
                   <FontAwesomeIcon icon={faChevronRight} />
                 </Link>
 
-                <button onClick={() => navigate("/collab")} className="inline-flex items-center gap-2 px-4 py-2.5 text-sm rounded-2xl bg-gray-50 hover:bg-gray-100 cursor-pointer border border-gray-200">
+                <button onClick={() => navigate("/collab")} className="inline-flex items-center gap-2 px-4 py-2.5 text-sm rounded-full bg-gray-50 hover:bg-gray-100 cursor-pointer border border-gray-200">
                   <FontAwesomeIcon icon={faCubes} />
                   Live Demo
                 </button>
@@ -290,15 +282,15 @@ const AppleLikeHero = () => {
               </div>
 
               <div className="mt-6 grid grid-cols-3 gap-3 text-xs">
-                <div className="rounded-lg p-3 bg-gray-50 border border-gray-100 text-center">
+                <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 text-center">
                   <div className="font-semibold">99.9%</div>
                   <div className="text-gray-500 mt-1">Uptime</div>
                 </div>
-                <div className="rounded-lg p-3 bg-gray-50 border border-gray-100 text-center">
+                <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 text-center">
                   <div className="font-semibold">12ms</div>
                   <div className="text-gray-500 mt-1">Avg Response</div>
                 </div>
-                <div className="rounded-lg p-3 bg-gray-50 border border-gray-100 text-center">
+                <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 text-center">
                   <div className="font-semibold">2.1k</div>
                   <div className="text-gray-500 mt-1">Scans / day</div>
                 </div>
@@ -427,8 +419,8 @@ const AppleLikeHero = () => {
               </ol>
 
               <div className="mt-6 flex gap-4">
-                <Link to="/platform" className="inline-flex items-center gap-3 px-4 py-2.5 bg-sky-700 text-white rounded-2xl text-sm font-semibold tracking-wide cursor-pointer">Platform details</Link>
-                <Link to="/contact" className="inline-flex items-center gap-3 px-4 py-2.5 bg-transparent text-black border border-gray-300 rounded-2xl text-sm font-semibold tracking-wide cursor-pointer">Contact Sales</Link>
+                <Link to="/platform" className="inline-flex items-center gap-3 px-4 py-2.5 bg-sky-700 text-white rounded-full text-sm font-semibold tracking-wide cursor-pointer">Platform details</Link>
+                <Link to="/contact" className="inline-flex items-center gap-3 px-4 py-2.5 bg-transparent text-black border border-gray-300 rounded-full text-sm font-semibold tracking-wide cursor-pointer">Contact Sales</Link>
               </div>
             </div>
 
@@ -456,8 +448,8 @@ const AppleLikeHero = () => {
             <p className="mt-2 text-gray-600 max-w-2xl mx-auto">Evaluate risks in minutes — not days. Safe-by-default policies you can audit and export.</p>
 
             <div className="mt-6 flex justify-center gap-4">
-              <Link to="/signup" className="flex items-center justify-center px-4 py-2 text-sm bg-sky-700 text-white rounded-2xl font-semibold">Get started free</Link>
-              <Link to="/contact" className="px-5 py-2 border rounded-2xl text-sm border-gray-300">Talk to sales</Link>
+              <Link to="/signup" className="flex items-center justify-center px-4 py-2 text-sm bg-sky-700 text-white rounded-full font-semibold">Get started free</Link>
+              <Link to="/contact" className="px-5 py-2 border rounded-full text-sm border-gray-300">Talk to sales</Link>
             </div>
           </div>
         </section>
@@ -526,7 +518,7 @@ const AppleLikeHero = () => {
 
       {/* long inline styles (bloat) */}
       <style>{`
-        /* Large inline style block to emulate Apple-like polish & complexity */
+        
         :root {
           --accent: #0ea5e9;
           --accent-2: #7c3aed;
@@ -714,4 +706,4 @@ function FAQ() {
   );
 }
 
-export default AppleLikeHero;
+export default HeroPage;
