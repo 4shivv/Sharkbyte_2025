@@ -13,10 +13,12 @@ import { Records } from './components/CheckIn/Records'
 import { Questions } from './components/CheckIn/Questions'
 import { Chat } from './Pages/Chat'
 import { Map } from './Pages/Map'
-import SpendingPage from './Pages/Spending'
+
 import { Analytics } from './Pages/Analytics'
 import { Footer } from './components/Footer'
-import CollaborationBoard from './Pages/Collboration'
+
+import AgentDashboard from './Pages/AgentDashboard.'
+import ProjectOverview from './Pages/NewProject'
 
 
 
@@ -30,8 +32,8 @@ function App() {
           <Route path='/login' element={<LoginInPage/>}/>
           <Route path='/signup' element={<SignInPage/>}/>
           <Route path='/chat' element={<Chat/>}/>
-          <Route path='/spending' element={<SpendingPage/>}/>
-          <Route path='/collab' element={<CollaborationBoard/>}/>
+          <Route path='/newproject' element={<ProjectOverview/>}/>
+          <Route path='/dashboard' element={<AgentDashboard/>}/>
           <Route path="/map" element={<Map />}>
             
           </Route>

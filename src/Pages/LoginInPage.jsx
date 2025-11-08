@@ -1,230 +1,112 @@
-import React, { useState, useEffect, useRef } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEye,
-  faEyeSlash,
-  faLocationArrow,
-  faHandPointer,
-  faICursor,
-  faChartPie,
-  faSquare,
-} from "@fortawesome/free-solid-svg-icons";
+import { faShieldHalved, faEnvelope, faLock, faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 
 const LoginInPage = () => {
-  const [emailActive, setEmailActive] = useState(false);
-  const [passwordActive, setPasswordActive] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
-
-  const navRefs = useRef([]);
-  const [activeIndex, setActiveIndex] = useState(
-    window.location.pathname === "/signup" ? 1 : 0
-  );
-  const [bgStyle, setBgStyle] = useState({ left: 0, width: 0, visible: false });
-
-  const moveHighlightTo = (el) => {
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const parentRect = el.parentElement.getBoundingClientRect();
-    setBgStyle({
-      left: rect.left - parentRect.left,
-      width: rect.width,
-      visible: true,
-    });
-  };
-
-  useEffect(() => {
-    if (navRefs.current[activeIndex]) moveHighlightTo(navRefs.current[activeIndex]);
-    else setBgStyle((p) => ({ ...p, visible: false }));
-  }, [activeIndex]);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoggedIn(true);
+    // Logic for user login (FR-1.2)
+    console.log("Logging in user:", { email, password });
+    // Simulate successful login and navigate to the main dashboard/home
+    navigate("/"); 
   };
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden bg-[#f8f6f4] text-gray-900 font-inter">
-      
-      {/* === Subtle Animated Background Grid === */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.05)_1px,transparent_1px)] bg-[size:60px_60px] opacity-40 animate-[gridMove_25s_linear_infinite]" />
-
-      {/* === Decorative Floating Icons === */}
-      <FontAwesomeIcon
-        icon={faChartPie}
-        className="absolute top-20 right-16 text-gray-300 text-5xl animate-[float_6s_ease-in-out_infinite]"
-      />
-      <FontAwesomeIcon
-        icon={faSquare}
-        className="absolute bottom-28 left-20 text-gray-300 text-4xl animate-[rotateSquare_20s_linear_infinite]"
-      />
-
-      {/* === Floating Cursor Labels === */}
-      <div className="absolute top-40 left-10 flex flex-col items-end gap-1 animate-[float_4s_ease-in-out_infinite]">
-        <FontAwesomeIcon icon={faHandPointer} className="text-[#ffc9c9] text-2xl" />
-        <div className="px-3 py-1 text-sm font-medium text-[#5C1F1F] bg-[#ffc9c9] rounded-full shadow-sm">
-          Alex
+    <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-[#100C08] p-4">
+      <div className="w-full max-w-md bg-white dark:bg-[#1a1a1a] shadow-2xl rounded-2xl p-8 space-y-8 border border-gray-200 dark:border-gray-800 transition-all duration-300">
+        
+        {/* Header */}
+        <div className="flex flex-col items-center">
+          <FontAwesomeIcon icon={faShieldHalved} className="text-4xl text-[#1a1a1a] dark:text-gray-100 mb-3" />
+          <h2 className="text-3xl font-extrabold text-[#1a1a1a] dark:text-white font-inter">
+            Welcome Back
+          </h2>
+          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            Log in to manage your agent security.
+          </p>
         </div>
-      </div>
 
-      <div className="absolute bottom-14 right-10 flex flex-col items-center gap-1 animate-[float_7s_ease-in-out_infinite_1s]">
-        <FontAwesomeIcon
-          icon={faLocationArrow}
-          className="text-[#d6e6ff] text-2xl rotate-[-45deg]"
-        />
-        <div className="px-3 py-1 text-sm font-medium text-gray-700 bg-[#eaf2ff] rounded-full shadow-sm">
-          Maya
-        </div>
-      </div>
-
-      <div className="absolute top-1/4 right-24 flex flex-col items-end gap-1 animate-[float_8s_ease-in-out_infinite_2s]">
-        <FontAwesomeIcon icon={faICursor} className="text-[#e3d8ff] text-2xl" />
-        <div className="px-3 py-1 text-sm font-medium text-[#2E2172] bg-[#efe9ff] rounded-full shadow-sm">
-          Leo
-        </div>
-      </div>
-
-      {/* === Top Navigation (Login / Sign Up) === */}
-      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-50">
-        <div className="relative flex items-center gap-4 bg-white border border-gray-200 rounded-full p-1.5 shadow-sm shadow-black/5 backdrop-blur-md">
-          {/* Highlight Animation */}
-          <span
-            className={`absolute top-[5px] bottom-[5px] rounded-full bg-gray-900/10 transition-[left,width,opacity] duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] ${
-              bgStyle.visible ? "opacity-100" : "opacity-0"
-            }`}
-            style={{ left: bgStyle.left, width: bgStyle.width }}
-          />
-          {["/login", "/signup"].map((path, index) => (
-            <NavLink
-              key={path}
-              to={path}
-              ref={(el) => (navRefs.current[index] = el)}
-              onMouseEnter={() => moveHighlightTo(navRefs.current[index])}
-              onMouseLeave={() => moveHighlightTo(navRefs.current[activeIndex])}
-              onClick={() => setActiveIndex(index)}
-              className={({ isActive }) =>
-                `relative z-10 px-5 py-1.5 text-sm font-medium rounded-full transition-colors ${
-                  isActive ? "text-black" : "text-gray-700 hover:text-black"
-                }`
-              }
+        {/* Login Form */}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Email Input */}
+          <div>
+            <label 
+              htmlFor="email" 
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
-              {index === 0 ? "Log in" : "Sign up"}
-            </NavLink>
-          ))}
-        </div>
-      </div>
-
-      {/* === Login Card === */}
-      <div className="relative z-20 w-[90%] max-w-md p-10 bg-gray-100/50  border border-gray-200 rounded-2xl shadow-xs backdrop-blur-lg text-center animate-[fadeInUp_1s_ease-out]">
-        <h1 className="mb-1 text-[2rem] font-semibold">
-          {loggedIn ? "Welcome back! 🎉" : "Welcome back"}
-        </h1>
-        <p className="mb-10 text-sm text-gray-500">
-          {loggedIn
-            ? "Redirecting to your workspace..."
-            : "Access your boards, notes, and chats"}
-        </p>
-
-        {!loggedIn && (
-          <form onSubmit={handleSubmit} className="flex flex-col gap-6 text-left">
-            
-            {/* Email Field */}
-            <div>
-              <label
-                htmlFor="email"
-                className="block mb-1.5 text-sm font-medium text-gray-700"
-              >
-                Email
-              </label>
+              Email Address
+            </label>
+            <div className="mt-1 relative rounded-md shadow-sm">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <FontAwesomeIcon icon={faEnvelope} className="text-gray-400" />
+              </div>
               <input
                 id="email"
+                name="email"
                 type="email"
-                placeholder="you@example.com"
-                onFocus={() => setEmailActive(true)}
-                onBlur={() => setEmailActive(false)}
-                className={`w-full px-4 py-2 rounded-xl border-2 transition-all duration-300 focus:outline-none focus:ring-4 ${
-                  emailActive
-                    ? "border-gray-800 ring-gray-200"
-                    : "border-gray-300 hover:border-gray-400"
-                } bg-transparent text-gray-900 placeholder-gray-500`}
+                autoComplete="email"
                 required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#1a1a1a] focus:border-[#1a1a1a] sm:text-sm dark:bg-[#2b2b2b] dark:border-gray-700 dark:text-white"
+                placeholder="you@organization.com"
               />
             </div>
+          </div>
 
-            {/* Password Field */}
-            <div className="relative">
-              <label
-                htmlFor="password"
-                className="block mb-1.5 text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
+          {/* Password Input */}
+          <div>
+            <label 
+              htmlFor="password" 
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
+              Password
+            </label>
+            <div className="mt-1 relative rounded-md shadow-sm">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <FontAwesomeIcon icon={faLock} className="text-gray-400" />
+              </div>
               <input
                 id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="••••••••"
-                onFocus={() => setPasswordActive(true)}
-                onBlur={() => setPasswordActive(false)}
-                className={`w-full px-4 py-2 pr-12 rounded-xl border-2 transition-all duration-300 focus:outline-none focus:ring-4 ${
-                  passwordActive
-                    ? "border-gray-800 ring-gray-200"
-                    : "border-gray-300 hover:border-gray-400"
-                } bg-transparent text-gray-900 placeholder-gray-500`}
+                name="password"
+                type="password"
+                autoComplete="current-password"
                 required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#1a1a1a] focus:border-[#1a1a1a] sm:text-sm dark:bg-[#2b2b2b] dark:border-gray-700 dark:text-white"
+                placeholder="••••••••"
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-9 text-gray-500 hover:text-gray-700 transition-all"
-                tabIndex={-1}
-              >
-                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-              </button>
             </div>
+          </div>
 
-            {/* Submit Button */}
+          {/* Submit Button */}
+          <div>
             <button
               type="submit"
-              className="mt-2 py-2 cursor-pointer rounded-full bg-[#1a1a1a] text-white font-medium hover:bg-black active:scale-[0.98] transition-all duration-300"
+              className="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#1a1a1a] hover:bg-[#2b2b2b] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1a1a1a] transition-colors duration-200"
             >
+              <FontAwesomeIcon icon={faSignInAlt} className="mr-2 h-4 w-4" />
               Log In
             </button>
+          </div>
+        </form>
 
-            {/* Sign Up Redirect */}
-            <div className="flex items-center justify-center gap-2 mt-6 text-sm text-gray-600">
-              <span>Don’t have an account?</span>
-              <NavLink
-                to="/signup"
-                onClick={() => setActiveIndex(1)}
-                className="font-medium text-gray-900 hover:underline"
-              >
-                Sign up
-              </NavLink>
-            </div>
-          </form>
-        )}
+        {/* Footer Link */}
+        <div className="text-center">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Need an account? 
+            <Link to="/signup" className="font-medium text-[#1a1a1a] dark:text-white hover:text-gray-700 dark:hover:text-gray-300 ml-1">
+              Sign Up
+            </Link>
+          </p>
+        </div>
       </div>
-
-      {/* === Animations === */}
-      <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-        }
-        @keyframes gridMove {
-          0% { background-position: 0 0; }
-          100% { background-position: 60px 60px; }
-        }
-        @keyframes rotateSquare {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        @keyframes fadeInUp {
-          0% { opacity: 0; transform: translateY(30px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </div>
   );
 };
