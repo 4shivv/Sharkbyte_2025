@@ -237,7 +237,7 @@ const HeroPage = () => {
 
             {/* Right visual */}
             <div className="col-span-12 lg:col-span-5 relative">
-              <div className="rounded-3xl p-1 bg-gradient-to-br from-white to-gray-50 border border-gray-300" >
+              <div className="rounded-3xl p-1 bg-white border border-gray-300" >
                 <div className="bg-white rounded-3xl p-6 lg:p-8">
                   <div className="flex items-start justify-between gap-4">
                     <div>
@@ -271,10 +271,10 @@ const HeroPage = () => {
                   </div>
 
                   <div className="mt-6 flex items-center gap-3">
-                    <button onClick={() => navigate("/collab")} className="text-sm inline-flex items-center gap-2 px-4 py-2 rounded-md bg-sky-700 text-white">
-                      Run My Scan
+                    <button onClick={() => navigate("/collab")} className="text-sm inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-700 text-white">
+                      Scan
                     </button>
-                    <Link to="/learn" className="text-sm inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gray-50 border border-gray-200">
+                    <Link to="/learn" className="text-sm inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gray-50 border border-gray-200">
                       Learn more
                     </Link>
                   </div>
@@ -375,8 +375,8 @@ const HeroPage = () => {
                           <div className="mt-3 flex items-center justify-between">
                             <div className="text-xs text-gray-500">Runtime: 32s</div>
                             <div className="flex items-center gap-2">
-                              <button className="text-xs px-2 py-1 rounded-lg bg-white border border-gray-300">View</button>
-                              <button className="text-xs px-2 py-1 rounded-lg bg-sky-700 text-white">Contain</button>
+                              <button className="text-xs px-2 py-1 rounded-full bg-white border border-gray-300">View</button>
+                              <button className="text-xs px-2 py-1 rounded-full bg-sky-700 text-white">Contain</button>
                             </div>
                           </div>
                         </div>
@@ -442,7 +442,7 @@ const HeroPage = () => {
         </section>
 
         {/* CTA */}
-        <section className="py-20 bg-gradient-to-r from-white to-gray-50">
+        <section className="py-20 bg-[#F5F5F5]">
           <div className="max-w-[1200px] mx-auto px-6 text-center">
             <h4 className="text-2xl font-extrabold">Start hardening your agent deployments</h4>
             <p className="mt-2 text-gray-600 max-w-2xl mx-auto">Evaluate risks in minutes — not days. Safe-by-default policies you can audit and export.</p>
@@ -463,7 +463,7 @@ const HeroPage = () => {
         </section>
 
         {/* Footer */}
-        <footer className="bg-white border-t border-gray-100 py-12">
+        <footer className=" bg-[#F5F5F5] borde border-t border-gray-100 py-12">
           <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center gap-3">
@@ -476,7 +476,7 @@ const HeroPage = () => {
                 </div>
               </div>
 
-              <div className="mt-4 text-sm text-gray-600">© {new Date().getFullYear()} AgentGuard, Inc. All rights reserved.</div>
+              
             </div>
 
             <div>
@@ -498,16 +498,18 @@ const HeroPage = () => {
             </div>
 
             <div>
-              <div className="font-semibold mb-3">Stay up to date</div>
+              <div className="flex items-center  font-semibold mb-3 gap-2">
+                <FontAwesomeIcon icon={faEnvelope} />
+                Contact Us
+               
+              </div>
+              
               <form onSubmit={(e) => { e.preventDefault(); alert("Subscribed (demo)"); }} className="flex gap-2">
-                <input id="searchInput" aria-label="Email" className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm" placeholder="you@example.com" />
-                <button className="px-3 py-2 bg-gray-900 text-white rounded-md text-sm">Subscribe</button>
+                <input id="searchInput" aria-label="Email" className="flex-1 px-3 py-2 border border-gray-300 rounded-xl text-sm" placeholder="you@example.com" />
+                <button className="px-3 py-2 bg-gray-900 text-white rounded-full text-sm">Subscribe</button>
               </form>
 
-              <div className="mt-4 text-sm text-gray-600 flex items-center gap-3">
-                <FontAwesomeIcon icon={faEnvelope} />
-                <Link to="/contact" className="hover:underline">Contact</Link>
-              </div>
+              
             </div>
           </div>
         </footer>
@@ -615,7 +617,7 @@ function FeatureCard({ icon, title, desc, addRef }) {
   const ref = useRef(null);
   useEffect(() => { if (ref.current && addRef) addRef(ref.current); }, [addRef]);
   return (
-    <article ref={ref} className="reveal-card rounded-2xl p-6 bg-white border border-gray-200 transition-all" tabIndex={0} aria-labelledby={`feature-${title}`}>
+    <article ref={ref} className="reveal-card rounded-2xl p-6 bg-white border border-gray-300 transition-all" tabIndex={0} aria-labelledby={`feature-${title}`}>
       <div className="flex items-start gap-4">
         <div className="p-3 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center">
           <FontAwesomeIcon icon={icon} className="text-2xl text-gray-700" />
@@ -626,11 +628,11 @@ function FeatureCard({ icon, title, desc, addRef }) {
           <p className="text-sm text-gray-600 mt-2">{desc}</p>
 
           <div className="mt-4 flex items-center gap-3">
-            <button className="text-xs flex px-2 py-2 rounded-md border border-gray-300 cursor-pointer">Learn </button>
-            <button className="text-xs flex px-3 py-2 rounded-md bg-sky-700 text-white cursor-pointer">Try it</button>
+            <button className="text-xs flex px-2 py-1.5 rounded-full border border-gray-300 cursor-pointer">Learn </button>
+            <button className="text-xs flex px-3 py-1.5 rounded-full bg-sky-700 text-white cursor-pointer">Try it</button>
             <div className="flex items-center gap-2 ml-auto text-xs text-gray-400">
               <span>Latency</span>
-              <span className="px-2 py-1 rounded bg-gray-100 border text-gray-700">12ms</span>
+              <span className="px-2.5 py-1 rounded-full bg-gray-100 border text-gray-700">12ms</span>
             </div>
           </div>
         </div>
@@ -660,8 +662,8 @@ function VideoModal({ onClose }) {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <button onClick={() => { navigator.clipboard?.writeText(window.location.href); }} className="px-3 py-1.5 rounded-xl border border-gray-300 text-sm cursor-pointer">Copy link</button>
-            <button onClick={onClose} className="px-3 py-1.5 rounded-xl text-sm text-white bg-gray-900 border cursor-pointer">Close</button>
+            <button onClick={() => { navigator.clipboard?.writeText(window.location.href); }} className="px-3 py-1.5 rounded-full border border-gray-300 text-sm cursor-pointer">Copy link</button>
+            <button onClick={onClose} className="px-3 py-1.5 rounded-full text-sm text-white bg-gray-900 border cursor-pointer">Close</button>
           </div>
         </div>
 

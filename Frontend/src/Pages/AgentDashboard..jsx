@@ -535,8 +535,8 @@ const AgentDashboard = () => {
                     </div>
 
                     <div className="mt-4 flex items-center gap-3">
-                      <button className="text-sm inline-flex items-center gap-2 px-4 py-2 rounded-md bg-sky-700 text-white cursor-pointer">Open Scan</button>
-                      <button className="text-sm inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gray-100 border border-gray-200 cursor-pointer">View Diff</button>
+                      <button className="text-sm inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-700 text-white cursor-pointer">Open Scan</button>
+                      <button className="text-sm inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gray-100 border border-gray-200 cursor-pointer">View Diff</button>
                     </div>
                   </div>
 
@@ -726,13 +726,13 @@ const AgentDashboard = () => {
                       <div className="mt-4 flex items-center gap-3">
                         <button
                           onClick={() => openAgent(agent)}
-                          className="px-3 py-1 rounded-md bg-gray-900 cursor-pointer text-white text-sm"
+                          className="px-3 py-1 rounded-full bg-gray-900 cursor-pointer text-white text-sm"
                         >
                           View
                         </button>
                         <button
                           onClick={() => scanNow(agent.id)}
-                          className="px-3 py-1 rounded-md border cursor-pointer border-gray-300 text-sm"
+                          className="px-3 py-1 rounded-full border cursor-pointer border-gray-300 text-sm"
                         >
                           Scan 
                         </button>
@@ -740,11 +740,11 @@ const AgentDashboard = () => {
                         <div className="ml-auto flex items-center gap-2">
                           <button
                             onClick={() => exportCSV()}
-                            className="text-xs px-3 py-1.5 rounded-md bg-white border border-gray-300"
+                            className=" px-3 py-1 text-sm rounded-full cursor-pointer bg-white border border-gray-300"
                           >
                             Export
                           </button>
-                          <Link to={`/agent/${agent.id}`} className="text-xs px-3 py-1.5 rounded-md border border-gray-300 bg-white">
+                          <Link to={`/agent/${agent.id}`} className="px-3 text-sm py-1 rounded-full border border-gray-300 bg-white">
                             Manage
                           </Link>
                         </div>

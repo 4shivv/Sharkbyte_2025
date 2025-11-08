@@ -22,8 +22,6 @@ import {
   faXmark, // For closing modal
 } from "@fortawesome/free-solid-svg-icons";
 
-
-
 /* ---------------------------
     Mock Data & Helpers
     --------------------------- */
@@ -355,12 +353,18 @@ const ProjectOverview = () => {
     document.body.style.overflow = "";
   };
 
-  // export CSV (simulated) — show toast - UNCHANGED
+   
+ 
+  
+  // ... rest of your code ...
+
+  // Remove the duplicate exportCSV at the top and keep only this one:
   const exportCSV = () => {
     // generate CSV text quickly
     const header = "id,name,owner,budget,status,team,deadline\n";
     const rows = projects.map((p) => `${p.id},${p.name},${p.owner},${p.budget},${p.status},${p.team},${p.deadline}`).join("\n");
     const csv = header + rows;
+    
     // download via blob
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
@@ -378,6 +382,8 @@ const ProjectOverview = () => {
     exportTimer.current = setTimeout(() => setShowingExportToast(false), 3500);
   };
 
+  
+
   // simulated "update status" action - UNCHANGED
   const updateStatus = (projectId) => {
     const statuses = ["On Track", "Minor Risk", "Delayed", "Critical"];
@@ -394,7 +400,12 @@ const ProjectOverview = () => {
       })
     );
   };
-
+{showingExportToast && (
+        <div className="export-toast px-6 py-3 bg-gray-900 text-white rounded-xl shadow-xl flex items-center gap-3">
+          <FontAwesomeIcon icon={faDownload} className="text-green-400" />
+          <p className="text-sm font-medium">Export successful! `agents_export_...csv` downloaded.</p>
+        </div>
+      )}
   // complex, long inline styles + animations - UNCHANGED
   const InlineStyles = () => (
     <style>{`
@@ -492,7 +503,7 @@ const ProjectOverview = () => {
               </h2>
               <button 
                 onClick={closeProject} 
-                className="p-2 text-gray-400 cursor-pointer hover:text-gray-900 transition-colors rounded-full"
+                className="px-2 py-1.5 text-gray-400 cursor-pointer hover:bg-gray-100 hover:text-gray-900 transition-colors rounded-full"
                 aria-label="Close project details"
               >
                 <FontAwesomeIcon icon={faXmark} />
@@ -528,13 +539,7 @@ const ProjectOverview = () => {
       <div className="min-h-screen bg-gradient-to-b pt-[8%] from-white via-white to-gray-50 text-gray-900 antialiased">
         <InlineStyles />
 
-        {/* Export Toast */}
-        {showingExportToast && (
-          <div className="export-toast p-4 bg-gray-900 text-white rounded-xl shadow-2xl flex items-center gap-3">
-            <FontAwesomeIcon icon={faDownload} className="text-green-400" />
-            <div className="text-sm">Project data exported successfully!</div>
-          </div>
-        )}
+       
 
         
         <header ref={heroRef} className="relative overflow-hidden">
@@ -646,8 +651,8 @@ const ProjectOverview = () => {
                       </div>
 
                       <div className="mt-4 flex items-center gap-3">
-                        <button className="text-sm inline-flex items-center gap-2 px-4 py-2 rounded-md bg-sky-700 text-white">View Details</button>
-                        <button className="text-sm inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gray-100 border border-gray-300">Open Tickets</button>
+                        <button className="text-sm inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sky-700 text-white">View Details</button>
+                        <button className="text-sm inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 border border-gray-300">Open Tickets</button>
                       </div>
                     </div>
 
@@ -830,13 +835,13 @@ const ProjectOverview = () => {
                         <div className="mt-4 flex items-center gap-3">
                           <button
                             onClick={() => openProject(project)}
-                            className="px-3 py-1 rounded-md bg-gray-900 text-white text-sm"
+                            className="px-3 py-1 cursor-pointer rounded-full bg-gray-900 text-white text-sm"
                           >
                             View
                           </button>
                           <button
                             onClick={() => updateStatus(project.id)}
-                            className="px-3 py-1 rounded-md bg-gray-50 border border-gray-300 text-black text-sm"
+                            className="px-3 py-1 cursor-pointer rounded-full bg-gray-50 border border-gray-300 text-black text-sm"
                           >
                             Update
                           </button>
@@ -844,11 +849,11 @@ const ProjectOverview = () => {
                           <div className="ml-auto flex items-center gap-2">
                             <button
                               onClick={() => exportCSV()}
-                              className="px-3 py-1 rounded-md border border-gray-300 text-sm"
+                              className="px-3 py-1  cursor-pointer rounded-full border border-gray-300 text-sm"
                             >
                               Report
                             </button>
-                            <Link to={`/project/${project.id}`} className="px-3 py-1 rounded-md border border-gray-300 text-sm">
+                            <Link to={`/project/${project.id}`} className="px-3 py-1 rounded-full border border-gray-300 text-sm">
                               Settings
                             </Link>
                           </div>
@@ -952,7 +957,14 @@ const ProjectOverview = () => {
             </section>
           )}
         </main>
+       
       </div>
+       {showingExportToast && (
+               <div className="export-toast px-6 py-3 bg-gray-900 text-white rounded-xl shadow-xl flex items-center gap-3">
+                 <FontAwesomeIcon icon={faDownload} className="text-green-400" />
+                 <p className="text-sm font-medium">Export successful! `agents_export_...csv` downloaded.</p>
+               </div>
+             )}
     </div>
   );
 };

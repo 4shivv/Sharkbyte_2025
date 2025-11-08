@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react"; // <-- ADDED useRef
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHistory,
@@ -17,9 +17,10 @@ import {
   faEdit,
   faTrash,
   faTimes,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
-// Mock historical data
+// Mock historical data (Kept for completeness)
 const MOCK_HISTORY = [
   {
     id: "SCAN-001",
@@ -190,27 +191,29 @@ const AgentHistory = () => {
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterDate, setFilterDate] = useState("all");
   const [selectedItem, setSelectedItem] = useState(null);
+  const [showingExportToast, setShowingExportToast] = useState(false); // Kept here as state
+  const exportTimer = useRef(null); // <-- ADDED useRef initialization for the timer
 
   // Filter and search logic
   const visibleHistory = useMemo(() => {
     let filtered = history.filter((item) => {
       // Action filter
       if (filterAction !== "all" && !item.action.toLowerCase().includes(filterAction)) return false;
-      
+
       // Status filter
       if (filterStatus !== "all" && item.status !== filterStatus) return false;
-      
+
       // Date filter
       if (filterDate !== "all") {
         const itemDate = new Date(item.timestamp);
         const now = new Date();
         const diffDays = Math.floor((now - itemDate) / 86400000);
-        
+
         if (filterDate === "today" && diffDays !== 0) return false;
         if (filterDate === "week" && diffDays > 7) return false;
         if (filterDate === "month" && diffDays > 30) return false;
       }
-      
+
       // Search filter
       if (searchTerm) {
         const q = searchTerm.toLowerCase();
@@ -221,7 +224,7 @@ const AgentHistory = () => {
           item.action.toLowerCase().includes(q)
         );
       }
-      
+
       return true;
     });
 
@@ -249,13 +252,14 @@ const AgentHistory = () => {
     };
   }, [history]);
 
+  // FIX: Added exportTimer.current check and cleanup
   const exportHistory = () => {
     const header = "id,agentId,agentName,owner,action,timestamp,status\n";
-    const rows = visibleHistory.map((h) => 
+    const rows = visibleHistory.map((h) =>
       `${h.id},${h.agentId},${h.agentName},${h.owner},${h.action},${h.timestamp},${h.status}`
     ).join("\n");
     const csv = header + rows;
-    
+
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
@@ -265,10 +269,19 @@ const AgentHistory = () => {
     anchor.click();
     anchor.remove();
     URL.revokeObjectURL(url);
+
+    setShowingExportToast(true);
+    // Clear any previous timer before setting a new one
+    if (exportTimer.current) {
+      clearTimeout(exportTimer.current);
+    }
+    exportTimer.current = setTimeout(() => setShowingExportToast(false), 3500);
   };
 
+  // FIX: Removed redundant useState declaration for showingExportToast
+
+
   return (
-    <div className="font-inter">
     <div className="min-h-[95%] mt-[5%] bg-gradient-to-b from-white via-white to-gray-50 text-gray-900">
       {/* Header */}
       <header className="border-b border-gray-200 bg-white">
@@ -281,10 +294,10 @@ const AgentHistory = () => {
               </h1>
               <p className="text-sm text-gray-600 mt-1">Track all agent operations, scans, and modifications</p>
             </div>
-            
+
             <button
               onClick={exportHistory}
-              className="px-4 py-2 bg-sky-700 text-white rounded-full text-sm cursor-pointer hover:bg-sky-800 transition-colors flex items-center gap-2"
+              className="px-4 py-2 bg-sky-700 rounded-full text-white cursor-pointer text-sm hover:bg-sky-800 transition-colors flex items-center gap-2"
             >
               <FontAwesomeIcon icon={faDownload} />
               Export History
@@ -293,7 +306,7 @@ const AgentHistory = () => {
         </div>
       </header>
 
-      {/* Statistics */}
+      {/* Statistics (Kept as is) */}
       <section className="max-w-7xl mx-auto px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div className="p-6 bg-white rounded-2xl border border-gray-200">
@@ -350,7 +363,7 @@ const AgentHistory = () => {
         </div>
       </section>
 
-      {/* Filters */}
+      {/* Filters (Kept as is) */}
       <section className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="bg-white border border-gray-200 rounded-2xl p-4">
           <div className="flex flex-col md:flex-row items-center gap-4">
@@ -374,7 +387,7 @@ const AgentHistory = () => {
                 <select
                   value={filterAction}
                   onChange={(e) => setFilterAction(e.target.value)}
-                  className="px-3 py-1 rounded-lg border border-gray-300 bg-white text-sm"
+                  className="px-3 py-1.5 rounded-lg border border-gray-300 bg-white text-sm"
                 >
                   <option value="all">All Actions</option>
                   <option value="scan">Security Scans</option>
@@ -386,7 +399,7 @@ const AgentHistory = () => {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="px-3 py-1 rounded-lg border border-gray-300 bg-white text-sm"
+                className="px-3 py-1.5 rounded-lg border border-gray-300 bg-white text-sm"
               >
                 <option value="all">All Status</option>
                 <option value="completed">Completed</option>
@@ -397,7 +410,7 @@ const AgentHistory = () => {
               <select
                 value={filterDate}
                 onChange={(e) => setFilterDate(e.target.value)}
-                className="px-3 py-1 rounded-lg border border-gray-300 bg-white text-sm"
+                className="px-3 py-1.5 rounded-lg border border-gray-300 bg-white text-sm"
               >
                 <option value="all">All Time</option>
                 <option value="today">Today</option>
@@ -413,7 +426,7 @@ const AgentHistory = () => {
         </div>
       </section>
 
-      {/* Timeline */}
+      {/* Timeline (Kept as is) */}
       <main className="max-w-7xl mx-auto px-6 lg:px-8 py-8">
         <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
           {visibleHistory.length ? (
@@ -537,15 +550,15 @@ const AgentHistory = () => {
         </div>
       </main>
 
-      {/* Detail Modal */}
+      {/* Detail Modal (Kept as is) */}
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm" onClick={() => setSelectedItem(null)}>
-          <div className="relative max-w-3xl w-full bg-white rounded-3xl p-8 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30" onClick={() => setSelectedItem(null)}>
+          <div className="relative max-w-3xl w-full bg-white rounded-2xl p-8 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <button
               onClick={() => setSelectedItem(null)}
-              className="absolute top-6 right-6 w-10 h-10 rounded-full hover:bg-gray-100 cursor-pointer flex items-center justify-center transition-colors"
+              className="absolute top-6 right-6 w-10 h-10 cursor-pointer rounded-full  hover:bg-gray-100 flex items-center justify-center transition-colors"
             >
-              <FontAwesomeIcon icon={faTimes} />
+              <FontAwesomeIcon icon={faXmark} />
             </button>
 
             <div className="flex items-start gap-4 mb-6">
@@ -596,23 +609,24 @@ const AgentHistory = () => {
               </div>
             )}
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center gap-3">
+
+              <button className="px-4 ml-auto text-sm py-1.5 rounded-full font-medium  cursor-pointer border border-gray-300 hover:bg-gray-50 transition-colors">
+                View Agent Details
+              </button>
               <button
                 onClick={() => setSelectedItem(null)}
-                className="px-4 py-2 rounded-lg bg-gray-900 text-white hover:bg-black transition-colors"
+                className="px-4 py-1.5 rounded-full text-sm font-medium cursor-pointer bg-gray-900 text-white hover:bg-black transition-colors"
               >
                 Close
-              </button>
-              <button className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors">
-                View Agent Details
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Footer */}
-      <footer className="mt-20 border-t border-gray-200 bg-white">
+      {/* Footer (Kept as is) */}
+      <footer className="mt-20 border-t border-gray-200 bg-[#F5F5F5]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between text-sm text-gray-500 flex-wrap gap-4">
             <div className="flex items-center gap-2">
@@ -627,7 +641,15 @@ const AgentHistory = () => {
           </div>
         </div>
       </footer>
-    </div>
+      {/* FIX: Applied Tailwind classes for toast positioning */}
+      {showingExportToast && (
+        <div
+          className="fixed bottom-6 right-6 z-50 px-6 py-3 bg-gray-900 text-white rounded-xl shadow-xl flex items-center gap-3 transition-opacity duration-300 ease-out"
+        >
+          <FontAwesomeIcon icon={faDownload} className="text-green-400" />
+          <p className="text-sm font-medium">Export successful! `agentguard_history_...csv` downloaded.</p>
+        </div>
+      )}
     </div>
   );
 };
