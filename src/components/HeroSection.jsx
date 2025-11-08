@@ -237,7 +237,7 @@ const HeroPage = () => {
 
             {/* Right visual */}
             <div className="col-span-12 lg:col-span-5 relative">
-              <div className="rounded-3xl p-1 bg-gradient-to-br from-white to-gray-50 border border-gray-200" >
+              <div className="rounded-3xl p-1 bg-gradient-to-br from-white to-gray-50 border border-gray-300" >
                 <div className="bg-white rounded-3xl p-6 lg:p-8">
                   <div className="flex items-start justify-between gap-4">
                     <div>
@@ -660,8 +660,8 @@ function VideoModal({ onClose }) {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <button onClick={() => { navigator.clipboard?.writeText(window.location.href); }} className="px-3 py-2 rounded border text-sm">Copy link</button>
-            <button onClick={onClose} className="px-3 py-2 rounded text-sm bg-gray-50 border">Close</button>
+            <button onClick={() => { navigator.clipboard?.writeText(window.location.href); }} className="px-3 py-1.5 rounded-xl border border-gray-300 text-sm cursor-pointer">Copy link</button>
+            <button onClick={onClose} className="px-3 py-1.5 rounded-xl text-sm text-white bg-gray-900 border cursor-pointer">Close</button>
           </div>
         </div>
 

@@ -543,7 +543,7 @@ const AgentHistory = () => {
           <div className="relative max-w-3xl w-full bg-white rounded-3xl p-8 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <button
               onClick={() => setSelectedItem(null)}
-              className="absolute top-6 right-6 w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+              className="absolute top-6 right-6 w-10 h-10 rounded-full hover:bg-gray-100 cursor-pointer flex items-center justify-center transition-colors"
             >
               <FontAwesomeIcon icon={faTimes} />
             </button>

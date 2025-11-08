@@ -7,7 +7,7 @@ import { ScreenContext } from '../Layouts/RootLayout';
 const NavBar = () => {
   const navItems = [
     { label: 'Dashboard', path: '/dashboard' },
-    { label: 'New Project', path: '/newproject' },
+    { label: 'Project', path: '/newproject' },
     { label: 'History', path: '/history' },
   ];
 
@@ -76,12 +76,7 @@ const NavBar = () => {
             {!isMobile && (
               <div className="relative flex items-center gap-8">
                 {/* Highlight */}
-                <span
-                  className={`absolute bottom-0 h-[2px] bg-white rounded-full transition-all duration-500 ease-out ${
-                    bgStyle.visible ? 'opacity-100' : 'opacity-0'
-                  }`}
-                  style={{ left: bgStyle.left, width: bgStyle.width }}
-                />
+              
 
                 {navItems.map((item, index) => (
                   <NavLink
@@ -129,9 +124,9 @@ const NavBar = () => {
             {isMobile && (
               <button
                 onClick={() => setIsMobileOpen(prev => !prev)}
-                className="ml-auto p-2 rounded-full hover:bg-black/70 text-white transition-colors cursor-pointer"
+                className="ml-auto px-1.5 py-0.5 rounded-full hover:bg-black/70 text-white transition-colors cursor-pointer"
               >
-                <FontAwesomeIcon icon={isMobileOpen ? faXmark : faBars} size="lg" />
+                <FontAwesomeIcon icon={isMobileOpen ? faXmark : faBars} size="sm" />
               </button>
             )}
           </div>

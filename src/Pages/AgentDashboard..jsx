@@ -15,13 +15,14 @@ import {
   faChevronDown,
   faDownload,
   faEllipsisV,
+  faTimes, // Added for the modal close button
 } from "@fortawesome/free-solid-svg-icons";
 
 
 
 /* ---------------------------
-   Mock Data & Helpers
-   --------------------------- */
+    Mock Data & Helpers
+    --------------------------- */
 const MOCK_AGENTS = [
   { id: "AGNT-001", name: "RFP Grant Writer", owner: "Alice Johnson", score: 85, risk: "Low", scans: 4, lastScan: "2025-10-28" },
   { id: "AGNT-002", name: "Customer Service Bot", owner: "Bob Smith", score: 55, risk: "High", scans: 1, lastScan: "2025-11-04" },
@@ -47,8 +48,152 @@ const formatNumberShort = (n) => {
 };
 
 /* ---------------------------
-   Main Component
-   --------------------------- */
+    Agent Registration Modal Component (NEW)
+    --------------------------- */
+
+/**
+ * Renders a full-screen modal/popup for registering a new agent.
+ */
+const RegisterAgentModal = ({ isOpen, onClose, onRegister }) => {
+  // Simple form state for simulation
+  const [agentName, setAgentName] = useState("");
+  const [agentType, setAgentType] = useState("LLM");
+  const [agentOwner, setAgentOwner] = useState("");
+
+  if (!isOpen) return null;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    // Simulate a successful registration by adding a new agent
+    onRegister({
+        id: `AGNT-${Math.floor(Math.random() * 900) + 100}`,
+        name: agentName || "New Unnamed Agent",
+        owner: agentOwner || "Unassigned",
+        score: Math.max(50, Math.floor(Math.random() * 50) + 50), // Score between 50-99
+        risk: getRiskColor(75).label,
+        scans: 0,
+        lastScan: new Date().toISOString().slice(0, 10),
+    });
+
+    // Reset form and close
+    setAgentName("");
+    setAgentOwner("");
+    setAgentType("LLM");
+    onClose();
+  };
+
+  return (
+    <div 
+        className="fixed inset-0 z-[100] overflow-y-auto bg-black/30 bg-opacity-70 flex items-center justify-center p-4 transition-opacity duration-300"
+        aria-modal="true"
+        role="dialog"
+        onClick={onClose} // Close on backdrop click
+    >
+      <div 
+        className="bg-white rounded-3xl p-8 w-full max-w-lg mx-auto transform transition-all duration-300 scale-100"
+        onClick={(e) => e.stopPropagation()} // Prevent clicking modal content from closing it
+      >
+        <div className="flex justify-between items-start border-b pb-4 mb-4">
+          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-3">
+            <FontAwesomeIcon icon={faPlus} className="text-sky-700" />
+            Register New Agent
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-700 transition"
+            aria-label="Close registration form"
+          >
+            <FontAwesomeIcon icon={faTimes} className="text-xl" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="agent-name" className="block text-sm font-medium text-gray-700 mb-1">
+              Agent Name
+            </label>
+            <input
+              id="agent-name"
+              type="text"
+              required
+              value={agentName}
+              onChange={(e) => setAgentName(e.target.value)}
+              placeholder="e.g., Internal QA Agent"
+              className="mt-1 block w-full rounded-lg border-gray-200 p-2 border"
+            />
+          </div>
+          
+          <div>
+            <label htmlFor="agent-owner" className="block text-sm font-medium text-gray-700 mb-1">
+              Agent Owner
+            </label>
+            <input
+              id="agent-owner"
+              type="text"
+              required
+              value={agentOwner}
+              onChange={(e) => setAgentOwner(e.target.value)}
+              placeholder="e.g., Alice Johnson"
+              className="mt-1 block w-full rounded-lg border-gray-200 p-2 border"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="agent-type" className="block text-sm font-medium text-gray-700 mb-1">
+              Agent Type
+            </label>
+            <select
+              id="agent-type"
+              value={agentType}
+              onChange={(e) => setAgentType(e.target.value)}
+              className="mt-1 block w-full rounded-lg border-gray-200 p-2 border bg-white"
+            >
+              <option value="LLM">LLM-based (Large Language Model)</option>
+              <option value="RAG">RAG System (Retrieval-Augmented)</option>
+              <option value="Traditional">Traditional Script/Bot</option>
+              <option value="Hybrid">Hybrid System</option>
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="agent-config" className="block text-sm font-medium text-gray-700 mb-1">
+              Initial Configuration URL/Repo
+            </label>
+            <input
+              id="agent-config"
+              type="url"
+              placeholder="https://repo.corp/my-agent-v1.git"
+              className="mt-1 block w-full rounded-lg border-gray-200 px-2 py-1.5 border"
+            />
+          </div>
+
+          <div className="flex justify-end pt-4 gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-full hover:bg-gray-50 transition"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 text-sm font-semibold text-white bg-sky-700 rounded-full hover:bg-sky-800 transition flex items-center gap-2"
+            >
+              <FontAwesomeIcon icon={faPlus} />
+              Start Monitoring
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+
+/* ---------------------------
+    Main Component
+    --------------------------- */
 const AgentDashboard = () => {
   // primary state
   const [agents, setAgents] = useState(MOCK_AGENTS);
@@ -60,12 +205,28 @@ const AgentDashboard = () => {
   const [sortBy, setSortBy] = useState("score_desc");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showingExportToast, setShowingExportToast] = useState(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false); // NEW STATE for modal
   const navigate = useNavigate?.() ?? (() => {});
 
   // refs
   const heroRef = useRef(null);
   const inputRef = useRef(null);
   const exportTimer = useRef(null);
+
+  // Handlers for the new agent modal
+  const openRegisterModal = () => {
+    setIsRegisterModalOpen(true);
+    document.body.style.overflow = "hidden"; // Prevent background scrolling
+  };
+  const closeRegisterModal = () => {
+    setIsRegisterModalOpen(false);
+    document.body.style.overflow = ""; // Restore background scrolling
+  };
+  const handleAgentRegistration = (newAgentData) => {
+    // Add the newly registered agent to the list (simulated)
+    setAgents(prev => [newAgentData, ...prev]); 
+  };
+
 
   // parallax for hero (mouse)
   useEffect(() => {
@@ -93,13 +254,13 @@ const AgentDashboard = () => {
       }
       if (e.key.toLowerCase() === "n" && (e.ctrlKey || e.metaKey)) {
         e.preventDefault();
-        // simulate create new agent (navigate)
-        navigate("/register-agent");
+        // Open modal instead of navigating
+        openRegisterModal(); 
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [navigate]);
+  }, []); // Removed [navigate] dependency as navigation is replaced by modal
 
   // computed filtered & sorted list
   const visibleAgents = useMemo(() => {
@@ -247,13 +408,20 @@ const AgentDashboard = () => {
   );
 
   /* ---------------------------
-     Rendered UI Sections (single file contains many sub-structures)
-     --------------------------- */
+      Rendered UI Sections (single file contains many sub-structures)
+      --------------------------- */
 
   return (
     <div className="min-h-screen bg-gradient-to-b pt-30 from-white via-white to-gray-50 text-gray-900 antialiased font-inter">
       <InlineStyles />
 
+      {/* NEW: Agent Registration Modal */}
+      <RegisterAgentModal 
+        isOpen={isRegisterModalOpen} 
+        onClose={closeRegisterModal} 
+        onRegister={handleAgentRegistration}
+      />
+      {/* END NEW: Agent Registration Modal */}
       
 
       
@@ -274,7 +442,7 @@ const AgentDashboard = () => {
 
               <div className="mt-8 flex flex-wrap gap-4 items-center">
                 <button
-                  onClick={() => navigate("/register-agent")}
+                  onClick={openRegisterModal} // UPDATED to open modal
                   className="flex justify-center items-center gap-3 px-4 py-2.5 bg-sky-700 text-white rounded-full text-sm font-semibold cursor-pointer hover:bg-sky-800 transition"
                 >
                   <FontAwesomeIcon icon={faPlus} />
@@ -325,7 +493,7 @@ const AgentDashboard = () => {
             {/* right visual - MacBook-like card */}
             <div className="col-span-12 lg:col-span-5">
               <div
-                className="rounded-3xl   p-6 relative overflow-hidden border border-gray-200"
+                className="rounded-3xl   p-6 relative overflow-hidden border border-gray-200"
                 
                 
               >
@@ -499,14 +667,21 @@ const AgentDashboard = () => {
         </div>
 
         {/* Content area */}
-        {viewMode === "cards" ? (
+        {visibleAgents.length === 0 && (
+            <div className="col-span-full text-center py-16 bg-white rounded-2xl border border-gray-300 mb-8">
+                <div className="text-lg font-semibold">No agents matched your search</div>
+                <div className="text-sm text-gray-500 mt-2">Try removing filters or click **Register New Agent** to begin monitoring.</div>
+            </div>
+        )}
+
+        {viewMode === "cards" && visibleAgents.length > 0 && (
           <section aria-label="Agent cards" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {visibleAgents.length ? visibleAgents.map((agent, idx) => {
+            {visibleAgents.map((agent, idx) => {
               const risk = getRiskColor(agent.score);
               return (
                 <article
                   key={agent.id}
-                  className={`p-6 bg-white rounded-2xl border border-gray-300  card-reveal ${idx < 6 ? "visible" : ""}`}
+                  className={`p-6 bg-white rounded-2xl border border-gray-300  card-reveal ${idx < 6 ? "visible" : ""}`}
                   tabIndex={0}
                   aria-labelledby={`agent-${agent.id}`}
                 >
@@ -577,14 +752,11 @@ const AgentDashboard = () => {
                   </div>
                 </article>
               );
-            }) : (
-              <div className="col-span-full text-center py-16 bg-white rounded-2xl">
-                <div className="text-lg font-semibold">No agents matched your search</div>
-                <div className="text-sm text-gray-500 mt-2">Try removing filters or registering a new agent.</div>
-              </div>
-            )}
+            })}
           </section>
-        ) : (
+        )}
+
+        {viewMode === "table" && visibleAgents.length > 0 && (
           <section aria-label="Agent table" className="bg-white rounded-2xl border border-gray-300 overflow-hidden">
             <div className="p-4 border-b border-gray-100 flex items-center justify-between">
               <div>
@@ -660,287 +832,131 @@ const AgentDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-xs text-gray-500">Risk over time</div>
-                <div className="text-lg font-semibold">Agent fleet risk trend</div>
+                {/* Placeholder for SVG Chart */}
+                <div className="h-64 w-full bg-gray-200 rounded-lg mt-4 flex items-center justify-center text-gray-500">
+                    [Placeholder for complex Risk/Score trend chart visualization]
+                </div>
               </div>
-              <div className="text-sm text-gray-500">Last 30 days</div>
-            </div>
-
-            <div className="mt-6">
-              {/* simple inline SVG sparkline with gradients and many points (longer) */}
-              <svg viewBox="0 0 900 240" className="w-full h-44">
-                <defs>
-                  <linearGradient id="gline" x1="0" x2="1">
-                    <stop offset="0%" stopColor="#f97316" stopOpacity="0.12" />
-                    <stop offset="50%" stopColor="#f43f5e" stopOpacity="0.10" />
-                    <stop offset="100%" stopColor="#7c3aed" stopOpacity="0.08" />
-                  </linearGradient>
-                  <linearGradient id="strokeGrad" x1="0" x2="1">
-                    <stop offset="0%" stopColor="#f97316" />
-                    <stop offset="50%" stopColor="#ef4444" />
-                    <stop offset="100%" stopColor="#7c3aed" />
-                  </linearGradient>
-                  <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="8" result="coloredBlur" />
-                    <feMerge>
-                      <feMergeNode in="coloredBlur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                </defs>
-
-                {/* background area */}
-                <path d="M0 160 C70 140 140 120 210 110 C280 100 350 112 420 96 C490 80 560 88 630 100 C700 112 770 128 840 110 L900 110 L900 240 L0 240 Z"
-                      fill="url(#gline)" opacity="0.9" />
-
-                {/* stroked path */}
-                <path d="M0 160 C70 140 140 120 210 110 C280 100 350 112 420 96 C490 80 560 88 630 100 C700 112 770 128 840 110"
-                      fill="none" stroke="url(#strokeGrad)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" filter="url(#glow)" />
-
-                {/* many small dots to indicate events */}
-                {Array.from({length: 18}).map((_, i) => {
-                  const x = 40 + i * 46;
-                  const y = 160 - Math.sin(i / 2.3) * 36 - (i % 3) * 6;
-                  return <circle key={i} cx={x} cy={y} r="4" fill="#fff" stroke="#ef4444" strokeWidth="1.5" />;
-                })}
-
-              </svg>
-            </div>
-
-            <div className="mt-6 text-sm text-gray-600">
-              The chart above shows a simplified risk trend across the fleet. Spikes indicate agent runs flagged for instruction hierarchy issues or possible data leakage.
-              Use this view to prioritize containment rules and review recent changes to system prompts.
-            </div>
-
-            <div className="mt-6 flex items-center gap-3">
-              <button className="px-4 py-2 rounded-md bg-gray-900 text-white">Open analytics</button>
-              <button className="px-4 py-2 rounded-md border border-gray-300 cursor-pointer">Compare periods</button>
-            </div>
           </div>
-
-          <aside className="p-6 bg-gray-100 rounded-2xl">
-            <div className="text-xs text-gray-500">Quick actions</div>
-            <div className="mt-3 grid gap-3">
-              <button onClick={() => setAgents((s)=>[...s, { id: `AGNT-${Math.floor(Math.random()*900)+100}`, name: "New Agent "+(s.length+1), owner: "You", score: 78, risk: "Medium", scans: 0, lastScan: new Date().toISOString().slice(0,10) }])} className="px-3 py-2 rounded-md bg-white border text-sm hover:bg-gray-200 transition-colors border-gray-300 cursor-pointer">Create test agent</button>
-              <button onClick={() => setAgents((s)=>s.slice(0, Math.max(1,s.length-1)))} className="px-3 py-2 rounded-md text-sm border border-gray-300 cursor-pointer hover:bg-gray-200 transition-colors">Remove last agent</button>
-              <button onClick={() => exportCSV()} className="px-3 py-2 rounded-md bg-gray-900 text-white text-sm cursor-pointer hover:bg-black/85 ">Export all</button>
-            </div>
-
-            <div className="mt-6 text-xs text-gray-500">Integrations</div>
-            <div className="mt-2 flex items-center gap-2">
-              <div className="p-2 rounded-md bg-gray-50 border border-gray-300 text-xs">Slack</div>
-              <div className="p-2 rounded-md bg-gray-50 border border-gray-300 text-xs">PagerDuty</div>
-              <div className="p-2 rounded-md bg-gray-50 border border-gray-300 text-xs">S3</div>
-            </div>
-          </aside>
-        </section>
-
-        {/* Large table of agents w/ simulated pagination controls (longer file) */}
-        <section className="mt-12 bg-white rounded-2xl border border-gray-300 p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-xs text-gray-500">Fleet overview</div>
-              <div className="text-lg font-semibold">All agents</div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="text-xs text-gray-500">Rows per page</div>
-              <select className="px-2 py-1 rounded-md border text-sm border-gray-300 bg-white cursor-pointer">
-                <option>10</option>
-                <option>25</option>
-                <option>50</option>
-              </select>
-            </div>
           </div>
-
-          <div className="mt-6 overflow-x-auto">
-            <table className="w-full table-auto">
-              <thead className="text-xs text-gray-500 uppercase">
-                <tr>
-                  <th className="px-4 py-3">ID</th>
-                  <th className="px-4 py-3">Agent</th>
-                  <th className="px-4 py-3">Owner</th>
-                  <th className="px-4 py-3">Score</th>
-                  <th className="px-4 py-3">Risk</th>
-                  <th className="px-4 py-3">Scans</th>
-                  <th className="px-4 py-3">Last Scan</th>
-                  <th className="px-4 py-3"></th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {visibleAgents.map((a) => {
-                  const risk = getRiskColor(a.score);
-                  return (
-                    <tr key={a.id} className="hover:bg-gray-50 rounded-xl">
-                      <td className="px-4 py-3 text-sm font-mono">{a.id}</td>
-                      <td className="px-4 py-3">
-                        <div className="font-medium">{a.name}</div>
-                        <div className="text-xs text-gray-500">type: autonomous</div>
-                      </td>
-                      <td className="px-4 py-3 text-sm">{a.owner}</td>
-                      <td className="px-4 py-3">
-                        <div className="text-lg font-semibold">{a.score}</div>
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className={`inline-flex px-2 py-1 rounded-full text-xs font-semibold ${risk.bg} ${risk.text}`}>{risk.label}</div>
-                      </td>
-                      <td className="px-4 py-3 text-sm">{a.scans}</td>
-                      <td className="px-4 py-3 text-sm">{a.lastScan}</td>
-                      <td className="px-4 py-3 text-right">
-                        <button onClick={() => openAgent(a)} className="px-3 py-2 text-xs rounded-md border border-gray-300 cursor-pointer">Details</button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-
-          {/* pagination */}
-          <div className="mt-6 flex items-center justify-between">
-            <div className="text-sm text-gray-500">Showing {visibleAgents.length} of {agents.length}</div>
-            <div className="flex items-center gap-2 text-xs">
-              <button className="px-3 py-2 rounded-md border border-gray-300 cursor-pointer">Prev</button>
-              <div className="px-3 py-2 rounded-md border border-gray-300 cursor-pointer">1</div>
-              <button className="px-3 py-2 rounded-md border border-gray-300 cursor-pointer">Next</button>
-            </div>
+          <div className="lg:col-span-1 p-6 bg-gray-100 rounded-2xl">
+            <div className="text-xs text-gray-500">Security Insights</div>
+            <h3 className="text-lg font-semibold mt-1">Immediate Action Items</h3>
+            <ul className="mt-4 space-y-3 text-sm">
+                <li className="p-3 bg-white rounded-lg border border-gray-200 flex items-center gap-3">
+                    <FontAwesomeIcon icon={faEdit} className="text-orange-500" />
+                    Agent **AGNT-002** needs prompt sanitization update.
+                </li>
+                <li className="p-3 bg-white rounded-lg border border-gray-200 flex items-center gap-3">
+                    <FontAwesomeIcon icon={faShieldHalved} className="text-red-500" />
+                    Review RAG source access for **AGNT-006** (High Risk).
+                </li>
+                <li className="p-3 bg-white rounded-lg border border-gray-200 flex items-center gap-3">
+                    <FontAwesomeIcon icon={faHistory} className="text-sky-700" />
+                    Schedule next compliance scan for all Low-Risk agents.
+                </li>
+            </ul>
           </div>
         </section>
       </main>
 
-      {/* Agent detail modal (long, complex) */}
-      {selectedAgent && (
-        <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={closeAgent} />
-          <div className="relative max-w-4xl w-full bg-white rounded-3xl p-6  z-50">
-            <div className="flex items-start gap-4">
-              <div className="w-16 h-16 rounded-xl border-gray-100 bg-gray-100 flex items-center justify-center border">
-                <FontAwesomeIcon icon={faBrain} className="text-2xl" />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <div className="text-xs text-gray-500">Agent</div>
-                    <h2 className="text-xl font-semibold">{selectedAgent.name} <span className="text-xs text-gray-400 font-mono">({selectedAgent.id})</span></h2>
-                    <div className="text-sm text-gray-500 mt-1">Owner: {selectedAgent.owner}</div>
-                  </div>
-
-                  <div className="text-right">
-                    <div className="text-xs text-gray-500">Score</div>
-                    <div className="text-xl font-bold">{selectedAgent.score}</div>
-                    <div className="mt-3 flex items-center gap-2">
-                      <button onClick={()=>scanNow(selectedAgent.id)} className="px-3 py-1 text-sm cursor-pointer hover:bg-black/80 transition-colors rounded-md bg-gray-900 text-white">Scan now</button>
-                      <button onClick={closeAgent} className="px-3 py-1 text-sm cursor-pointer rounded-md border hover:bg-gray-100 transition-colors">Close</button>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="p-3 rounded-lg border border-gray-400 bg-gray-50">
-                    <div className="text-xs text-gray-500">Creation</div>
-                    <div className="mt-1 text-sm">2024-06-28</div>
-                  </div>
-                  <div className="p-3 rounded-lg border border-gray-400 bg-gray-50">
-                    <div className="text-xs text-gray-500">Last scanned</div>
-                    <div className="mt-1 text-sm">{selectedAgent.lastScan}</div>
-                  </div>
-                  <div className="p-3 rounded-lg border border-gray-400 bg-gray-50">
-                    <div className="text-xs text-gray-500">Scans</div>
-                    <div className="mt-1 text-sm">{selectedAgent.scans}</div>
-                  </div>
-                </div>
-
-                <div className="mt-6">
-                  <div className="text-sm font-semibold">Recent findings</div>
-                  <div className="mt-3 bg-white border border-gray-400 rounded-lg p-3 text-sm font-mono">
-{`> flagged: possible prompt dilution at step 2
-> suggested: add instruction role-scope & sandboxing
-> confidence: 0.83
-> risk: 4.1 / 10`}
-                  </div>
-
-                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div className="p-3 rounded-lg border border-gray-400">
-                      <div className="text-xs text-gray-500">Containment</div>
-                      <div className="mt-2 text-sm">Sandbox + rate limits</div>
-                    </div>
-                    <div className="p-3 rounded-lg border border-gray-400">
-                      <div className="text-xs text-gray-500">Mitigation</div>
-                      <div className="mt-2 text-sm">Add mandatory input validation & approve externally fetched data</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-6 flex items-center gap-3">
-                  <button className="px-3 py-1 text-sm cursor-pointer hover:bg-black/80 transition-colors rounded-md bg-gray-900 text-white">Open Run</button>
-                  <button className="px-3 py-1 text-sm cursor-pointer rounded-md border hover:bg-gray-100 transition-colors">Download Report</button>
-                  <button className="px-3 py-1 text-sm cursor-pointer rounded-md border hover:bg-gray-100 transition-colors">Edit Agent</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Export toast */}
+      {/* Export Toast Notification */}
       {showingExportToast && (
-        <div className="export-toast">
-          <div className="bg-white rounded-lg p-3 shadow-md border  border-gray-300">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-green-50 border border-green-400 flex items-center justify-center">
-                <FontAwesomeIcon icon={faDownload} />
-              </div>
-              <div className="text-sm">
-                <div className="font-semibold">Export started</div>
-                <div className="text-sm text-gray-500">Your CSV is downloading — check your downloads folder.</div>
-              </div>
+        <div className="export-toast px-6 py-3 bg-gray-900 text-white rounded-xl shadow-xl flex items-center gap-3">
+          <FontAwesomeIcon icon={faDownload} className="text-green-400" />
+          <p className="text-sm font-medium">Export successful! `agents_export_...csv` downloaded.</p>
+        </div>
+      )}
+
+      {/* Agent Detail Modal (Simulated) */}
+      {selectedAgent && (
+        <div 
+          className="fixed inset-0 z-[100] overflow-y-auto bg-gray-900 bg-opacity-70 flex items-center justify-center p-4 transition-opacity duration-300"
+          aria-modal="true"
+          role="dialog"
+          onClick={closeAgent}
+        >
+          <div 
+            className="bg-white rounded-3xl p-8 w-full max-w-2xl mx-auto shadow-2xl transform transition-all duration-300 scale-100"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-start border-b pb-4 mb-4">
+              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+                <FontAwesomeIcon icon={faBrain} className="text-sky-700" />
+                {selectedAgent.name}
+              </h2>
+              <button
+                onClick={closeAgent}
+                className="text-gray-400 hover:text-gray-700 transition"
+                aria-label="Close agent details"
+              >
+                <FontAwesomeIcon icon={faTimes} className="text-xl" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                    <div className="text-xs text-gray-500 uppercase">Agent ID</div>
+                    <div className="font-mono mt-1">{selectedAgent.id}</div>
+                </div>
+                <div>
+                    <div className="text-xs text-gray-500 uppercase">Owner</div>
+                    <div className="mt-1 flex items-center gap-2">
+                        <FontAwesomeIcon icon={faUser} className="text-gray-400" />
+                        {selectedAgent.owner}
+                    </div>
+                </div>
+                <div>
+                    <div className="text-xs text-gray-500 uppercase">Latest Score</div>
+                    <div className={`text-3xl font-bold ${getRiskColor(selectedAgent.score).text}`}>{selectedAgent.score}</div>
+                </div>
+                <div>
+                    <div className="text-xs text-gray-500 uppercase">Risk Level</div>
+                    <div className={`mt-1 inline-flex px-3 py-1 rounded-full text-sm font-semibold ${getRiskColor(selectedAgent.score).bg} ${getRiskColor(selectedAgent.score).text}`}>
+                        {getRiskColor(selectedAgent.score).label}
+                    </div>
+                </div>
+            </div>
+
+            <h3 className="text-lg font-semibold mt-6 border-t pt-4">Recent Activity</h3>
+            <ul className="mt-3 space-y-2 text-sm max-h-48 overflow-y-auto p-2 bg-gray-50 rounded-lg">
+                <li className="flex justify-between items-center p-2 rounded-md hover:bg-white">
+                    <span>Scan Completed: Prompt Injection Audit</span>
+                    <span className="text-xs text-gray-500">2025-11-06</span>
+                </li>
+                <li className="flex justify-between items-center p-2 rounded-md hover:bg-white">
+                    <span>Configuration Update: Rate limit increased</span>
+                    <span className="text-xs text-gray-500">2025-11-05</span>
+                </li>
+                <li className="flex justify-between items-center p-2 rounded-md hover:bg-white">
+                    <span>Manual Remediation Applied</span>
+                    <span className="text-xs text-gray-500">2025-11-04</span>
+                </li>
+                {selectedAgent.id === "AGNT-002" && (
+                    <li className="flex justify-between items-center p-2 rounded-md bg-red-50/50">
+                        <span className="font-medium text-red-700">ALERT: High Risk Vulnerability Detected</span>
+                        <span className="text-xs text-gray-500">2025-11-04</span>
+                    </li>
+                )}
+            </ul>
+
+            <div className="flex justify-end pt-6 gap-3">
+                <button
+                    onClick={() => scanNow(selectedAgent.id)}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-full hover:bg-gray-50 transition"
+                >
+                    Run New Scan
+                </button>
+                <Link to={`/agent/${selectedAgent.id}`}
+                    className="px-4 py-2 text-sm font-semibold text-white bg-sky-700 rounded-full hover:bg-sky-800 transition flex items-center gap-2"
+                >
+                    Go to Full Management
+                    <FontAwesomeIcon icon={faArrowRight} />
+                </Link>
             </div>
           </div>
         </div>
       )}
-
-      
-      <footer className="mt-20 border-t border-gray-100 bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
-            <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gray-900 text-white flex items-center justify-center">
-                  <FontAwesomeIcon icon={faShieldHalved} />
-                </div>              <div>
-                <div className="font-semibold">AgentGuard</div>
-                <div className="text-sm text-gray-500">Operationalized security for agents</div>
-              </div>
-            </div>
-            <div className="mt-6 text-sm text-gray-500">© {new Date().getFullYear()} AgentGuard, Inc.</div>
-          </div>
-
-          <div>
-            <div className="font-semibold">Product</div>
-            <ul className="mt-3 space-y-2 text-sm text-gray-500">
-              <li><Link to="/platform" className="hover:underline">Platform</Link></li>
-              <li><Link to="/docs" className="hover:underline">Docs</Link></li>
-              <li><Link to="/pricing" className="hover:underline">Pricing</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <div className="font-semibold">Company</div>
-            <ul className="mt-3 space-y-2 text-sm text-gray-500">
-              <li><Link to="/about" className="hover:underline">About</Link></li>
-              <li><Link to="/careers" className="hover:underline">Careers</Link></li>
-              <li><Link to="/press" className="hover:underline">Press</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <div className="font-semibold">Get in touch</div>
-            <div className="mt-3 text-sm text-gray-500">
-              <div>Contact: <Link to="/contact" className="hover:underline">contact@agentguard.example</Link></div>
-              <div className="mt-2">Status: <span className="font-medium">All systems operational</span></div>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
