@@ -2,18 +2,33 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShieldHalved, faEnvelope, faLock, faSignInAlt } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../contexts/AuthContext";
 
 const LoginInPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Logic for user login (FR-1.2)
-    console.log("Logging in user:", { email, password });
-    // Simulate successful login and navigate to the main dashboard/home
-    navigate("/"); 
+    setError("");
+    setLoading(true);
+
+    try {
+      // FR-1.2: Login user with credentials
+      await login({ email, password });
+      // Navigate to agent dashboard on successful login
+      navigate("/agent-dashboard");
+    } catch (err) {
+      // Display error message to user
+      const errorMessage = err.response?.data?.error || "Login failed. Please try again.";
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -31,12 +46,19 @@ const LoginInPage = () => {
           </p>
         </div>
 
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
+            {error}
+          </div>
+        )}
+
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Email Input */}
           <div>
-            <label 
-              htmlFor="email" 
+            <label
+              htmlFor="email"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
               Email Address
@@ -53,7 +75,8 @@ const LoginInPage = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#1a1a1a] focus:border-[#1a1a1a] sm:text-sm dark:bg-[#2b2b2b] dark:border-gray-700 dark:text-white"
+                disabled={loading}
+                className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#1a1a1a] focus:border-[#1a1a1a] sm:text-sm dark:bg-[#2b2b2b] dark:border-gray-700 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
                 placeholder="you@organization.com"
               />
             </div>
@@ -61,8 +84,8 @@ const LoginInPage = () => {
 
           {/* Password Input */}
           <div>
-            <label 
-              htmlFor="password" 
+            <label
+              htmlFor="password"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
               Password
@@ -79,7 +102,8 @@ const LoginInPage = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#1a1a1a] focus:border-[#1a1a1a] sm:text-sm dark:bg-[#2b2b2b] dark:border-gray-700 dark:text-white"
+                disabled={loading}
+                className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#1a1a1a] focus:border-[#1a1a1a] sm:text-sm dark:bg-[#2b2b2b] dark:border-gray-700 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
                 placeholder="••••••••"
               />
             </div>
@@ -89,10 +113,11 @@ const LoginInPage = () => {
           <div>
             <button
               type="submit"
-              className="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#1a1a1a] hover:bg-[#2b2b2b] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1a1a1a] transition-colors duration-200"
+              disabled={loading}
+              className="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#1a1a1a] hover:bg-[#2b2b2b] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1a1a1a] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FontAwesomeIcon icon={faSignInAlt} className="mr-2 h-4 w-4" />
-              Log In
+              {loading ? "Logging in..." : "Log In"}
             </button>
           </div>
         </form>

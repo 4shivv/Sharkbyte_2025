@@ -18,6 +18,7 @@ import {
   faTimes,
   faXmark, // Added for the modal close button
 } from "@fortawesome/free-solid-svg-icons";
+import { agentAPI } from "../services/api";
 
 
 
@@ -48,40 +49,66 @@ const formatNumberShort = (n) => {
   return `${n}`;
 };
 
+// Map backend agent data to UI format
+const mapAgentToUIFormat = (agent) => {
+  // Generate a mock security score (will be replaced by actual scanning later)
+  const mockScore = agent.score || Math.floor(Math.random() * 50) + 50; // 50-99
+  const risk = getRiskColor(mockScore);
+
+  return {
+    ...agent,
+    name: agent.agent_name,
+    score: mockScore,
+    risk: risk.label,
+    scans: agent.scans || 0,
+    lastScan: agent.updatedAt ? new Date(agent.updatedAt).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
+  };
+};
+
 /* ---------------------------
     Agent Registration Modal Component (NEW)
     --------------------------- */
 
 /**
  * Renders a full-screen modal/popup for registering a new agent.
+ * FR-2.1, FR-2.2, FR-2.3, FR-2.4: Captures agent name (ID), owner, description, and system prompt
  */
 const RegisterAgentModal = ({ isOpen, onClose, onRegister }) => {
-  // Simple form state for simulation
+  // Form state matching functional requirements
   const [agentName, setAgentName] = useState("");
-  const [agentType, setAgentType] = useState("LLM");
   const [agentOwner, setAgentOwner] = useState("");
+  const [description, setDescription] = useState(""); // FR-2.3
+  const [systemPrompt, setSystemPrompt] = useState(""); // FR-2.4
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Simulate a successful registration by adding a new agent
-    onRegister({
-        id: `AGNT-${Math.floor(Math.random() * 900) + 100}`,
-        name: agentName || "New Unnamed Agent",
-        owner: agentOwner || "Unassigned",
-        score: Math.max(50, Math.floor(Math.random() * 50) + 50), // Score between 50-99
-        risk: getRiskColor(75).label,
-        scans: 0,
-        lastScan: new Date().toISOString().slice(0, 10),
-    });
+    setError("");
+    setLoading(true);
 
-    // Reset form and close
-    setAgentName("");
-    setAgentOwner("");
-    setAgentType("LLM");
-    onClose();
+    try {
+      // Call the onRegister function with the proper data structure
+      await onRegister({
+        agent_name: agentName,
+        owner: agentOwner,
+        description: description || null,
+        system_prompt: systemPrompt || null,
+      });
+
+      // Reset form and close
+      setAgentName("");
+      setAgentOwner("");
+      setDescription("");
+      setSystemPrompt("");
+      onClose();
+    } catch (err) {
+      setError(err.response?.data?.error || "Failed to register agent. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -109,10 +136,18 @@ const RegisterAgentModal = ({ isOpen, onClose, onRegister }) => {
           </button>
         </div>
 
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm mb-4">
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* FR-2.1: Agent Name (Mandatory ID field) */}
           <div>
             <label htmlFor="agent-name" className="block text-sm font-medium text-gray-700 mb-1">
-              Agent Name
+              Agent Name / ID <span className="text-red-500">*</span>
             </label>
             <input
               id="agent-name"
@@ -120,14 +155,16 @@ const RegisterAgentModal = ({ isOpen, onClose, onRegister }) => {
               required
               value={agentName}
               onChange={(e) => setAgentName(e.target.value)}
+              disabled={loading}
               placeholder="e.g., Internal QA Agent"
-              className="mt-1 block w-full rounded-lg border-gray-200 px-2 py-1.5 border"
+              className="mt-1 block w-full rounded-lg border-gray-200 px-3 py-2 border focus:border-sky-700 focus:ring-1 focus:ring-sky-700 disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
-          
+
+          {/* FR-2.2: Agent Owner (Mandatory) */}
           <div>
             <label htmlFor="agent-owner" className="block text-sm font-medium text-gray-700 mb-1">
-              Agent Owner
+              Agent Owner <span className="text-red-500">*</span>
             </label>
             <input
               id="agent-owner"
@@ -135,54 +172,232 @@ const RegisterAgentModal = ({ isOpen, onClose, onRegister }) => {
               required
               value={agentOwner}
               onChange={(e) => setAgentOwner(e.target.value)}
+              disabled={loading}
               placeholder="e.g., Alice Johnson"
-              className="mt-1 block w-full rounded-lg border-gray-200 px-2 py-1.5 border"
+              className="mt-1 block w-full rounded-lg border-gray-200 px-3 py-2 border focus:border-sky-700 focus:ring-1 focus:ring-sky-700 disabled:opacity-50 disabled:cursor-not-allowed"
             />
+            <p className="mt-1 text-xs text-gray-500">Accountable person for this agent's behavior</p>
           </div>
 
+          {/* FR-2.3: Purpose/Description */}
           <div>
-            <label htmlFor="agent-type" className="block text-sm font-medium text-gray-700 mb-1">
-              Agent Type
+            <label htmlFor="agent-description" className="block text-sm font-medium text-gray-700 mb-1">
+              Purpose / Description
             </label>
-            <select
-              id="agent-type"
-              value={agentType}
-              onChange={(e) => setAgentType(e.target.value)}
-              className="mt-1 block w-full rounded-lg border-gray-200 px-2 py-1.5 border bg-white"
-            >
-              <option value="LLM">LLM-based (Large Language Model)</option>
-              <option value="RAG">RAG System (Retrieval-Augmented)</option>
-              <option value="Traditional">Traditional Script/Bot</option>
-              <option value="Hybrid">Hybrid System</option>
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="agent-config" className="block text-sm font-medium text-gray-700 mb-1">
-              Initial Configuration URL/Repo
-            </label>
-            <input
-              id="agent-config"
-              type="url"
-              placeholder="https://repo.corp/my-agent-v1.git"
-              className="mt-1 block w-full rounded-lg border-gray-200 px-2 py-1.5 border"
+            <textarea
+              id="agent-description"
+              rows="3"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              disabled={loading}
+              placeholder="Describe the agent's intended purpose and approved scope..."
+              className="mt-1 block w-full rounded-lg border-gray-200 px-3 py-2 border focus:border-sky-700 focus:ring-1 focus:ring-sky-700 disabled:opacity-50 disabled:cursor-not-allowed"
             />
+            <p className="mt-1 text-xs text-gray-500">Define approved scope and capabilities (FR-2.3)</p>
           </div>
 
-          <div className="flex justify-end pt-4 gap-3">
+          {/* FR-2.4: System Prompt */}
+          <div>
+            <label htmlFor="system-prompt" className="block text-sm font-medium text-gray-700 mb-1">
+              System Prompt
+            </label>
+            <textarea
+              id="system-prompt"
+              rows="6"
+              value={systemPrompt}
+              onChange={(e) => setSystemPrompt(e.target.value)}
+              disabled={loading}
+              placeholder="Enter the complete system prompt for security analysis...
+
+Example:
+You are a customer service agent. You can only access customer records when provided with a valid ticket ID. Never reveal internal system information."
+              className="mt-1 block w-full rounded-lg border-gray-200 px-3 py-2 border focus:border-sky-700 focus:ring-1 focus:ring-sky-700 font-mono text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+            <p className="mt-1 text-xs text-gray-500">Required for vulnerability scanning (FR-2.4)</p>
+          </div>
+
+          <div className="flex justify-end pt-4 gap-3 border-t border-gray-200 mt-6">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm cursor-pointer font-medium text-gray-700 bg-white border border-gray-300 rounded-full hover:bg-gray-50 transition"
+              disabled={loading}
+              className="px-4 py-2 text-sm cursor-pointer font-medium text-gray-700 bg-white border border-gray-300 rounded-full hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-sm cursor-pointer font-semibold text-white bg-sky-700 rounded-full hover:bg-sky-800 transition flex items-center gap-2"
+              disabled={loading}
+              className="px-4 py-2 text-sm cursor-pointer font-semibold text-white bg-sky-700 rounded-full hover:bg-sky-800 transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FontAwesomeIcon icon={faPlus} />
-              Start Monitoring
+              {loading ? "Registering..." : "Register Agent"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+/* ---------------------------
+    Edit Agent Modal Component (FR-2.5)
+    --------------------------- */
+/**
+ * Modal for editing existing agent details
+ * FR-2.5: Update agent owner, description, and system_prompt
+ */
+const EditAgentModal = ({ isOpen, onClose, agent, onUpdate }) => {
+  const [agentName, setAgentName] = useState("");
+  const [agentOwner, setAgentOwner] = useState("");
+  const [description, setDescription] = useState("");
+  const [systemPrompt, setSystemPrompt] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  // Initialize form with agent data when modal opens
+  useEffect(() => {
+    if (agent && isOpen) {
+      setAgentName(agent.agent_name || agent.name || "");
+      setAgentOwner(agent.owner || "");
+      setDescription(agent.description || "");
+      setSystemPrompt(agent.system_prompt || "");
+    }
+  }, [agent, isOpen]);
+
+  if (!isOpen || !agent) return null;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      await onUpdate(agent.id, {
+        agent_name: agentName,
+        owner: agentOwner,
+        description: description || null,
+        system_prompt: systemPrompt || null,
+      });
+
+      onClose();
+    } catch (err) {
+      setError(err.response?.data?.error || "Failed to update agent. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] overflow-y-auto bg-black/30 bg-opacity-70 flex items-center justify-center p-4 transition-opacity duration-300"
+      aria-modal="true"
+      role="dialog"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-2xl p-8 w-full max-w-lg mx-auto transform transition-all duration-300 scale-100"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex justify-between items-center pb-4 mb-4">
+          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-3">
+            <FontAwesomeIcon icon={faEdit} className="text-sky-700" />
+            Edit Agent
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 cursor-pointer hover:text-gray-700 transition flex items-center hover:bg-gray-100 px-2 py-2.5 rounded-full"
+            aria-label="Close edit form"
+          >
+            <FontAwesomeIcon icon={faXmark} className="text-lg" />
+          </button>
+        </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm mb-4">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Agent Name */}
+          <div>
+            <label htmlFor="edit-agent-name" className="block text-sm font-medium text-gray-700 mb-1">
+              Agent Name / ID <span className="text-red-500">*</span>
+            </label>
+            <input
+              id="edit-agent-name"
+              type="text"
+              required
+              value={agentName}
+              onChange={(e) => setAgentName(e.target.value)}
+              disabled={loading}
+              className="mt-1 block w-full rounded-lg border-gray-200 px-3 py-2 border focus:border-sky-700 focus:ring-1 focus:ring-sky-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+          </div>
+
+          {/* Agent Owner */}
+          <div>
+            <label htmlFor="edit-agent-owner" className="block text-sm font-medium text-gray-700 mb-1">
+              Agent Owner <span className="text-red-500">*</span>
+            </label>
+            <input
+              id="edit-agent-owner"
+              type="text"
+              required
+              value={agentOwner}
+              onChange={(e) => setAgentOwner(e.target.value)}
+              disabled={loading}
+              className="mt-1 block w-full rounded-lg border-gray-200 px-3 py-2 border focus:border-sky-700 focus:ring-1 focus:ring-sky-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+          </div>
+
+          {/* Description */}
+          <div>
+            <label htmlFor="edit-agent-description" className="block text-sm font-medium text-gray-700 mb-1">
+              Purpose / Description
+            </label>
+            <textarea
+              id="edit-agent-description"
+              rows="3"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              disabled={loading}
+              className="mt-1 block w-full rounded-lg border-gray-200 px-3 py-2 border focus:border-sky-700 focus:ring-1 focus:ring-sky-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+          </div>
+
+          {/* System Prompt */}
+          <div>
+            <label htmlFor="edit-system-prompt" className="block text-sm font-medium text-gray-700 mb-1">
+              System Prompt
+            </label>
+            <textarea
+              id="edit-system-prompt"
+              rows="6"
+              value={systemPrompt}
+              onChange={(e) => setSystemPrompt(e.target.value)}
+              disabled={loading}
+              className="mt-1 block w-full rounded-lg border-gray-200 px-3 py-2 border focus:border-sky-700 focus:ring-1 focus:ring-sky-700 font-mono text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+          </div>
+
+          <div className="flex justify-end pt-4 gap-3 border-t border-gray-200 mt-6">
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={loading}
+              className="px-4 py-2 text-sm cursor-pointer font-medium text-gray-700 bg-white border border-gray-300 rounded-full hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-4 py-2 text-sm cursor-pointer font-semibold text-white bg-sky-700 rounded-full hover:bg-sky-800 transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <FontAwesomeIcon icon={faEdit} />
+              {loading ? "Updating..." : "Update Agent"}
             </button>
           </div>
         </form>
@@ -197,7 +412,8 @@ const RegisterAgentModal = ({ isOpen, onClose, onRegister }) => {
     --------------------------- */
 const AgentDashboard = () => {
   // primary state
-  const [agents, setAgents] = useState(MOCK_AGENTS);
+  const [agents, setAgents] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState("cards"); // cards | table
   const [selectedAgent, setSelectedAgent] = useState(null);
@@ -206,7 +422,9 @@ const AgentDashboard = () => {
   const [sortBy, setSortBy] = useState("score_desc");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showingExportToast, setShowingExportToast] = useState(false);
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false); // NEW STATE for modal
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [agentToEdit, setAgentToEdit] = useState(null);
   const navigate = useNavigate?.() ?? (() => {});
 
   // refs
@@ -214,18 +432,74 @@ const AgentDashboard = () => {
   const inputRef = useRef(null);
   const exportTimer = useRef(null);
 
+  // FR-2.6: Fetch all agents on component mount
+  useEffect(() => {
+    fetchAgents();
+  }, []);
+
+  const fetchAgents = async () => {
+    try {
+      setLoading(true);
+      const data = await agentAPI.getAll();
+      // Map backend agent format to UI format
+      const mappedAgents = data.map(mapAgentToUIFormat);
+      setAgents(mappedAgents);
+    } catch (error) {
+      console.error("Error fetching agents:", error);
+      // If unauthorized, redirect to login (handled by axios interceptor)
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Handlers for the new agent modal
   const openRegisterModal = () => {
     setIsRegisterModalOpen(true);
-    document.body.style.overflow = "hidden"; // Prevent background scrolling
+    document.body.style.overflow = "hidden";
   };
   const closeRegisterModal = () => {
     setIsRegisterModalOpen(false);
-    document.body.style.overflow = ""; // Restore background scrolling
+    document.body.style.overflow = "";
   };
-  const handleAgentRegistration = (newAgentData) => {
-    // Add the newly registered agent to the list (simulated)
-    setAgents(prev => [newAgentData, ...prev]); 
+
+  // FR-2.1, FR-2.2, FR-2.3, FR-2.4: Register new agent with backend
+  const handleAgentRegistration = async (newAgentData) => {
+    try {
+      const createdAgent = await agentAPI.create(newAgentData);
+      // Map to UI format and add to the list
+      const mappedAgent = mapAgentToUIFormat(createdAgent);
+      setAgents(prev => [mappedAgent, ...prev]);
+      return createdAgent;
+    } catch (error) {
+      console.error("Error registering agent:", error);
+      throw error;
+    }
+  };
+
+  // FR-2.5: Edit agent handlers
+  const openEditModal = (agent) => {
+    setAgentToEdit(agent);
+    setIsEditModalOpen(true);
+    document.body.style.overflow = "hidden";
+  };
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setAgentToEdit(null);
+    document.body.style.overflow = "";
+  };
+
+  const handleAgentUpdate = async (agentId, updatedData) => {
+    try {
+      const updatedAgent = await agentAPI.update(agentId, updatedData);
+      // Update the agent in the list
+      const mappedAgent = mapAgentToUIFormat(updatedAgent);
+      setAgents(prev => prev.map(a => a.id === agentId ? mappedAgent : a));
+      return updatedAgent;
+    } catch (error) {
+      console.error("Error updating agent:", error);
+      throw error;
+    }
   };
 
 
@@ -416,13 +690,20 @@ const AgentDashboard = () => {
     <div className="min-h-screen bg-gradient-to-b pt-30 from-white via-white to-gray-50 text-gray-900 antialiased font-inter">
       <InlineStyles />
 
-      {/* NEW: Agent Registration Modal */}
-      <RegisterAgentModal 
-        isOpen={isRegisterModalOpen} 
-        onClose={closeRegisterModal} 
+      {/* Agent Registration Modal */}
+      <RegisterAgentModal
+        isOpen={isRegisterModalOpen}
+        onClose={closeRegisterModal}
         onRegister={handleAgentRegistration}
       />
-      {/* END NEW: Agent Registration Modal */}
+
+      {/* FR-2.5: Edit Agent Modal */}
+      <EditAgentModal
+        isOpen={isEditModalOpen}
+        onClose={closeEditModal}
+        agent={agentToEdit}
+        onUpdate={handleAgentUpdate}
+      />
       
 
       
@@ -476,17 +757,21 @@ const AgentDashboard = () => {
               <div className="mt-8 grid grid-cols-3 gap-4 max-w-md">
                 <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 ">
                   <div className="text-xs uppercase text-gray-500">Average Score</div>
-                  <div className="mt-2 text-lg font-semibold">{
-                    Math.round(agents.reduce((s, a) => s + a.score, 0) / agents.length)
-                  }</div>
+                  <div className="mt-2 text-lg font-semibold">
+                    {agents.length > 0 ? Math.round(agents.reduce((s, a) => s + a.score, 0) / agents.length) : 0}
+                  </div>
                 </div>
                 <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 ">
                   <div className="text-xs uppercase text-gray-500">Total Scans</div>
-                  <div className="mt-2 text-lg font-semibold">{agents.reduce((s, a) => s + a.scans, 0)}</div>
+                  <div className="mt-2 text-lg font-semibold">
+                    {agents.length > 0 ? agents.reduce((s, a) => s + (a.scans || 0), 0) : 0}
+                  </div>
                 </div>
                 <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 ">
                   <div className="text-xs uppercase text-gray-500">Last Activity</div>
-                  <div className="mt-2 text-lg font-semibold">{agents.sort((a,b)=>new Date(b.lastScan)-new Date(a.lastScan))[0].lastScan}</div>
+                  <div className="mt-2 text-lg font-semibold">
+                    {agents.length > 0 ? agents.sort((a,b)=>new Date(b.lastScan||0)-new Date(a.lastScan||0))[0].lastScan : 'Never'}
+                  </div>
                 </div>
               </div>
             </div>
@@ -652,28 +937,45 @@ const AgentDashboard = () => {
           </div>
           <div className="p-5 bg-gray-100 rounded-2xl">
             <div className="text-xs text-gray-500">Avg Security Score</div>
-            <div className="mt-2 text-2xl font-semibold">{Math.round(agents.reduce((s,a)=>s+a.score,0)/agents.length)}</div>
+            <div className="mt-2 text-2xl font-semibold">
+              {agents.length > 0 ? Math.round(agents.reduce((s,a)=>s+a.score,0)/agents.length) : 0}
+            </div>
             <div className="mt-3 text-sm text-gray-500">Higher is safer</div>
           </div>
           <div className="p-5 bg-gray-100 rounded-2xl">
-            <div className="text-xs text-gray-500">Scans / day</div>
-            <div className="mt-2 text-2xl font-semibold">1.4k</div>
-            <div className="mt-3 text-sm text-gray-500">Automated & scheduled</div>
+            <div className="text-xs text-gray-500">Total Scans</div>
+            <div className="mt-2 text-2xl font-semibold">
+              {agents.length > 0 ? agents.reduce((s,a)=>s+(a.scans||0),0) : 0}
+            </div>
+            <div className="mt-3 text-sm text-gray-500">Security assessments</div>
           </div>
           <div className="p-5 bg-gray-100 rounded-2xl">
-            <div className="text-xs text-gray-500">Exported</div>
-            <div className="mt-2 text-2xl font-semibold">512</div>
-            <div className="mt-3 text-sm text-gray-500">Reports generated</div>
+            <div className="text-xs text-gray-500">High Risk Agents</div>
+            <div className="mt-2 text-2xl font-semibold text-red-600">
+              {agents.length > 0 ? agents.filter(a => a.score < 60).length : 0}
+            </div>
+            <div className="mt-3 text-sm text-gray-500">Require attention</div>
           </div>
         </div>
 
         {/* Content area */}
-        {visibleAgents.length === 0 && (
-            <div className="col-span-full text-center py-16 bg-white rounded-2xl border border-gray-300 mb-8">
-                <div className="text-lg font-semibold">No agents matched your search</div>
-                <div className="text-sm text-gray-500 mt-2">Try removing filters or click **Register New Agent** to begin monitoring.</div>
+        {loading ? (
+          <div className="col-span-full text-center py-16 bg-white rounded-2xl border border-gray-300 mb-8">
+            <div className="text-lg font-semibold">Loading agents...</div>
+            <div className="text-sm text-gray-500 mt-2">Fetching your registered agents from the database.</div>
+          </div>
+        ) : visibleAgents.length === 0 && !loading ? (
+          <div className="col-span-full text-center py-16 bg-white rounded-2xl border border-gray-300 mb-8">
+            <div className="text-lg font-semibold">
+              {agents.length === 0 ? "No agents registered yet" : "No agents matched your search"}
             </div>
-        )}
+            <div className="text-sm text-gray-500 mt-2">
+              {agents.length === 0
+                ? "Click 'Register New Agent' above to add your first agent to AgentGuard."
+                : "Try removing filters or adjusting your search terms."}
+            </div>
+          </div>
+        ) : null}
 
         {viewMode === "cards" && visibleAgents.length > 0 && (
           <section aria-label="Agent cards" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -723,7 +1025,7 @@ const AgentDashboard = () => {
                         </div>
                       </div>
 
-                      <div className="mt-4 flex items-center gap-3">
+                      <div className="mt-4 flex items-center gap-2">
                         <button
                           onClick={() => openAgent(agent)}
                           className="px-3 py-1 rounded-full bg-gray-900 cursor-pointer text-white text-sm"
@@ -731,23 +1033,19 @@ const AgentDashboard = () => {
                           View
                         </button>
                         <button
-                          onClick={() => scanNow(agent.id)}
-                          className="px-3 py-1 rounded-full border cursor-pointer border-gray-300 text-sm"
+                          onClick={() => openEditModal(agent)}
+                          className="px-3 py-1 rounded-full border cursor-pointer border-gray-300 text-sm hover:bg-gray-50"
+                          title="Edit agent details (FR-2.5)"
                         >
-                          Scan 
+                          <FontAwesomeIcon icon={faEdit} className="mr-1" />
+                          Edit
                         </button>
-
-                        <div className="ml-auto flex items-center gap-2">
-                          <button
-                            onClick={() => exportCSV()}
-                            className=" px-3 py-1 text-sm rounded-full cursor-pointer bg-white border border-gray-300"
-                          >
-                            Export
-                          </button>
-                          <Link to={`/agent/${agent.id}`} className="px-3 text-sm py-1 rounded-full border border-gray-300 bg-white">
-                            Manage
-                          </Link>
-                        </div>
+                        <button
+                          onClick={() => scanNow(agent.id)}
+                          className="px-3 py-1 rounded-full border cursor-pointer border-gray-300 text-sm hover:bg-gray-50"
+                        >
+                          Scan
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -811,9 +1109,9 @@ const AgentDashboard = () => {
                           <div className="text-xs text-gray-400">{risk.label}</div>
                         </td>
 
-                        <td className="px-6 py-4 text-sm text-gray-600">{a.scans}</td>
+                        <td className="px-6 py-4 text-sm text-gray-600">{a.scans || 0}</td>
 
-                        <td className="px-6 py-4 text-sm text-gray-600">{a.lastScan}</td>
+                        <td className="px-6 py-4 text-sm text-gray-600">{a.lastScan || 'Never'}</td>
 
                         <td className="px-6 py-4 text-right">
                           <FontAwesomeIcon icon={faArrowRight} />
