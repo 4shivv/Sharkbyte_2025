@@ -282,22 +282,22 @@ const AgentHistory = () => {
 
 
   return (
-    <div className="min-h-[95%] mt-[5%] bg-gradient-to-b from-white via-white to-gray-50 text-gray-900">
+    <div className="min-h-[95%] bg-gradient-to-b from-black via-black to-gray-900 text-gray-900">
       {/* Header */}
-      <header className="border-b border-gray-200 bg-white">
+      <header className="bg-black">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-                <FontAwesomeIcon icon={faHistory} className="text-sky-700" />
+              <h1 className="text-3xl mt-[12%] font-bold text-[#a7b8dd] flex items-center gap-3">
+                <FontAwesomeIcon icon={faHistory} className="text-[#6699CC]" />
                 Activity History
               </h1>
-              <p className="text-sm text-gray-600 mt-1">Track all agent operations, scans, and modifications</p>
+              <p className="text-sm text-gray-300 mt-1">Track all agent operations, scans, and modifications</p>
             </div>
 
             <button
               onClick={exportHistory}
-              className="px-4 py-2 bg-sky-700 rounded-full text-white cursor-pointer text-sm hover:bg-sky-800 transition-colors flex items-center gap-2"
+              className="px-4 py-2 mt-5 bg-[#6699CC] rounded-full text-black cursor-pointer text-sm hover:bg-sky-800 transition-colors flex items-center gap-2"
             >
               <FontAwesomeIcon icon={faDownload} />
               Export History
@@ -309,7 +309,7 @@ const AgentHistory = () => {
       {/* Statistics (Kept as is) */}
       <section className="max-w-7xl mx-auto px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="p-6 bg-white rounded-2xl border border-gray-200">
+          <div className="p-6 bg-gray-200 rounded-2xl border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-xs text-gray-500 uppercase">Total Scans</div>
@@ -322,7 +322,7 @@ const AgentHistory = () => {
             <div className="mt-3 text-sm text-gray-600">Completed security audits</div>
           </div>
 
-          <div className="p-6 bg-white rounded-2xl border border-gray-200">
+          <div className="p-6 bg-gray-200 rounded-2xl border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-xs text-gray-500 uppercase">Avg Improvement</div>
@@ -335,7 +335,7 @@ const AgentHistory = () => {
             <div className="mt-3 text-sm text-gray-600">Score increase per scan</div>
           </div>
 
-          <div className="p-6 bg-white rounded-2xl border border-gray-200">
+          <div className="p-6 bg-gray-200 rounded-2xl border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-xs text-gray-500 uppercase">Vulnerabilities Found</div>
@@ -348,7 +348,7 @@ const AgentHistory = () => {
             <div className="mt-3 text-sm text-gray-600">Security issues detected</div>
           </div>
 
-          <div className="p-6 bg-white rounded-2xl border border-gray-200">
+          <div className="p-6 bg-gray-200 rounded-2xl border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-xs text-gray-500 uppercase">Failed Scans</div>
@@ -365,15 +365,15 @@ const AgentHistory = () => {
 
       {/* Filters (Kept as is) */}
       <section className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="bg-white border border-gray-200 rounded-2xl p-4">
+        <div className="bg-gray-200 border border-gray-200 rounded-2xl p-4">
           <div className="flex flex-col md:flex-row items-center gap-4">
             {/* Search */}
             <div className="flex items-center gap-3 flex-1 w-full">
-              <div className="px-3 py-2 rounded-lg bg-gray-100">
-                <FontAwesomeIcon icon={faSearch} className="text-gray-500" />
+              <div className="px-3 py-2 rounded-lg bg-gray-200">
+                <FontAwesomeIcon icon={faSearch} className="text-gray-600" />
               </div>
               <input
-                className="w-full bg-transparent focus:outline-none text-gray-900 placeholder-gray-500"
+                className="w-full bg-transparent focus:outline-none text-gray-900 placeholder-gray-600"
                 placeholder="Search by agent, owner, or action..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -387,7 +387,7 @@ const AgentHistory = () => {
                 <select
                   value={filterAction}
                   onChange={(e) => setFilterAction(e.target.value)}
-                  className="px-3 py-1.5 rounded-lg border border-gray-300 bg-white text-sm"
+                  className="px-3 py-1.5 rounded-lg border border-gray-300 bg-white/60 text-sm"
                 >
                   <option value="all">All Actions</option>
                   <option value="scan">Security Scans</option>
@@ -428,7 +428,7 @@ const AgentHistory = () => {
 
       {/* Timeline (Kept as is) */}
       <main className="max-w-7xl mx-auto px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+        <div className="bg-gray-200 rounded-2xl border border-gray-200 overflow-hidden">
           {visibleHistory.length ? (
             <div className="divide-y divide-gray-100">
               {visibleHistory.map((item) => {
@@ -438,7 +438,7 @@ const AgentHistory = () => {
                 return (
                   <article
                     key={item.id}
-                    className="p-6 hover:bg-gray-50 transition-colors cursor-pointer"
+                    className="p-6 hover:bg-gray-100/70 transition-colors cursor-pointer"
                     onClick={() => setSelectedItem(item)}
                   >
                     <div className="flex items-start gap-4">
@@ -556,7 +556,7 @@ const AgentHistory = () => {
           <div className="relative max-w-3xl w-full bg-white rounded-2xl p-8 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <button
               onClick={() => setSelectedItem(null)}
-              className="absolute top-6 right-6 w-10 h-10 cursor-pointer rounded-full  hover:bg-gray-100 flex items-center justify-center transition-colors"
+              className="absolute top-6 right-6 w-10 h-10 cursor-pointer rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
             >
               <FontAwesomeIcon icon={faXmark} />
             </button>

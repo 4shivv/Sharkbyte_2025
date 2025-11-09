@@ -64,7 +64,7 @@ const NavBar = () => {
   return (
     <>
       {!['/login', '/signup', '/new-project'].includes(location.pathname) && (
-        <nav className={`fixed top-0 left-0 right-0 z-50 flex justify-center backdrop-blur-md ${!isMobile ? "bg-black/80" : "bg-[#1B1B1B]"} border-b border-gray-200 font-inter`}>
+        <nav className={`fixed top-0 left-0 right-0 z-50 flex justify-center backdrop-blur-md ${!isMobile ? "bg-black/80" : "bg-[#1B1B1B]"} border-b-[0.2px] border-gray-200 font-inter `}>
           <div className="flex items-center justify-between w-full max-w-7xl px-6 py-2.5">
             {/* Brand */}
             <NavLink
@@ -79,7 +79,7 @@ const NavBar = () => {
             {!isMobile && (
               <div className="relative flex items-center gap-8">
                 {/* Highlight */}
-              
+                
 
                 {navItems.map((item, index) => (
                   <NavLink
@@ -146,9 +146,9 @@ const NavBar = () => {
             {isMobile && (
               <button
                 onClick={() => setIsMobileOpen(prev => !prev)}
-                className="ml-auto px-1.5 py-0.5 rounded-full hover:bg-black/30 text-white transition-colors cursor-pointer"
+                className="ml-auto p-2 rounded-full hover:bg-black/30 text-white transition-colors cursor-pointer"
               >
-                <FontAwesomeIcon icon={isMobileOpen ? faXmark : faBars} size="sm" />
+                <FontAwesomeIcon icon={isMobileOpen ? faXmark : faBars} size="lg" />
               </button>
             )}
           </div>

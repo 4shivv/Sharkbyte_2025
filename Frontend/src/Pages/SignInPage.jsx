@@ -87,7 +87,7 @@ const SignInPage = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
                 className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#1a1a1a] focus:border-[#1a1a1a] sm:text-sm dark:bg-[#2b2b2b] dark:border-gray-700 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                placeholder="you@organization.com"
+                placeholder="username@organization.com"
               />
             </div>
           </div>
@@ -151,7 +151,7 @@ const SignInPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#1a1a1a] hover:bg-[#2b2b2b] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1a1a1a] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="cursour-pointer w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-[#a7b8dd] hover:bg-[#5c6491] focus:outline-none focus:ring-2 focus:ring-[#434875] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Registering..." : "Register Account"}
               <FontAwesomeIcon icon={faArrowRight} className="ml-2 h-4 w-4" />

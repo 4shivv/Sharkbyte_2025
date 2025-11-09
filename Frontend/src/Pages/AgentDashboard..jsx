@@ -23,8 +23,8 @@ import { agentAPI } from "../services/api";
 
 
 /* ---------------------------
-    Mock Data & Helpers
-    --------------------------- */
+   Mock Data & Helpers
+   --------------------------- */
 const MOCK_AGENTS = [
   { id: "AGNT-001", name: "RFP Grant Writer", owner: "Alice Johnson", score: 85, risk: "Low", scans: 4, lastScan: "2025-10-28" },
   { id: "AGNT-002", name: "Customer Service Bot", owner: "Bob Smith", score: 55, risk: "High", scans: 1, lastScan: "2025-11-04" },
@@ -40,8 +40,8 @@ const MOCK_AGENTS = [
 const getRiskColor = (score) => {
   if (score <= 40) return { text: "text-red-600", bg: "bg-red-100/80", label: "Critical", ring: "ring-red-200" };
   if (score <= 60) return { text: "text-orange-500", bg: "bg-orange-100/80", label: "High", ring: "ring-orange-200" };
-  if (score <= 80) return { text: "text-yellow-500", bg: "bg-yellow-100/80", label: "Medium", ring: "ring-yellow-200" };
-  return { text: "text-green-600", bg: "bg-green-100/80", label: "Low", ring: "ring-green-200" };
+  if (score <= 80) return { text: "text-yellow-800", bg: "bg-orange-100", label: "Medium", ring: "ring-yellow-200" };
+  return { text: "text-green-900", bg: "bg-green-100", label: "Low", ring: "ring-green-200" };
 };
 
 const formatNumberShort = (n) => {
@@ -408,8 +408,8 @@ const EditAgentModal = ({ isOpen, onClose, agent, onUpdate }) => {
 
 
 /* ---------------------------
-    Main Component
-    --------------------------- */
+   Main Component
+   --------------------------- */
 const AgentDashboard = () => {
   // primary state
   const [agents, setAgents] = useState([]);
@@ -671,11 +671,11 @@ const AgentDashboard = () => {
   );
 
   /* ---------------------------
-      Rendered UI Sections (single file contains many sub-structures)
-      --------------------------- */
+     Rendered UI Sections (single file contains many sub-structures)
+     --------------------------- */
 
   return (
-    <div className="min-h-screen bg-gradient-to-b pt-30 from-white via-white to-gray-50 text-gray-900 antialiased font-inter">
+    <div className="min-h-screen bg-gradient-to-b pt-30 from-black via-black to-gray-900 text-gray-900 antialiased font-inter">
       <InlineStyles />
 
       {/* Agent Registration Modal */}
@@ -701,11 +701,11 @@ const AgentDashboard = () => {
             <div className="col-span-12 lg:col-span-7">
               
 
-              <h1 className="hero-title text-[42px] md:text-[52px] font-bold text-gray-900 tracking-tight leading-tight max-w-3xl">
-                Beautifully simple agent oversight — <span className="text-gray-700 font-medium">built for high-trust teams</span>
+              <h1 className="hero-title text-[42px] md:text-[52px] font-bold text-[#a7b8dd] tracking-tight leading-tight max-w-3xl">
+                Beautifully simple agent oversight — <span className="text-[#5c6491] font-medium">built for high-trust teams</span>
               </h1>
 
-              <p className="mt-6 text-md text-gray-600 max-w-xl">
+              <p className="mt-6 text-md text-gray-300/90 max-w-xl">
                 Monitor, scan, and harden your deployed agents with automated red-teaming and live remediation.
                 Elegant, fast, and focused — everything the security and product teams need.
               </p>
@@ -713,7 +713,7 @@ const AgentDashboard = () => {
               <div className="mt-8 flex flex-wrap gap-4 items-center">
                 <button
                   onClick={openRegisterModal} // UPDATED to open modal
-                  className="flex justify-center items-center gap-3 px-4 py-2.5 bg-sky-700 text-white rounded-full text-sm font-semibold cursor-pointer hover:bg-sky-800 transition"
+                  className="flex justify-center items-center gap-3 px-4 py-2.5 bg-[#6699CC] text-black rounded-full text-sm font-semibold cursor-pointer hover:bg-sky-800 transition"
                 >
                   <FontAwesomeIcon icon={faPlus} />
                   Register New Agent
@@ -721,7 +721,7 @@ const AgentDashboard = () => {
 
                 <button
                   onClick={exportCSV}
-                  className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full border border-gray-300 bg-white hover:bg-gray-100 transition-colors cursor-pointer "
+                  className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full border border-gray-300 bg-gray-200 hover:bg-gray-100 transition-colors cursor-pointer "
                 >
                   <FontAwesomeIcon icon={faDownload} />
                   Export CSV
@@ -729,33 +729,32 @@ const AgentDashboard = () => {
 
                 <button
                   onClick={() => setViewMode((v) => (v === "cards" ? "table" : "cards"))}
-                  className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-gray-50 border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors text-sm"
+                  className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-gray-200 border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors text-sm"
                 >
                   <FontAwesomeIcon icon={faTachometerAlt} />
                   {viewMode === "cards" ? "Table view" : "Card view"}
                 </button>
 
                 <div className="ml-auto hidden lg:flex items-center gap-3">
-                  <div className="text-xs text-gray-500">Agents deployed</div>
-                  <div className="text-2xl font-semibold">{formatNumberShort(agents.length)}</div>
+                  <div className="text-xs text-gray-300">Agents deployed</div>
+                  <div className="text-2xl text-[#434875] font-semibold">{formatNumberShort(agents.length)}</div>
                 </div>
               </div>
 
               {/* subtle visual cues */}
               <div className="mt-8 grid grid-cols-3 gap-4 max-w-md">
-                <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 ">
+                <div className="rounded-lg p-3 bg-gray-200 border border-gray-100 ">
                   <div className="text-xs uppercase text-gray-500">Average Score</div>
                   <div className="mt-2 text-lg font-semibold">
-                    {agents.length > 0 ? Math.round(agents.reduce((s, a) => s + a.score, 0) / agents.length) : 0}
-                  </div>
+                    {agents.length > 0 ? Math.round(agents.reduce((s, a) => s + a.score, 0) / agents.length): 0}</div>
                 </div>
-                <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 ">
+                <div className="rounded-lg p-3 bg-gray-200 border border-gray-100 ">
                   <div className="text-xs uppercase text-gray-500">Total Scans</div>
                   <div className="mt-2 text-lg font-semibold">
                     {agents.length > 0 ? agents.reduce((s, a) => s + (a.scans || 0), 0) : 0}
                   </div>
                 </div>
-                <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 ">
+                <div className="rounded-lg p-3 bg-gray-200 border border-gray-100 ">
                   <div className="text-xs uppercase text-gray-500">Last Activity</div>
                   <div className="mt-2 text-lg font-semibold">
                     {agents.length > 0 ? agents.sort((a,b)=>new Date(b.lastScan||0)-new Date(a.lastScan||0))[0].lastScan : 'Never'}
@@ -767,21 +766,21 @@ const AgentDashboard = () => {
             {/* right visual - MacBook-like card */}
             <div className="col-span-12 lg:col-span-5">
               <div
-                className="rounded-3xl   p-6 relative overflow-hidden border border-gray-200"
+                className="rounded-3xl   p-6 relative overflow-hidden border-r border-gray-100"
                 
                 
               >
                 {/* decorative top lights */}
-                <div className="absolute -left-24 -top-24 w-[420px] h-[420px] rounded-full hero-sheen opacity-30 bg-gradient-to-tr from-pink-100 to-transparent" />
-                <div className="absolute -right-20 top-8 w-[260px] h-[260px] rounded-full hero-sheen opacity-20 bg-gradient-to-br from-indigo-100 to-transparent" />
+                <div className="absolute -left-24 -top-24 w-[420px] h-[420px] rounded-full hero-sheen opacity-30 bg-gradient-to-tr from-blue-300 backdrop-blur-md to-transparent" />
+                <div className="absolute -right-20 top-8 w-[260px] h-[260px] rounded-full hero-sheen opacity-20 bg-gradient-to-br from-blue-400/95 backdrop-blur-md to-transparent" />
 
                 {/* simulated device visual */}
                 <div className="relative">
-                  <div className="w-full h-auto border border-gray-100 rounded-2xl p-4 bg-white">
+                  <div className="w-full h-auto border border-gray-600 rounded-2xl p-4 bg-black">
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="text-xs text-gray-500 uppercase">Live Cloud Scan</div>
-                        <div className="text-lg text-gray-800 font-semibold mt-1">Instruction Hierarchy Audit</div>
+                        <div className="text-xs text-[#a7b8dd] uppercase">Live Cloud Scan</div>
+                        <div className="text-lg text-gray-100/90 font-semibold mt-1">Instruction Hierarchy Audit</div>
                       </div>
                       <div className="text-right flex items-center gap-3 justify-center">
                         <div className="text-xs text-gray-500">Risk</div>
@@ -790,7 +789,7 @@ const AgentDashboard = () => {
                       </div>
                     </div>
 
-                    <div className="mt-4 rounded-lg border border-gray-100 p-3 bg-gray-900">
+                    <div className="mt-4 rounded-lg border border-gray-100/20 p-3 bg-gray-900">
                       <div className="flex items-center gap-3">
                       <span className="inline-block w-2 h-2 rounded-full bg-red-400" />
                       <span className="inline-block w-2 h-2 rounded-full bg-yellow-400" />
@@ -808,21 +807,21 @@ const AgentDashboard = () => {
                     </div>
 
                     <div className="mt-4 flex items-center gap-3">
-                      <button className="text-sm inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-700 text-white cursor-pointer">Open Scan</button>
-                      <button className="text-sm inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gray-100 border border-gray-200 cursor-pointer">View Diff</button>
+                      <button className="text-sm inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#6699CC] text-black cursor-pointer">Open Scan</button>
+                      <button className="text-sm inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gray-100/85 border border-gray-200 cursor-pointer">View Diff</button>
                     </div>
                   </div>
 
                   {/* small badges */}
                   <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
-                    <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 text-center"><span className="text-gray-500">Uptime</span> <div className="font-semibold">99.9%</div></div>
-                    <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 text-center"><span className="text-gray-500">Avg RT </span><div className="font-semibold">14ms</div></div>
-                    <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 text-center"><span className="text-gray-500">Scans/day </span><div className="font-semibold">1.4k</div></div>
+                    <div className="rounded-lg p-3 bg-gray-400 border border-gray-100 text-center"><span className="text-gray-900">Uptime</span> <div className="font-semibold">99.9%</div></div>
+                    <div className="rounded-lg p-3 bg-gray-400 border border-gray-100 text-center"><span className="text-gray-900">Avg RT </span><div className="font-semibold">14ms</div></div>
+                    <div className="rounded-lg p-3 bg-gray-400 border border-gray-100 text-center"><span className="text-gray-900">Scans/day </span><div className="font-semibold">1.4k</div></div>
                   </div>
                 </div>
 
                 {/* decorative bottom highlight */}
-                <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white/60 to-transparent pointer-events-none" />
+                <div className="absolute bottom-0 left-0 right-0 h-0 bg-gradient-to-t from-blue-100 to-transparent pointer-events-none" />
               </div>
             </div>
           </div>
@@ -836,17 +835,17 @@ const AgentDashboard = () => {
 
       {/* Controls: Search, risk filter, sort */}
       <section className="max-w-7xl mx-auto px-6 lg:px-8 -mt-8">
-        <div className="bg-white/80 border border-gray-300 rounded-2xl p-4">
+        <div className="bg-gray-200 border border-gray-300 rounded-2xl p-4">
           <div className="flex flex-col md:flex-row items-center gap-4">
             <label htmlFor="search" className="sr-only">Search agents</label>
             <div className="flex items-center gap-3 flex-1">
-              <div className="px-3 py-2 rounded-lg border border-gray-100 bg-gray-100">
+              <div className="px-3 py-2 rounded-lg border border-gray-200 bg-gray-200">
                 <FontAwesomeIcon icon={faSearch} className="text-gray-500" />
               </div>
               <input
                 id="search"
                 ref={inputRef}
-                className="w-full bg-transparent focus:outline-none text-gray-900 placeholder-gray-500"
+                className="w-full bg-transparent focus:outline-none text-gray-900 placeholder-gray-700/90"
                 placeholder="Search by ID, name, owner — press / to focus"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -856,12 +855,12 @@ const AgentDashboard = () => {
 
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">
-                <div className="text-xs text-gray-500">Risk</div>
+                <div className="text-xs text-gray-700/90">Risk</div>
                 <select
                   aria-label="Filter by risk"
                   value={filterRisk}
                   onChange={(e) => setFilterRisk(e.target.value)}
-                  className="px-2 py-1.5 rounded-md border border-gray-300 bg-white text-sm cursor-pointer"
+                  className="px-2 py-1.5 rounded-md border border-gray-300 bg-white/60 text-sm cursor-pointer"
                 >
                   <option value="all">All</option>
                   <option value="low">Low</option>
@@ -872,12 +871,12 @@ const AgentDashboard = () => {
               </div>
 
               <div className="flex items-center gap-2">
-                <div className="text-xs text-gray-500">Sort</div>
+                <div className="text-xs text-gray-700/90">Sort</div>
                 <select
                   aria-label="Sort agents"
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="px-2 py-1.5 rounded-md border border-gray-300 bg-white text-sm cursor-pointer"
+                  className="px-2 py-1.5 rounded-md border border-gray-300 bg-white/60 text-sm cursor-pointer"
                 >
                   <option value="score_desc">Score (high → low)</option>
                   <option value="score_asc">Score (low → high)</option>
@@ -888,8 +887,8 @@ const AgentDashboard = () => {
               <div className="hidden md:block h-8 w-px bg-gray-100 mx-2" />
 
               <div className="hidden md:flex items-center gap-2">
-                <div className="text-xs text-gray-500">View</div>
-                <div className="inline-flex rounded-md px-1 bg-white border border-gray-100">
+                <div className="text-xs text-gray-700/90">View</div>
+                <div className="inline-flex rounded-md px-1 bg-gray-200 border border-gray-100">
                   <button
                     onClick={() => setViewMode("cards")}
                     className={`px-3 py-1 rounded-md text-sm cursor-pointer ${viewMode === "cards" ? "bg-gray-900 text-white" : "bg-white text-gray-700"}`}
@@ -918,31 +917,25 @@ const AgentDashboard = () => {
       <main className="max-w-7xl mx-auto px-6 lg:px-8 py-8">
         {/* Stats strip */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="p-5 bg-gray-100 rounded-2xl">
-            <div className="text-xs text-gray-500">Total Agents</div>
+          <div className="p-5 bg-gray-200 rounded-2xl">
+            <div className="text-sm text-gray-600">Total Agents</div>
             <div className="mt-2 text-2xl font-semibold">{agents.length}</div>
-            <div className="mt-3 text-sm text-gray-500">Active and monitored</div>
+            <div className="mt-3 text-xs text-gray-500">Active and monitored</div>
           </div>
-          <div className="p-5 bg-gray-100 rounded-2xl">
-            <div className="text-xs text-gray-500">Avg Security Score</div>
-            <div className="mt-2 text-2xl font-semibold">
-              {agents.length > 0 ? Math.round(agents.reduce((s,a)=>s+a.score,0)/agents.length) : 0}
-            </div>
-            <div className="mt-3 text-sm text-gray-500">Higher is safer</div>
+          <div className="p-5 bg-gray-200 rounded-2xl">
+            <div className="text-sm text-gray-600">Avg Security Score</div>
+            <div className="mt-2 text-2xl font-semibold">{agents.length > 0 ? Math.round(agents.reduce((s,a)=>s+a.score,0)/agents.length) : 0}</div>
+            <div className="mt-3 text-xs text-gray-500">Higher is safer</div>
           </div>
-          <div className="p-5 bg-gray-100 rounded-2xl">
-            <div className="text-xs text-gray-500">Total Scans</div>
-            <div className="mt-2 text-2xl font-semibold">
-              {agents.length > 0 ? agents.reduce((s,a)=>s+(a.scans||0),0) : 0}
-            </div>
-            <div className="mt-3 text-sm text-gray-500">Security assessments</div>
+          <div className="p-5 bg-gray-200 rounded-2xl">
+            <div className="text-sm text-gray-500">Scans / day</div>
+            <div className="mt-2 text-2xl font-semibold">1.4k</div>
+            <div className="mt-3 text-xs text-gray-500">Automated & scheduled</div>
           </div>
-          <div className="p-5 bg-gray-100 rounded-2xl">
-            <div className="text-xs text-gray-500">High Risk Agents</div>
-            <div className="mt-2 text-2xl font-semibold text-red-600">
-              {agents.length > 0 ? agents.filter(a => a.score < 60).length : 0}
-            </div>
-            <div className="mt-3 text-sm text-gray-500">Require attention</div>
+          <div className="p-5 bg-gray-200 rounded-2xl">
+            <div className="text-sm text-gray-600">Exported</div>
+            <div className="mt-2 text-2xl font-semibold">512</div>
+            <div className="mt-3 text-xs text-gray-500">Reports generated</div>
           </div>
         </div>
 
@@ -972,7 +965,7 @@ const AgentDashboard = () => {
               return (
                 <article
                   key={agent.id}
-                  className={`p-6 bg-white rounded-2xl border border-gray-300  card-reveal ${idx < 6 ? "visible" : ""}`}
+                  className={`p-6 bg-gray-200 rounded-2xl border border-gray-300  card-reveal ${idx < 6 ? "visible" : ""}`}
                   tabIndex={0}
                   aria-labelledby={`agent-${agent.id}`}
                 >
@@ -1115,19 +1108,19 @@ const AgentDashboard = () => {
 
         {/* Large visual analytics block (SVG chart + long caption) */}
         <section className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 p-6 bg-gray-100 rounded-2xl ">
+          <div className="lg:col-span-2 p-6 bg-gray-200 rounded-2xl ">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-xs text-gray-500">Risk over time</div>
+                <div className="text-xs text-gray-600">Risk over time</div>
                 {/* Placeholder for SVG Chart */}
-                <div className="h-64 w-full bg-gray-200 rounded-lg mt-4 flex items-center justify-center text-gray-500">
+                <div className="h-64 w-full p-3 bg-gray-300 rounded-lg mt-4 flex items-center justify-center text-gray-500">
                     [Placeholder for complex Risk/Score trend chart visualization]
-                </div>
-              </div>
+              </div>     
+            </div>
+            </div>
           </div>
-          </div>
-          <div className="lg:col-span-1 p-6 bg-gray-100 rounded-2xl">
-            <div className="text-xs text-gray-500">Security Insights</div>
+          <div className="lg:col-span-1 p-6 bg-gray-200 rounded-2xl">
+            <div className="text-xs text-gray-600">Security Insights</div>
             <h3 className="text-lg font-semibold mt-1">Immediate Action Items</h3>
             <ul className="mt-4 space-y-3 text-sm">
                 <li className="p-3 bg-white rounded-lg border border-gray-200 flex items-center gap-3">
@@ -1143,7 +1136,7 @@ const AgentDashboard = () => {
                     Schedule next compliance scan for all Low-Risk agents.
                 </li>
             </ul>
-          </div>
+            </div>
         </section>
       </main>
 
@@ -1152,7 +1145,7 @@ const AgentDashboard = () => {
         <div className="export-toast px-6 py-3 bg-gray-900 text-white rounded-xl shadow-xl flex items-center gap-3">
           <FontAwesomeIcon icon={faDownload} className="text-green-400" />
           <p className="text-sm font-medium">Export successful! `agents_export_...csv` downloaded.</p>
-        </div>
+            </div>
       )}
 
       {/* Agent Detail Modal (Simulated) */}
@@ -1180,30 +1173,30 @@ const AgentDashboard = () => {
                 <FontAwesomeIcon icon={faXmark} className="text-md" />
               </button>
             </div>
-
+    
             <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
+            <div>
                     <div className="text-xs text-gray-500 uppercase">Agent ID</div>
                     <div className="font-mono mt-1">{selectedAgent.id}</div>
-                </div>
+            </div>
                 <div>
                     <div className="text-xs text-gray-500 uppercase">Owner</div>
                     <div className="mt-1 flex items-center gap-2">
                         <FontAwesomeIcon icon={faUser} className="text-gray-400" />
                         {selectedAgent.owner}
-                    </div>
-                </div>
+            </div>
+          </div>
                 <div>
                     <div className="text-xs text-gray-500 uppercase">Latest Score</div>
                     <div className={`text-3xl font-bold ${getRiskColor(selectedAgent.score).text}`}>{selectedAgent.score}</div>
-                </div>
-                <div>
+            </div>
+                  <div>
                     <div className="text-xs text-gray-500 uppercase">Risk Level</div>
                     <div className={`mt-1 inline-flex px-3 py-1 rounded-full text-sm font-semibold ${getRiskColor(selectedAgent.score).bg} ${getRiskColor(selectedAgent.score).text}`}>
                         {getRiskColor(selectedAgent.score).label}
                     </div>
+                  </div>
                 </div>
-            </div>
 
             <h3 className="text-lg font-semibold mt-6 border-t border-gray-200 pt-4">Recent Activity</h3>
             <ul className="mt-3 space-y-2 text-sm max-h-48 overflow-y-auto p-2 bg-gray-50 rounded-lg">
