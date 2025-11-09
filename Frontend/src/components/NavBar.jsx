@@ -67,7 +67,7 @@ const NavBar = () => {
           <div className="flex items-center justify-between w-full max-w-7xl px-6 py-2.5">
             {/* Brand */}
             <NavLink
-              to="/"
+              to={isAuthenticated ? "/dashboard" : "/"}
               className="flex items-center gap-2 text-gray-50 hover:text-white transition-all duration-300"
             >
               <FontAwesomeIcon icon={faShieldHalved} className="text-white" />
