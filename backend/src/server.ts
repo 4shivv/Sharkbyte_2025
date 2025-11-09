@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth';
 import agentRoutes from './routes/agents';
+import scanRoutes from './routes/scans';
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use(cors({
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/agents', agentRoutes);
+app.use('/api/scans', scanRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {

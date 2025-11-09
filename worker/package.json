@@ -1,0 +1,25 @@
+{
+  "name": "agentguard-worker",
+  "version": "1.0.0",
+  "description": "Background worker for processing security scans",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "dev": "ts-node src/index.ts",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "@prisma/client": "^6.19.0",
+    "dotenv": "^17.2.3",
+    "ioredis": "^5.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

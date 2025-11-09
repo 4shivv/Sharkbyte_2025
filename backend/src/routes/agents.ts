@@ -1,5 +1,6 @@
 import express, { Router } from 'express';
 import { createAgent, getAgents, getAgentById, updateAgent } from '../controllers/agentController';
+import { initiateScan, getAgentScans } from '../controllers/scanController';
 import { authMiddleware } from '../middleware/authMiddleware';
 
 const router = Router();
@@ -18,5 +19,11 @@ router.get('/:id', getAgentById);
 
 // PUT /api/agents/:id - Update an agent by ID
 router.put('/:id', updateAgent);
+
+// POST /api/agents/:agentId/scan - Initiate security scan for an agent
+router.post('/:agentId/scan', initiateScan);
+
+// GET /api/agents/:agentId/scans - Get all scans for an agent
+router.get('/:agentId/scans', getAgentScans);
 
 export default router;

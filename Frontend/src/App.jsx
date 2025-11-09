@@ -20,6 +20,8 @@ import { Footer } from './components/Footer'
 import AgentDashboard from './Pages/AgentDashboard.'
 import AgentHistory from './Pages/History'
 import ProjectOverview from './Pages/NewProject'
+import AgentDetails from './Pages/AgentDetails'
+import ScanResults from './Pages/ScanResults'
 
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 
@@ -44,11 +46,20 @@ const ProtectedRoute = ({ children }) => {
 
 
 
+// Wrapper component to provide AuthProvider inside the router
+const AppContent = () => {
+  return (
+    <AuthProvider>
+      <RootLayout />
+    </AuthProvider>
+  );
+};
+
 function App() {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path='/' element={<RootLayout/>}>
+      <Route path='/' element={<AppContent/>}>
           <Route index element={<Homepage/>}/>
           <Route path='footer' element={<Footer/>}/>
           {/* Public routes */}
@@ -75,17 +86,23 @@ function App() {
               <ProjectOverview/>
             </ProtectedRoute>
           }/>
+          <Route path='/agents/:agentId' element={
+            <ProtectedRoute>
+              <AgentDetails/>
+            </ProtectedRoute>
+          }/>
+          <Route path='/scans/:scanId' element={
+            <ProtectedRoute>
+              <ScanResults/>
+            </ProtectedRoute>
+          }/>
           <Route path='/chat' element={<Chat/>}/>
           <Route path="/map" element={<Map />} />
       </Route>
     )
   )
 
-  return (
-    <AuthProvider>
-      <RouterProvider router={router}/>
-    </AuthProvider>
-  )
+  return <RouterProvider router={router}/>
 }
 
 

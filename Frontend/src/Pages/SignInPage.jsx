@@ -23,8 +23,8 @@ const SignInPage = () => {
       // FR-1.1: Register a new user with email and password
       await register({ email, password, confirmPassword });
       setSuccess(true);
-      // Navigate to login after successful registration
-      setTimeout(() => navigate("/login"), 2000);
+      // Navigate to dashboard after successful registration
+      setTimeout(() => navigate("/dashboard"), 2000);
     } catch (err) {
       // Display error message to user
       const errorMessage = err.response?.data?.error || "Registration failed. Please try again.";
@@ -59,7 +59,7 @@ const SignInPage = () => {
         {/* Success Message */}
         {success && (
           <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md text-sm">
-            Registration successful! Redirecting to login...
+            Registration successful! Redirecting to dashboard...
           </div>
         )}
 

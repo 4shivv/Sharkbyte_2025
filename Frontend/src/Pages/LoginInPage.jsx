@@ -21,7 +21,7 @@ const LoginInPage = () => {
       // FR-1.2: Login user with credentials
       await login({ email, password });
       // Navigate to agent dashboard on successful login
-      navigate("/agent-dashboard");
+      navigate("/dashboard");
     } catch (err) {
       // Display error message to user
       const errorMessage = err.response?.data?.error || "Login failed. Please try again.";

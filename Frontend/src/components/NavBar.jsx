@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faXmark, faDiagramProject, faShieldHalved } from '@fortawesome/free-solid-svg-icons';
 import { ScreenContext } from '../Layouts/RootLayout';
+import { useAuth } from '../contexts/AuthContext';
 
 const NavBar = () => {
   const navItems = [
@@ -12,8 +13,10 @@ const NavBar = () => {
   ];
 
   const { isMobile } = useContext(ScreenContext);
+  const { isAuthenticated, logout, user } = useAuth();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const navRefs = useRef([]);
 
   const getInitialIndex = () => {
@@ -105,18 +108,37 @@ const NavBar = () => {
             {/* Right Side Buttons */}
             {!isMobile && (
               <div className="flex items-center gap-3">
-                <NavLink
-                  to="/login"
-                  className="text-[14px] font-light text-gray-50 hover:text-white transition-all duration-300"
-                >
-                  Login
-                </NavLink>
-                <NavLink
-                  to="/signup"
-                  className="text-[14px] font-light text-gray-50 hover:text-white transition-all duration-300"
-                >
-                  Sign up
-                </NavLink>
+                {isAuthenticated ? (
+                  <div className="flex items-center gap-3">
+                    <span className="text-[14px] font-light text-gray-300">
+                      {user?.email}
+                    </span>
+                    <button
+                      onClick={() => {
+                        logout();
+                        navigate('/');
+                      }}
+                      className="text-[14px] font-light text-gray-50 hover:text-white transition-all duration-300"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <NavLink
+                      to="/login"
+                      className="text-[14px] font-light text-gray-50 hover:text-white transition-all duration-300"
+                    >
+                      Login
+                    </NavLink>
+                    <NavLink
+                      to="/signup"
+                      className="text-[14px] font-light text-gray-50 hover:text-white transition-all duration-300"
+                    >
+                      Sign up
+                    </NavLink>
+                  </>
+                )}
               </div>
             )}
 
@@ -152,20 +174,40 @@ const NavBar = () => {
                   </NavLink>
                 ))}
                 <div className="h-px bg-gray-200 w-3/4" />
-                <NavLink
-                  to="/login"
-                  onClick={() => setIsMobileOpen(false)}
-                  className="text-[25px] font-semibold text-gray-100   hover:text-white"
-                >
-                  Login
-                </NavLink>
-                <NavLink
-                  to="/signup"
-                  onClick={() => setIsMobileOpen(false)}
-                  className="text-[25px] font-semibold text-gray-100 hover:text-white"
-                >
-                  Sign up
-                </NavLink>
+                {isAuthenticated ? (
+                  <div className="flex flex-col gap-2">
+                    <span className="text-[18px] font-normal text-gray-300">
+                      {user?.email}
+                    </span>
+                    <button
+                      onClick={() => {
+                        logout();
+                        navigate('/');
+                        setIsMobileOpen(false);
+                      }}
+                      className="text-left text-[25px] font-semibold text-gray-100 hover:text-white"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <NavLink
+                      to="/login"
+                      onClick={() => setIsMobileOpen(false)}
+                      className="text-[25px] font-semibold text-gray-100 hover:text-white"
+                    >
+                      Login
+                    </NavLink>
+                    <NavLink
+                      to="/signup"
+                      onClick={() => setIsMobileOpen(false)}
+                      className="text-[25px] font-semibold text-gray-100 hover:text-white"
+                    >
+                      Sign up
+                    </NavLink>
+                  </>
+                )}
               </div>
             </div>
           )}

@@ -560,10 +560,9 @@ const AgentDashboard = () => {
     return filtered;
   }, [agents, searchTerm, filterRisk, sortBy]);
 
-  // open agent details modal
+  // open agent details page
   const openAgent = (agent) => {
-    setSelectedAgent(agent);
-    document.body.style.overflow = "hidden";
+    navigate(`/agents/${agent.id}`);
   };
 
   const closeAgent = () => {
@@ -594,20 +593,9 @@ const AgentDashboard = () => {
     exportTimer.current = setTimeout(() => setShowingExportToast(false), 3500);
   };
 
-  // simulated "scan now" action that updates the agent's scans & lastScan & score randomly
+  // Navigate to agent details page where scan can be initiated
   const scanNow = (agentId) => {
-    setAgents((prev) =>
-      prev.map((a) => {
-        if (a.id !== agentId) return a;
-        const newScore = Math.max(10, Math.min(99, Math.round(a.score + (Math.random() * 10 - 5))));
-        return {
-          ...a,
-          score: newScore,
-          scans: a.scans + 1,
-          lastScan: new Date().toISOString().slice(0, 10),
-        };
-      })
-    );
+    navigate(`/agents/${agentId}`);
   };
 
   // complex, long inline styles + animations (intentionally verbose)

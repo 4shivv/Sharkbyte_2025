@@ -49,6 +49,47 @@ export interface UpdateAgentRequest {
   system_prompt?: string;
 }
 
+export interface Vulnerability {
+  type: string;
+  severity: 'critical' | 'high' | 'medium' | 'low';
+  location: string;
+  description: string;
+  exploit_example: string;
+}
+
+export interface AttackSimulation {
+  attack_type: string;
+  payload: string;
+  expected_outcome: string;
+  mitigation: string;
+}
+
+export interface RemediationStep {
+  priority: number;
+  category: string;
+  action: string;
+  implementation: string;
+}
+
+export interface Scan {
+  id: string;
+  status: 'pending' | 'processing' | 'completed' | 'failed';
+  security_score: number | null;
+  vulnerabilities: Vulnerability[] | null;
+  attack_simulations: AttackSimulation[] | null;
+  remediation_steps: RemediationStep[] | null;
+  error_message: string | null;
+  agent_name?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface InitiateScanResponse {
+  scanId: string;
+  status: string;
+  message: string;
+}
+
 // Create axios instance with base configuration
 const api: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3001/api',
@@ -142,6 +183,27 @@ export const agentAPI = {
   // FR-2.5: Update agent details (owner, description, system_prompt)
   update: async (id: string, agentData: UpdateAgentRequest): Promise<Agent> => {
     const response = await api.put<Agent>(`/agents/${id}`, agentData);
+    return response.data;
+  },
+};
+
+// Scan API
+export const scanAPI = {
+  // FR-3.1: Initiate security scan for an agent
+  initiateScan: async (agentId: string): Promise<InitiateScanResponse> => {
+    const response = await api.post<InitiateScanResponse>(`/agents/${agentId}/scan`);
+    return response.data;
+  },
+
+  // FR-3.8: Get scan result by ID
+  getScanResult: async (scanId: string): Promise<Scan> => {
+    const response = await api.get<Scan>(`/scans/${scanId}`);
+    return response.data;
+  },
+
+  // Get all scans for an agent
+  getAgentScans: async (agentId: string): Promise<Scan[]> => {
+    const response = await api.get<Scan[]>(`/agents/${agentId}/scans`);
     return response.data;
   },
 };
