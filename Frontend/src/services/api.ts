@@ -90,6 +90,12 @@ export interface InitiateScanResponse {
   message: string;
 }
 
+export interface RemediationResponse {
+  original_prompt: string;
+  hardened_prompt: string;
+  vulnerabilities_addressed: number;
+}
+
 // Create axios instance with base configuration
 const api: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3001/api',
@@ -204,6 +210,12 @@ export const scanAPI = {
   // Get all scans for an agent
   getAgentScans: async (agentId: string): Promise<Scan[]> => {
     const response = await api.get<Scan[]>(`/agents/${agentId}/scans`);
+    return response.data;
+  },
+
+  // FR-4.7: Generate hardened prompt using Gemini API
+  remediatePrompt: async (scanId: string): Promise<RemediationResponse> => {
+    const response = await api.post<RemediationResponse>(`/scans/${scanId}/remediate`);
     return response.data;
   },
 };

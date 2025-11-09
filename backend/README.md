@@ -45,6 +45,16 @@ npm install
 npx prisma generate
 npx prisma db push
 
+## Database GUI (Optional)
+
+```bash
+cd backend
+npx prisma studio
+```
+
+Opens at **http://localhost:5555** - View/edit users, agents, and scans
+
+
 # Worker
 cd ../worker
 npm install
@@ -80,11 +90,3 @@ redis-cli ping  # Returns PONG
 pg_isready      # Returns "accepting connections"
 ```
 
-## Database GUI (Optional)
-
-```bash
-cd backend
-npx prisma studio
-```
-
-Opens at **http://localhost:5555** - View/edit users, agents, and scans

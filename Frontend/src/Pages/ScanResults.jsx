@@ -9,6 +9,11 @@ const ScanResults = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('vulnerabilities');
+  const [copiedIndex, setCopiedIndex] = useState(null);
+  const [remediating, setRemediating] = useState(false);
+  const [remediationResult, setRemediationResult] = useState(null);
+  const [remediationError, setRemediationError] = useState(null);
+  const [copiedPrompt, setCopiedPrompt] = useState(false);
 
   useEffect(() => {
     fetchScanResult();
@@ -28,6 +33,44 @@ const ScanResults = () => {
     }
   };
 
+  // FR-4.6: Copy remediation suggestions to clipboard
+  const copyToClipboard = async (text, index) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedIndex(index);
+      setTimeout(() => setCopiedIndex(null), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
+  // FR-4.7: Generate hardened prompt using Gemini API
+  const handleGenerateHardenedPrompt = async () => {
+    try {
+      setRemediating(true);
+      setRemediationError(null);
+      const result = await scanAPI.remediatePrompt(scanId);
+      setRemediationResult(result);
+      setActiveTab('auto-fix'); // Switch to the auto-fix tab
+    } catch (err) {
+      console.error('Error generating hardened prompt:', err);
+      setRemediationError(err.response?.data?.error || 'Failed to generate hardened prompt');
+    } finally {
+      setRemediating(false);
+    }
+  };
+
+  // Copy hardened prompt to clipboard
+  const copyHardenedPrompt = async () => {
+    try {
+      await navigator.clipboard.writeText(remediationResult.hardened_prompt);
+      setCopiedPrompt(true);
+      setTimeout(() => setCopiedPrompt(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
   const getSeverityColor = (severity) => {
     switch (severity) {
       case 'critical': return 'bg-red-100 text-red-800 border-red-300';
@@ -38,20 +81,26 @@ const ScanResults = () => {
     }
   };
 
+  // FR-4.1: Color-coded risk levels (Critical: 0-40, High: 41-60, Medium: 61-80, Low: 81-100)
   const getScoreColor = (score) => {
-    if (score >= 90) return 'text-green-500';
-    if (score >= 70) return 'text-green-400';
-    if (score >= 50) return 'text-yellow-500';
-    if (score >= 30) return 'text-orange-500';
-    return 'text-red-500';
+    if (score >= 81) return 'text-green-500';      // Low risk
+    if (score >= 61) return 'text-yellow-500';     // Medium risk
+    if (score >= 41) return 'text-orange-500';     // High risk
+    return 'text-red-500';                         // Critical risk (0-40)
   };
 
   const getScoreLabel = (score) => {
-    if (score >= 90) return 'Excellent';
-    if (score >= 70) return 'Good';
-    if (score >= 50) return 'Moderate';
-    if (score >= 30) return 'Poor';
-    return 'Critical';
+    if (score >= 81) return 'Low Risk';
+    if (score >= 61) return 'Medium Risk';
+    if (score >= 41) return 'High Risk';
+    return 'Critical Risk';
+  };
+
+  const getScoreBackground = (score) => {
+    if (score >= 81) return 'bg-green-500/10 border-green-500/30';
+    if (score >= 61) return 'bg-yellow-500/10 border-yellow-500/30';
+    if (score >= 41) return 'bg-orange-500/10 border-orange-500/30';
+    return 'bg-red-500/10 border-red-500/30';
   };
 
   if (loading) {
@@ -103,13 +152,12 @@ const ScanResults = () => {
           </div>
 
           {/* Score interpretation */}
-          <div className="mt-6 p-4 bg-gray-800/50 rounded-lg">
+          <div className={`mt-6 p-4 rounded-lg border ${getScoreBackground(scan.security_score)}`}>
             <p className="text-sm text-gray-300">
-              {scan.security_score >= 90 && 'Excellent security posture with explicit prohibitions and safeguards in place.'}
-              {scan.security_score >= 70 && scan.security_score < 90 && 'Good security with minor gaps that should be addressed.'}
-              {scan.security_score >= 50 && scan.security_score < 70 && 'Moderate security with notable vulnerabilities requiring attention.'}
-              {scan.security_score >= 30 && scan.security_score < 50 && 'Poor security with critical flaws that need immediate remediation.'}
-              {scan.security_score < 30 && 'Severely vulnerable and easily exploitable. Immediate action required.'}
+              {scan.security_score >= 81 && 'Low risk - Good security posture with explicit prohibitions and safeguards in place.'}
+              {scan.security_score >= 61 && scan.security_score < 81 && 'Medium risk - Acceptable security with some gaps that should be addressed.'}
+              {scan.security_score >= 41 && scan.security_score < 61 && 'High risk - Notable vulnerabilities requiring immediate attention.'}
+              {scan.security_score < 41 && 'Critical risk - Severely vulnerable and easily exploitable. Immediate action required.'}
             </p>
           </div>
         </div>
@@ -147,6 +195,16 @@ const ScanResults = () => {
                 }`}
               >
                 Remediation Steps ({scan.remediation_steps?.length || 0})
+              </button>
+              <button
+                onClick={() => setActiveTab('auto-fix')}
+                className={`py-4 px-2 border-b-2 font-medium text-sm ${
+                  activeTab === 'auto-fix'
+                    ? 'border-blue-500 text-blue-400'
+                    : 'border-transparent text-gray-400 hover:text-gray-300'
+                }`}
+              >
+                Auto-Fix {remediationResult && '✓'}
               </button>
             </nav>
           </div>
@@ -241,7 +299,15 @@ const ScanResults = () => {
                         </div>
                       </div>
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-400 mb-1">Implementation</h4>
+                        <div className="flex items-center justify-between mb-1">
+                          <h4 className="text-sm font-semibold text-gray-400">Implementation</h4>
+                          <button
+                            onClick={() => copyToClipboard(step.implementation, index)}
+                            className="text-xs px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
+                          >
+                            {copiedIndex === index ? 'Copied!' : 'Copy Code'}
+                          </button>
+                        </div>
                         <pre className="text-white bg-gray-800 p-3 rounded text-sm overflow-x-auto whitespace-pre-wrap">{step.implementation}</pre>
                       </div>
                     </div>
@@ -249,6 +315,104 @@ const ScanResults = () => {
               ) : (
                 <div className="bg-gray-900 rounded-lg p-8 text-center text-gray-400">
                   No remediation steps needed
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Auto-Fix Tab */}
+          {activeTab === 'auto-fix' && (
+            <div className="space-y-6">
+              {/* Generate Button Section */}
+              {!remediationResult && (
+                <div className="bg-gradient-to-br from-blue-900/20 to-purple-900/20 rounded-lg p-8 border border-blue-500/30">
+                  <div className="text-center">
+                    <h3 className="text-2xl font-semibold mb-3">Auto-Remediation</h3>
+                    <p className="text-gray-400 mb-6 max-w-2xl mx-auto">
+                      Use AI to automatically generate a hardened version of your system prompt that fixes all identified vulnerabilities while preserving the original functionality.
+                    </p>
+                    {remediationError && (
+                      <div className="mb-4 p-4 bg-red-900/30 border border-red-500/50 rounded-lg text-red-300">
+                        {remediationError}
+                      </div>
+                    )}
+                    <button
+                      onClick={handleGenerateHardenedPrompt}
+                      disabled={remediating || scan.status !== 'completed'}
+                      className={`px-8 py-3 rounded-lg font-semibold text-white transition-all ${
+                        remediating || scan.status !== 'completed'
+                          ? 'bg-gray-600 cursor-not-allowed'
+                          : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700'
+                      }`}
+                    >
+                      {remediating ? (
+                        <span className="flex items-center gap-2">
+                          <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                          </svg>
+                          Generating Hardened Prompt...
+                        </span>
+                      ) : (
+                        'Generate Hardened Prompt'
+                      )}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Results Section */}
+              {remediationResult && (
+                <div className="space-y-4">
+                  {/* Summary Card */}
+                  <div className="bg-green-900/20 border border-green-500/30 rounded-lg p-6">
+                    <div className="flex items-center gap-3 mb-2">
+                      <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <h3 className="text-xl font-semibold text-green-400">Hardened Prompt Generated</h3>
+                    </div>
+                    <p className="text-gray-300">
+                      Successfully generated a secure version of your prompt that addresses {remediationResult.vulnerabilities_addressed} vulnerabilit{remediationResult.vulnerabilities_addressed === 1 ? 'y' : 'ies'}.
+                    </p>
+                  </div>
+
+                  {/* Original Prompt */}
+                  <div className="bg-gray-900 rounded-lg p-6 border border-gray-700">
+                    <h4 className="text-lg font-semibold text-gray-300 mb-3">Original Prompt</h4>
+                    <pre className="text-white bg-gray-800 p-4 rounded text-sm overflow-x-auto whitespace-pre-wrap max-h-96 overflow-y-auto">
+                      {remediationResult.original_prompt}
+                    </pre>
+                  </div>
+
+                  {/* Hardened Prompt */}
+                  <div className="bg-gray-900 rounded-lg p-6 border border-green-700">
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className="text-lg font-semibold text-green-400">Hardened Prompt (Ready to Use)</h4>
+                      <button
+                        onClick={copyHardenedPrompt}
+                        className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded transition-colors"
+                      >
+                        {copiedPrompt ? 'Copied!' : 'Copy Hardened Prompt'}
+                      </button>
+                    </div>
+                    <pre className="text-white bg-gray-800 p-4 rounded text-sm overflow-x-auto whitespace-pre-wrap max-h-96 overflow-y-auto">
+                      {remediationResult.hardened_prompt}
+                    </pre>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-4">
+                    <button
+                      onClick={() => {
+                        setRemediationResult(null);
+                        setRemediationError(null);
+                      }}
+                      className="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded transition-colors"
+                    >
+                      Generate Again
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
