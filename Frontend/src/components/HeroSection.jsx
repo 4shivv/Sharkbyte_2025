@@ -207,19 +207,19 @@ const HeroPage = () => {
               </p>
 
               <div className="mt-8 flex flex-wrap gap-4 items-center">
-                <button onClick={() => setModalOpen(true)} className="inline-flex items-center gap-3 px-4 py-2.5 bg-sky-700 text-white rounded-full text-sm font-semibold tracking-wide cursor-pointer transition-color duration-200">
-                  <FontAwesomeIcon icon={faPlay} />
-                  Watch overview
-                </button>
-
-                <Link to="/docs" className="inline-flex items-center gap-3  px-4 py-2.5 bg-white text-gray-800 rounded-full text-sm font-semibold border border-gray-200 hover:bg-gray-50 transition">
-                  View docs
+                <Link to="/signup" className="inline-flex items-center gap-3 px-4 py-2.5 bg-sky-700 text-white rounded-full text-sm font-semibold tracking-wide cursor-pointer transition-color duration-200 hover:bg-sky-800">
+                  Get Started
                   <FontAwesomeIcon icon={faChevronRight} />
                 </Link>
 
-                <button onClick={() => navigate("/collab")} className="inline-flex items-center gap-2 px-4 py-2.5 text-sm rounded-full bg-gray-50 hover:bg-gray-100 cursor-pointer border border-gray-200">
-                  <FontAwesomeIcon icon={faCubes} />
-                  Live Demo
+                <Link to="/login" className="inline-flex items-center gap-3 px-4 py-2.5 bg-white text-gray-800 rounded-full text-sm font-semibold border border-gray-200 hover:bg-gray-50 transition">
+                  Sign In
+                  <FontAwesomeIcon icon={faChevronRight} />
+                </Link>
+
+                <button onClick={() => setModalOpen(true)} className="inline-flex items-center gap-2 px-4 py-2.5 text-sm rounded-full bg-gray-50 hover:bg-gray-100 cursor-pointer border border-gray-200">
+                  <FontAwesomeIcon icon={faPlay} />
+                  Watch Demo
                 </button>
               </div>
 
@@ -448,8 +448,8 @@ const HeroPage = () => {
             <p className="mt-2 text-gray-600 max-w-2xl mx-auto">Evaluate risks in minutes — not days. Safe-by-default policies you can audit and export.</p>
 
             <div className="mt-6 flex justify-center gap-4">
-              <Link to="/signup" className="flex items-center justify-center px-4 py-2 text-sm bg-sky-700 text-white rounded-full font-semibold">Get started free</Link>
-              <Link to="/contact" className="px-5 py-2 border rounded-full text-sm border-gray-300">Talk to sales</Link>
+              <Link to="/signup" className="flex items-center justify-center px-4 py-2 text-sm bg-sky-700 text-white rounded-full font-semibold hover:bg-sky-800 transition">Get started free</Link>
+              <Link to="/login" className="px-5 py-2 border rounded-full text-sm border-gray-300 hover:bg-gray-50 transition">Sign in</Link>
             </div>
           </div>
         </section>

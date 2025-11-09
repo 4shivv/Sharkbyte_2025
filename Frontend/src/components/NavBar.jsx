@@ -6,15 +6,14 @@ import { ScreenContext } from '../Layouts/RootLayout';
 import { useAuth } from '../contexts/AuthContext';
 
 const NavBar = () => {
-  const navItems = [
-    { label: 'Dashboard', path: '/dashboard' },
-    { label: 'Project', path: '/newproject' },
-    { label: 'History', path: '/history' },
-  ];
-
   const { isMobile } = useContext(ScreenContext);
   const { isAuthenticated, logout, user } = useAuth();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+  const navItems = isAuthenticated ? [
+    { label: 'Dashboard', path: '/dashboard' },
+    { label: 'Project', path: '/newproject' },
+  ] : [];
   const location = useLocation();
   const navigate = useNavigate();
   const navRefs = useRef([]);

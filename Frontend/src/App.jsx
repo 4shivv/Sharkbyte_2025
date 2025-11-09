@@ -6,19 +6,9 @@ import SignInPage from './Pages/SignInPage'
 import LoginInPage from './Pages/LoginInPage'
 import { RootLayout } from './Layouts/RootLayout'
 import Homepage from './Pages/HomePage'
-import CheckIn from './Pages/CheckIn'
-import { Appointments } from './components/CheckIn/Appointments'
-import { Insurance } from './components/CheckIn/Insurance'
-import { Records } from './components/CheckIn/Records'
-import { Questions } from './components/CheckIn/Questions'
-import { Chat } from './Pages/Chat'
-import { Map } from './Pages/Map'
-
-import { Analytics } from './Pages/Analytics'
-import { Footer } from './components/Footer'
 
 import AgentDashboard from './Pages/AgentDashboard.'
-import AgentHistory from './Pages/History'
+import AgentScanHistory from './Pages/AgentScanHistory'
 import ProjectOverview from './Pages/NewProject'
 import AgentDetails from './Pages/AgentDetails'
 import ScanResults from './Pages/ScanResults'
@@ -61,7 +51,6 @@ function App() {
     createRoutesFromElements(
       <Route path='/' element={<AppContent/>}>
           <Route index element={<Homepage/>}/>
-          <Route path='footer' element={<Footer/>}/>
           {/* Public routes */}
           <Route path='/login' element={<LoginInPage/>}/>
           <Route path='/signup' element={<SignInPage/>}/>
@@ -76,9 +65,9 @@ function App() {
               <AgentDashboard/>
             </ProtectedRoute>
           }/>
-          <Route path='/history' element={
+          <Route path='/agents/:agentId/history' element={
             <ProtectedRoute>
-              <AgentHistory/>
+              <AgentScanHistory/>
             </ProtectedRoute>
           }/>
           <Route path='/newproject' element={
@@ -96,8 +85,6 @@ function App() {
               <ScanResults/>
             </ProtectedRoute>
           }/>
-          <Route path='/chat' element={<Chat/>}/>
-          <Route path="/map" element={<Map />} />
       </Route>
     )
   )

@@ -18,24 +18,13 @@ import {
   faTimes,
   faXmark, // Added for the modal close button
 } from "@fortawesome/free-solid-svg-icons";
-import { agentAPI } from "../services/api";
+import { agentAPI, scanAPI } from "../services/api";
 
 
 
 /* ---------------------------
-   Mock Data & Helpers
+   Helpers
    --------------------------- */
-const MOCK_AGENTS = [
-  { id: "AGNT-001", name: "RFP Grant Writer", owner: "Alice Johnson", score: 85, risk: "Low", scans: 4, lastScan: "2025-10-28" },
-  { id: "AGNT-002", name: "Customer Service Bot", owner: "Bob Smith", score: 55, risk: "High", scans: 1, lastScan: "2025-11-04" },
-  { id: "AGNT-003", name: "Internal QA Agent", owner: "Charlie Bell", score: 68, risk: "Medium", scans: 12, lastScan: "2025-11-01" },
-  { id: "AGNT-004", name: "Log Analyzer", owner: "Devin Clark", score: 92, risk: "Low", scans: 2, lastScan: "2025-11-05" },
-  // extra items to lengthen the UI
-  { id: "AGNT-005", name: "Fraud Detector", owner: "Eve Lopez", score: 72, risk: "Medium", scans: 7, lastScan: "2025-11-02" },
-  { id: "AGNT-006", name: "Analytics Reporter", owner: "Frank Wu", score: 48, risk: "High", scans: 3, lastScan: "2025-10-30" },
-  { id: "AGNT-007", name: "Scheduler Agent", owner: "Grace Park", score: 96, risk: "Low", scans: 9, lastScan: "2025-11-06" },
-  { id: "AGNT-008", name: "Sentiment Miner", owner: "Hector Alvarez", score: 61, risk: "Medium", scans: 5, lastScan: "2025-11-03" },
-];
 
 const getRiskColor = (score) => {
   if (score <= 40) return { text: "text-red-600", bg: "bg-red-100/80", label: "Critical", ring: "ring-red-200" };
@@ -49,19 +38,30 @@ const formatNumberShort = (n) => {
   return `${n}`;
 };
 
-// Map backend agent data to UI format
-const mapAgentToUIFormat = (agent) => {
-  // Generate a mock security score (will be replaced by actual scanning later)
-  const mockScore = agent.score || Math.floor(Math.random() * 50) + 50; // 50-99
-  const risk = getRiskColor(mockScore);
+// Map backend agent data to UI format with scan statistics
+const mapAgentToUIFormat = (agent, scans = []) => {
+  // Calculate metrics from actual scans
+  const completedScans = scans.filter(s => s.status === 'completed' && s.security_score !== null);
+
+  // Get the latest security score from most recent completed scan
+  const latestScore = completedScans.length > 0
+    ? completedScans[completedScans.length - 1].security_score
+    : 0;
+
+  const risk = getRiskColor(latestScore);
+
+  // Get last scan date
+  const lastScanDate = scans.length > 0
+    ? new Date(scans[scans.length - 1].createdAt).toISOString().slice(0, 10)
+    : 'Never';
 
   return {
     ...agent,
     name: agent.agent_name,
-    score: mockScore,
+    score: latestScore,
     risk: risk.label,
-    scans: agent.scans || 0,
-    lastScan: agent.updatedAt ? new Date(agent.updatedAt).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
+    scans: scans.length,
+    lastScan: lastScanDate,
   };
 };
 
@@ -441,9 +441,22 @@ const AgentDashboard = () => {
     try {
       setLoading(true);
       const data = await agentAPI.getAll();
-      // Map backend agent format to UI format
-      const mappedAgents = data.map(mapAgentToUIFormat);
-      setAgents(mappedAgents);
+
+      // Fetch scans for each agent to calculate metrics
+      const agentsWithScans = await Promise.all(
+        data.map(async (agent) => {
+          try {
+            const scans = await scanAPI.getAgentScans(agent.id);
+            return mapAgentToUIFormat(agent, scans);
+          } catch (error) {
+            console.error(`Error fetching scans for agent ${agent.id}:`, error);
+            // If scan fetch fails, map agent without scan data
+            return mapAgentToUIFormat(agent, []);
+          }
+        })
+      );
+
+      setAgents(agentsWithScans);
     } catch (error) {
       console.error("Error fetching agents:", error);
       // If unauthorized, redirect to login (handled by axios interceptor)
@@ -466,8 +479,8 @@ const AgentDashboard = () => {
   const handleAgentRegistration = async (newAgentData) => {
     try {
       const createdAgent = await agentAPI.create(newAgentData);
-      // Map to UI format and add to the list
-      const mappedAgent = mapAgentToUIFormat(createdAgent);
+      // Map to UI format with empty scans array (newly created agent has no scans)
+      const mappedAgent = mapAgentToUIFormat(createdAgent, []);
       setAgents(prev => [mappedAgent, ...prev]);
       return createdAgent;
     } catch (error) {
@@ -492,8 +505,12 @@ const AgentDashboard = () => {
   const handleAgentUpdate = async (agentId, updatedData) => {
     try {
       const updatedAgent = await agentAPI.update(agentId, updatedData);
+
+      // Fetch latest scans for this agent to maintain accurate metrics
+      const scans = await scanAPI.getAgentScans(agentId).catch(() => []);
+      const mappedAgent = mapAgentToUIFormat(updatedAgent, scans);
+
       // Update the agent in the list
-      const mappedAgent = mapAgentToUIFormat(updatedAgent);
       setAgents(prev => prev.map(a => a.id === agentId ? mappedAgent : a));
       return updatedAgent;
     } catch (error) {

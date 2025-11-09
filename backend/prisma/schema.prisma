@@ -47,6 +47,7 @@ model Scan {
   attack_simulations Json? // Array of attack simulation objects
   remediation_steps Json? // Array of remediation step objects
   error_message  String?  // For failed scans
+  prompt_snapshot String? // FR-5.4: Snapshot of system prompt at scan time for comparison
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 

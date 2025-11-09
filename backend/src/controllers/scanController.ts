@@ -32,10 +32,12 @@ export const initiateScan = async (req: Request, res: Response): Promise<void> =
     }
 
     // Create scan record with pending status (FR-3.8)
+    // FR-5.4: Store prompt snapshot for history comparison
     const scan = await prisma.scan.create({
       data: {
         agent_id: agentId,
         status: 'pending',
+        prompt_snapshot: agent.system_prompt,
       },
     });
 
@@ -124,17 +126,20 @@ export const getAgentScans = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
+    // FR-5.1, FR-5.2, FR-5.3, FR-5.4: Fetch scan history with prompt snapshots
     const scans = await prisma.scan.findMany({
       where: {
         agent_id: agentId,
       },
       orderBy: {
-        createdAt: 'desc',
+        createdAt: 'asc', // FR-5.2: Ascending order for timeline visualization
       },
       select: {
         id: true,
         status: true,
         security_score: true,
+        prompt_snapshot: true, // FR-5.4: For prompt comparison
+        vulnerabilities: true,
         createdAt: true,
         updatedAt: true,
       },

@@ -105,55 +105,55 @@ const ScanResults = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-950">
-        <div className="text-lg text-white">Loading scan results...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-black via-black to-gray-900">
+        <div className="text-lg text-[#a7b8dd]">Loading scan results...</div>
       </div>
     );
   }
 
   if (error || !scan) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-950">
-        <div className="text-lg text-red-500">{error || 'Scan not found'}</div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-black via-black to-gray-900">
+        <div className="text-lg text-red-400">{error || 'Scan not found'}</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white p-8">
+    <div className="min-h-screen bg-gradient-to-b from-black via-black to-gray-900 text-gray-900 pt-[8%] p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <button
             onClick={() => navigate(-1)}
-            className="text-blue-400 hover:text-blue-300 mb-4"
+            className="text-[#a7b8dd] hover:text-[#6699CC] mb-4 cursor-pointer"
           >
             ← Back
           </button>
-          <h1 className="text-4xl font-bold mb-2">Security Scan Results</h1>
-          <p className="text-gray-400">
+          <h1 className="text-4xl font-bold mb-2 text-[#a7b8dd]">Security Scan Results</h1>
+          <p className="text-gray-300">
             Agent: {scan.agent_name} | Scanned on {new Date(scan.createdAt).toLocaleString()}
           </p>
         </div>
 
         {/* Security Score Card */}
-        <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg p-8 mb-8 border border-gray-700">
+        <div className="bg-gray-200 rounded-lg p-8 mb-8 border border-gray-300">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-semibold mb-2">Security Score</h2>
-              <p className="text-gray-400">Overall security assessment of your agent's system prompt</p>
+              <h2 className="text-2xl font-semibold mb-2 text-gray-900">Security Score</h2>
+              <p className="text-gray-600">Overall security assessment of your agent's system prompt</p>
             </div>
             <div className="text-center">
               <div className={`text-7xl font-bold ${getScoreColor(scan.security_score)}`}>
                 {scan.security_score}
               </div>
-              <div className="text-xl text-gray-400 mt-2">{getScoreLabel(scan.security_score)}</div>
+              <div className="text-xl text-gray-600 mt-2">{getScoreLabel(scan.security_score)}</div>
             </div>
           </div>
 
           {/* Score interpretation */}
           <div className={`mt-6 p-4 rounded-lg border ${getScoreBackground(scan.security_score)}`}>
-            <p className="text-sm text-gray-300">
+            <p className="text-sm text-gray-500">
               {scan.security_score >= 81 && 'Low risk - Good security posture with explicit prohibitions and safeguards in place.'}
               {scan.security_score >= 61 && scan.security_score < 81 && 'Medium risk - Acceptable security with some gaps that should be addressed.'}
               {scan.security_score >= 41 && scan.security_score < 61 && 'High risk - Notable vulnerabilities requiring immediate attention.'}
@@ -217,7 +217,7 @@ const ScanResults = () => {
             <div className="space-y-4">
               {scan.vulnerabilities && scan.vulnerabilities.length > 0 ? (
                 scan.vulnerabilities.map((vuln, index) => (
-                  <div key={index} className="bg-gray-900 rounded-lg p-6 border border-gray-700">
+                  <div key={index} className="bg-gray-100 rounded-lg p-6 border border-gray-300">
                     <div className="flex items-start justify-between mb-4">
                       <div>
                         <h3 className="text-xl font-semibold mb-2">{vuln.type.replace(/_/g, ' ').toUpperCase()}</h3>
@@ -228,22 +228,22 @@ const ScanResults = () => {
                     </div>
                     <div className="space-y-3">
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-400 mb-1">Location</h4>
-                        <p className="text-white bg-gray-800 p-2 rounded text-sm">{vuln.location}</p>
+                        <h4 className="text-sm font-semibold text-gray-700 mb-1">Location</h4>
+                        <p className="text-gray-900 bg-white p-2 rounded text-sm border border-gray-300">{vuln.location}</p>
                       </div>
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-400 mb-1">Description</h4>
-                        <p className="text-white">{vuln.description}</p>
+                        <h4 className="text-sm font-semibold text-gray-700 mb-1">Description</h4>
+                        <p className="text-gray-900">{vuln.description}</p>
                       </div>
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-400 mb-1">Exploit Example</h4>
-                        <pre className="text-white bg-gray-800 p-3 rounded text-sm overflow-x-auto">{vuln.exploit_example}</pre>
+                        <h4 className="text-sm font-semibold text-gray-700 mb-1">Exploit Example</h4>
+                        <pre className="text-gray-900 bg-white p-3 rounded text-sm overflow-x-auto border border-gray-300">{vuln.exploit_example}</pre>
                       </div>
                     </div>
                   </div>
                 ))
               ) : (
-                <div className="bg-gray-900 rounded-lg p-8 text-center text-gray-400">
+                <div className="bg-gray-100 rounded-lg p-8 text-center text-gray-600 border border-gray-300">
                   No vulnerabilities detected
                 </div>
               )}
@@ -255,26 +255,26 @@ const ScanResults = () => {
             <div className="space-y-4">
               {scan.attack_simulations && scan.attack_simulations.length > 0 ? (
                 scan.attack_simulations.map((attack, index) => (
-                  <div key={index} className="bg-gray-900 rounded-lg p-6 border border-gray-700">
+                  <div key={index} className="bg-gray-100 rounded-lg p-6 border border-gray-300">
                     <h3 className="text-xl font-semibold mb-4">{attack.attack_type}</h3>
                     <div className="space-y-3">
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-400 mb-1">Attack Payload</h4>
-                        <pre className="text-white bg-gray-800 p-3 rounded text-sm overflow-x-auto">{attack.payload}</pre>
+                        <h4 className="text-sm font-semibold text-gray-700 mb-1">Attack Payload</h4>
+                        <pre className="text-gray-900 bg-white p-3 rounded text-sm overflow-x-auto border border-gray-300">{attack.payload}</pre>
                       </div>
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-400 mb-1">Expected Outcome</h4>
-                        <p className="text-white">{attack.expected_outcome}</p>
+                        <h4 className="text-sm font-semibold text-gray-700 mb-1">Expected Outcome</h4>
+                        <p className="text-gray-900">{attack.expected_outcome}</p>
                       </div>
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-400 mb-1">Mitigation</h4>
-                        <p className="text-white">{attack.mitigation}</p>
+                        <h4 className="text-sm font-semibold text-gray-700 mb-1">Mitigation</h4>
+                        <p className="text-gray-900">{attack.mitigation}</p>
                       </div>
                     </div>
                   </div>
                 ))
               ) : (
-                <div className="bg-gray-900 rounded-lg p-8 text-center text-gray-400">
+                <div className="bg-gray-100 rounded-lg p-8 text-center text-gray-600 border border-gray-300">
                   No attack simulations available
                 </div>
               )}
@@ -288,11 +288,11 @@ const ScanResults = () => {
                 scan.remediation_steps
                   .sort((a, b) => a.priority - b.priority)
                   .map((step, index) => (
-                    <div key={index} className="bg-gray-900 rounded-lg p-6 border border-gray-700">
+                    <div key={index} className="bg-gray-100 rounded-lg p-6 border border-gray-300">
                       <div className="flex items-start justify-between mb-4">
                         <div>
                           <h3 className="text-xl font-semibold mb-2">{step.action}</h3>
-                          <span className="text-sm text-gray-400">Category: {step.category}</span>
+                          <span className="text-sm text-gray-600">Category: {step.category}</span>
                         </div>
                         <div className="bg-blue-900/30 border border-blue-500 text-blue-400 px-3 py-1 rounded-full text-sm">
                           Priority {step.priority}
@@ -303,17 +303,17 @@ const ScanResults = () => {
                           <h4 className="text-sm font-semibold text-gray-400">Implementation</h4>
                           <button
                             onClick={() => copyToClipboard(step.implementation, index)}
-                            className="text-xs px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
+                            className="text-xs px-3 py-1 bg-[#6699CC] hover:bg-sky-800 text-black rounded-full transition-colors cursor-pointer"
                           >
                             {copiedIndex === index ? 'Copied!' : 'Copy Code'}
                           </button>
                         </div>
-                        <pre className="text-white bg-gray-800 p-3 rounded text-sm overflow-x-auto whitespace-pre-wrap">{step.implementation}</pre>
+                        <pre className="text-gray-900 bg-white p-3 rounded text-sm overflow-x-auto whitespace-pre-wrap border border-gray-300">{step.implementation}</pre>
                       </div>
                     </div>
                   ))
               ) : (
-                <div className="bg-gray-900 rounded-lg p-8 text-center text-gray-400">
+                <div className="bg-gray-100 rounded-lg p-8 text-center text-gray-600 border border-gray-300">
                   No remediation steps needed
                 </div>
               )}
@@ -328,7 +328,7 @@ const ScanResults = () => {
                 <div className="bg-gradient-to-br from-blue-900/20 to-purple-900/20 rounded-lg p-8 border border-blue-500/30">
                   <div className="text-center">
                     <h3 className="text-2xl font-semibold mb-3">Auto-Remediation</h3>
-                    <p className="text-gray-400 mb-6 max-w-2xl mx-auto">
+                    <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
                       Use AI to automatically generate a hardened version of your system prompt that fixes all identified vulnerabilities while preserving the original functionality.
                     </p>
                     {remediationError && (
@@ -339,10 +339,10 @@ const ScanResults = () => {
                     <button
                       onClick={handleGenerateHardenedPrompt}
                       disabled={remediating || scan.status !== 'completed'}
-                      className={`px-8 py-3 rounded-lg font-semibold text-white transition-all ${
+                      className={`px-8 py-3 rounded-full font-semibold transition-all ${
                         remediating || scan.status !== 'completed'
-                          ? 'bg-gray-600 cursor-not-allowed'
-                          : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700'
+                          ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                          : 'bg-[#6699CC] hover:bg-sky-800 text-black cursor-pointer'
                       }`}
                     >
                       {remediating ? (

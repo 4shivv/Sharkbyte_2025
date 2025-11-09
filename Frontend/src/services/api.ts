@@ -79,6 +79,7 @@ export interface Scan {
   attack_simulations: AttackSimulation[] | null;
   remediation_steps: RemediationStep[] | null;
   error_message: string | null;
+  prompt_snapshot: string | null; // FR-5.4: Snapshot of prompt at scan time
   agent_name?: string;
   createdAt: string;
   updatedAt: string;
