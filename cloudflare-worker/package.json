@@ -1,0 +1,17 @@
+{
+  "name": "agentguard-precheck-worker",
+  "version": "1.0.0",
+  "description": "Cloudflare Worker for AgentGuard instant security pre-check using Workers AI",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail"
+  },
+  "keywords": ["cloudflare", "workers", "ai", "security"],
+  "author": "AgentGuard Team",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}

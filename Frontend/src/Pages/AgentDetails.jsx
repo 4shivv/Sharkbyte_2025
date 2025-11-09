@@ -12,6 +12,10 @@ const AgentDetails = () => {
   const [scanningStatus, setScanningStatus] = useState(null);
   const [error, setError] = useState(null);
 
+  // Cloudflare Workers AI Pre-Check feature
+  const [preCheckLoading, setPreCheckLoading] = useState(false);
+  const [preCheckResult, setPreCheckResult] = useState(null);
+
   // Fetch agent details and scan history on component mount
   useEffect(() => {
     fetchAgentDetails();
@@ -50,6 +54,44 @@ const AgentDetails = () => {
       handleStartScan();
     }
   }, [agent, searchParams]);
+
+  // NEW: Cloudflare Workers AI Quick Pre-Check
+  const handleQuickPreCheck = async () => {
+    if (!agent?.system_prompt) {
+      alert('This agent has no system prompt to analyze');
+      return;
+    }
+
+    try {
+      setPreCheckLoading(true);
+      setError(null);
+
+      // TODO: Replace with your actual Cloudflare Worker URL after deployment
+      const WORKER_URL = import.meta.env.VITE_CLOUDFLARE_WORKER_URL || 'https://agentguard-precheck.YOUR-SUBDOMAIN.workers.dev';
+
+      const response = await fetch(WORKER_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          systemPrompt: agent.system_prompt
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Pre-check request failed');
+      }
+
+      const result = await response.json();
+      setPreCheckResult(result);
+    } catch (err) {
+      console.error('Error running pre-check:', err);
+      setError('Failed to run quick security check. Make sure the Cloudflare Worker is deployed.');
+    } finally {
+      setPreCheckLoading(false);
+    }
+  };
 
   // FR-3.1: Initiate security scan
   const handleStartScan = async () => {
@@ -187,7 +229,91 @@ const AgentDetails = () => {
         <div className="bg-gray-200 rounded-2xl p-8 mb-8 border border-gray-300">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-3xl font-bold text-gray-900">Security Scanning</h2>
-            
+
+          </div>
+
+          {/* Cloudflare Workers AI Quick Pre-Check */}
+          <div className="bg-gradient-to-r from-orange-50 to-yellow-50 rounded-xl p-6 mb-6 border-2 border-orange-200">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 mt-1">
+                <svg className="w-8 h-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  ⚡ Quick Security Pre-Check (Powered by Cloudflare Workers AI)
+                </h3>
+                <p className="text-gray-700 mb-4">
+                  Get instant risk assessment using Llama 3.1 at the edge (2-3 seconds) before running the full Gemini deep scan (10-30 seconds)
+                </p>
+                <button
+                  onClick={handleQuickPreCheck}
+                  disabled={preCheckLoading || !agent?.system_prompt}
+                  className={`px-6 py-2.5 rounded-full font-semibold transition-all shadow-md ${
+                    preCheckLoading || !agent?.system_prompt
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : 'bg-orange-500 text-white hover:bg-orange-600 cursor-pointer'
+                  }`}
+                >
+                  {preCheckLoading ? (
+                    <span className="flex items-center gap-2">
+                      <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Analyzing with Cloudflare AI...
+                    </span>
+                  ) : (
+                    '⚡ Run Quick Pre-Check'
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Pre-Check Result Display */}
+            {preCheckResult && (
+              <div className="mt-6 bg-white rounded-lg p-6 border border-orange-200">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-lg font-bold text-gray-900">Pre-Check Result</h4>
+                  <div className={`px-4 py-2 rounded-full font-bold text-sm ${
+                    preCheckResult.riskLevel === 'LOW' ? 'bg-green-100 text-green-800' :
+                    preCheckResult.riskLevel === 'MEDIUM' ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-red-100 text-red-800'
+                  }`}>
+                    {preCheckResult.riskLevel} RISK
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-xs font-semibold text-gray-600 uppercase">Analysis</label>
+                    <p className="text-gray-800 mt-1">{preCheckResult.reason}</p>
+                  </div>
+
+                  {preCheckResult.topConcern && (
+                    <div>
+                      <label className="text-xs font-semibold text-gray-600 uppercase">Top Concern</label>
+                      <p className="text-gray-800 mt-1">{preCheckResult.topConcern}</p>
+                    </div>
+                  )}
+
+                  <div className="flex gap-4 text-xs text-gray-500 pt-2 border-t">
+                    <span>Model: {preCheckResult.model}</span>
+                    <span>•</span>
+                    <span>Provider: {preCheckResult.provider}</span>
+                    <span>•</span>
+                    <span>Analyzed: {new Date(preCheckResult.analyzedAt).toLocaleTimeString()}</span>
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-4 border-t border-gray-200">
+                  <p className="text-sm text-gray-600 italic">
+                    💡 For detailed vulnerability analysis, attack simulations, and remediation steps, run the full Gemini scan below.
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
 
           {error && (
