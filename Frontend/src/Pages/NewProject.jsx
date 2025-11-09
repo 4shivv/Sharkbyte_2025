@@ -44,10 +44,10 @@ const getStatusColor = (status) => {
     case "Delayed":
       return { text: "text-orange-500", bg: "bg-orange-100/80", label: "Delayed", ring: "ring-orange-200" };
     case "Minor Risk":
-      return { text: "text-yellow-500", bg: "bg-yellow-100/80", label: "Minor Risk", ring: "ring-yellow-200" };
+      return { text: "text-yellow-800", bg: "bg-orange-100", label: "Minor Risk", ring: "ring-yellow-200" };
     case "On Track":
     default:
-      return { text: "text-green-600", bg: "bg-green-100/80", label: "On Track", ring: "ring-green-200" };
+      return { text: "text-green-900", bg: "bg-green-100", label: "On Track", ring: "ring-green-200" };
   }
 };
 
@@ -133,17 +133,17 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
     >
       {/* Modal Content - uses similar styles to the Project Details / History popup (bg-white, rounded-2xl, soft-shadow) */}
       <div 
-        className="bg-white rounded-2xl soft-shadow w-full max-w-lg p-6 lg:p-8 transform transition-transform scale-100 opacity-100"
+        className="bg-black rounded-2xl soft-shadow w-full max-w-lg p-6 lg:p-8 transform transition-transform scale-100 opacity-100"
         onClick={e => e.stopPropagation()} // Prevent closing on modal content click
       >
         <div className="flex items-center justify-between pb-4 mb-4">
-          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-3">
-            <FontAwesomeIcon icon={faPlus} className="text-sky-700 " />
+          <h2 className="text-xl font-bold text-gray-300 flex items-center gap-3">
+            <FontAwesomeIcon icon={faPlus} className="text-[#6699CC] " />
             Start New Project
           </h2>
           <button 
             onClick={onClose} 
-            className="px-2 py-1.5 cursor-pointer text-gray-400 hover:text-gray-900 hover:bg-gray-100 transition-colors rounded-full"
+            className="px-2 py-1.5 cursor-pointer text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors rounded-full"
             aria-label="Close modal"
           >
             <FontAwesomeIcon icon={faXmark} />
@@ -154,7 +154,7 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
           
           {/* Project Name */}
           <div>
-            <label htmlFor="projectName" className=" text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
+            <label htmlFor="projectName" className=" text-sm font-medium text-gray-400 mb-1 flex items-center gap-2">
               Project Name
             </label>
             <input
@@ -163,14 +163,14 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="mt-1 block w-full px-3 py-1.5 border border-gray-200 rounded-lg "
+              className="mt-1 block w-full px-3 py-1.5 border border-gray-200 rounded-lg text-gray-300"
               placeholder="e.g., Q1 Billing System Upgrade"
             />
           </div>
 
           {/* Project Owner */}
           <div>
-            <label htmlFor="projectOwner" className=" text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
+            <label htmlFor="projectOwner" className=" text-sm font-medium text-gray-400 mb-1 flex items-center gap-2">
               Project Owner
             </label>
             <input
@@ -179,7 +179,7 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
               value={owner}
               onChange={(e) => setOwner(e.target.value)}
               required
-              className="mt-1 block w-full px-3 py-1.5 border border-gray-200 rounded-lg"
+              className="mt-1 block w-full px-3 py-1.5 border border-gray-200 rounded-lg text-gray-300"
               placeholder="Full Name"
             />
           </div>
@@ -187,7 +187,7 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
           {/* Budget & Team Size (side-by-side) */}
           <div className="flex gap-4">
             <div className="flex-1">
-              <label htmlFor="projectBudget" className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
+              <label htmlFor="projectBudget" className="text-sm font-medium text-gray-400 mb-1 flex items-center gap-2">
                 Budget (USD)
               </label>
               <input
@@ -198,12 +198,12 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
                 required
                 min="0"
                 step="1000"
-                className="mt-1 block w-full px-3 py-1.5 border border-gray-200 rounded-lg"
+                className="mt-1 block w-full px-3 py-1.5 border border-gray-200 rounded-lg text-gray-300"
                 placeholder="e.g., 250000"
               />
             </div>
             <div className="flex-1">
-              <label htmlFor="projectTeamSize" className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
+              <label htmlFor="projectTeamSize" className="text-sm font-medium text-gray-400 mb-1 flex items-center gap-2">
                 Team Size
               </label>
               <input
@@ -213,7 +213,7 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
                 onChange={(e) => setTeamSize(e.target.value)}
                 required
                 min="1"
-                className="mt-1 block w-full px-3 py-1.5 border border-gray-200 rounded-lg"
+                className="mt-1 block w-full px-3 py-1.5 border border-gray-200 rounded-lg text-gray-300"
                 placeholder="e.g., 5"
               />
             </div>
@@ -221,7 +221,7 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
           
           {/* Deadline */}
           <div>
-            <label htmlFor="projectDeadline" className=" text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
+            <label htmlFor="projectDeadline" className=" text-sm font-medium text-gray-400 mb-1 flex items-center gap-2">
               Deadline
             </label>
             <input
@@ -230,7 +230,7 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
               value={deadline}
               onChange={(e) => setDeadline(e.target.value)}
               required
-              className="mt-1 block w-full px-3 py-1.5 border border-gray-200 rounded-lg"
+              className="mt-1 block w-full px-3 py-1.5 border border-gray-200 rounded-lg text-gray-300"
             />
           </div>
 
@@ -238,7 +238,7 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
           <div className="pt-4 mt-4 flex justify-end">
             <button
               type="submit"
-              className="flex justify-center items-center gap-3 px-4 py-2.5 bg-sky-700 text-white rounded-full text-sm font-semibold cursor-pointer hover:bg-sky-800 transition"
+              className="flex justify-center items-center gap-3 px-4 py-2.5 bg-[#6699CC] text-black rounded-full text-sm font-semibold cursor-pointer hover:bg-sky-800 transition"
             >
               <FontAwesomeIcon icon={faPlus} />
               Create Project
@@ -495,9 +495,9 @@ const ProjectOverview = () => {
       {selectedProject && (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4 transition-opacity" onClick={closeProject}>
            {/* Simulate the look of the existing modal: Uses soft-shadow and rounded-2xl */}
-          <div className="bg-white rounded-2xl w-full max-w-xl p-6 lg:p-8 transform transition-transform scale-100 opacity-100" onClick={e => e.stopPropagation()}>
+          <div className="bg-black rounded-2xl w-full max-w-xl p-6 lg:p-8 transform transition-transform scale-100 opacity-100" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between pb-4 mb-4">
-              <h2 className="text-xl font-bold text-gray-900 flex items-center gap-3">
+              <h2 className="text-xl font-bold text-gray-300 flex items-center gap-3">
                 <FontAwesomeIcon icon={faHistory} className="text-sky-700" />
                 Project Details: {selectedProject.id}
               </h2>
@@ -510,14 +510,14 @@ const ProjectOverview = () => {
               </button>
             </div>
             {/* Project Details Content */}
-            <div className="text-sm text-gray-600 space-y-3">
-                <p>Project Name: <strong className="text-gray-900">{selectedProject.name}</strong></p>
-                <p>Owner: <strong className="text-gray-900">{selectedProject.owner}</strong></p>
-                <p>Budget: <strong className="text-gray-900">{formatCurrency(selectedProject.budget)}</strong></p>
-                <p>Team Size: <strong className="text-gray-900">{selectedProject.team} members</strong></p>
+            <div className="text-sm text-gray-300 space-y-3">
+                <p>Project Name: <strong className="text-gray-400/75">{selectedProject.name}</strong></p>
+                <p>Owner: <strong className="text-gray-400/75">{selectedProject.owner}</strong></p>
+                <p>Budget: <strong className="text-gray-400/75">{formatCurrency(selectedProject.budget)}</strong></p>
+                <p>Team Size: <strong className="text-gray-400/75">{selectedProject.team} members</strong></p>
                 <p>Status: <span className={`font-semibold ${getStatusColor(selectedProject.status).text}`}>{selectedProject.status}</span></p>
-                <p>Deadline: <strong className="text-gray-900">{selectedProject.deadline}</strong></p>
-                <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                <p>Deadline: <strong className="text-gray-400/75">{selectedProject.deadline}</strong></p>
+                <div className="mt-4 p-3 bg-gray-200 rounded-lg">
                   <h4 className="font-semibold mb-2 text-gray-800">History Log (Simulated)</h4>
                   <ul className="space-y-1 text-xs text-gray-500">
                     <li>[2025-10-01] Project created by Mia Chen.</li>
@@ -528,7 +528,7 @@ const ProjectOverview = () => {
                 </div>
             </div>
             <div className="mt-6 flex justify-end">
-                 <button onClick={closeProject} className="px-4 py-2 cursor-pointer bg-gray-100 rounded-full text-sm font-semibold hover:bg-gray-200">
+                 <button onClick={closeProject} className="px-4 py-2 cursor-pointer bg-gray-200 rounded-full text-sm font-semibold hover:bg-gray-200">
                     Close
                 </button>
             </div>
@@ -536,7 +536,7 @@ const ProjectOverview = () => {
         </div>
       )}
 
-      <div className="min-h-screen bg-gradient-to-b pt-[8%] from-white via-white to-gray-50 text-gray-900 antialiased">
+      <div className="min-h-screen bg-gradient-to-b pt-[8%] from-black via-black to-gray-900 text-gray-900 antialiased">
         <InlineStyles />
 
        
@@ -548,11 +548,11 @@ const ProjectOverview = () => {
               <div className="col-span-12 lg:col-span-7">
                 
 
-                <h1 className="hero-title text-[42px] md:text-[52px] font-bold text-gray-900 tracking-tight leading-tight max-w-3xl">
-                  Unified <span className="text-sky-700">Project Health</span> Overview — <span className="text-gray-700 font-medium">real-time insights, effortless management</span>
+                <h1 className="hero-title text-[42px] md:text-[52px] font-bold text-[#a7b8dd] tracking-tight leading-tight max-w-3xl">
+                  Unified <span className="text-[#2d77c0]">Project Health</span> Overview — <span className="text-[#5c6491] font-medium">real-time insights, effortless management</span>
                 </h1>
 
-                <p className="mt-6 text-md text-gray-600 max-w-xl">
+                <p className="mt-6 text-md text-gray-300/90  max-w-xl">
                   Track budget, monitor deadlines, and visualize team progress across your entire portfolio.
                   Empower your stakeholders with clarity and predictable outcomes.
                 </p>
@@ -560,7 +560,7 @@ const ProjectOverview = () => {
                 <div className="mt-8 flex flex-wrap gap-4 items-center">
                   <button
                     onClick={openNewProjectModal} 
-                    className="flex justify-center items-center gap-3 px-4 py-2.5 bg-sky-700 text-white rounded-full text-sm font-semibold cursor-pointer hover:bg-sky-800 transition"
+                    className="flex justify-center items-center gap-3 px-4 py-2.5 bg-[#6699CC] text-black rounded-full text-sm font-semibold cursor-pointer hover:bg-sky-800 transition"
                   >
                     <FontAwesomeIcon icon={faPlus} />
                     Start New Project
@@ -568,7 +568,7 @@ const ProjectOverview = () => {
 
                   <button
                     onClick={exportCSV}
-                    className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full border border-gray-200 bg-white hover:bg-gray-100 transition-colors cursor-pointer "
+                    className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full border border-gray-200 bg-gray-300 hover:bg-gray-100 transition-colors cursor-pointer "
                   >
                     <FontAwesomeIcon icon={faDownload} />
                     Export CSV
@@ -576,31 +576,31 @@ const ProjectOverview = () => {
 
                   <button
                     onClick={() => setViewMode((v) => (v === "cards" ? "table" : "cards"))}
-                    className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-gray-50 border border-gray-300 cursor-pointer hover:bg-gray-100 transition-colors text-sm"
+                    className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-gray-300 border border-gray-300 cursor-pointer hover:bg-gray-100 transition-colors text-sm"
                   >
                     <FontAwesomeIcon icon={faTachometerAlt} />
                     {viewMode === "cards" ? "Table view" : "Card view"}
                   </button>
 
                   <div className="ml-auto hidden lg:flex items-center gap-3">
-                    <div className="text-xs text-gray-500">Active Projects</div>
-                    <div className="text-2xl font-semibold">{formatNumberShort(projects.length)}</div>
+                    <div className="text-xs text-gray-200">Active Projects</div>
+                    <div className="text-2xl text-[#434875] font-semibold">{formatNumberShort(projects.length)}</div>
                   </div>
                 </div>
 
                 {/* subtle visual cues */}
                 <div className="mt-8 grid grid-cols-3 gap-4 max-w-md">
-                  <div className="p-4 bg-gray-100 rounded-lg">
+                  <div className="p-4 bg-gray-200 rounded-lg">
                     <div className="text-xs uppercase text-gray-500">Total Budget</div>
                     <div className="mt-2 text-lg font-semibold">{
                       formatNumberShort(projects.reduce((s, p) => s + p.budget, 0))
                     }</div>
                   </div>
-                  <div className="p-4 bg-gray-100 rounded-lg">
+                  <div className="p-4 bg-gray-200 rounded-lg">
                     <div className="text-xs uppercase text-gray-500">Team Members</div>
                     <div className="mt-2 text-lg font-semibold">{projects.reduce((s, p) => s + p.team, 0)}</div>
                   </div>
-                  <div className="p-4 bg-gray-100 rounded-lg">
+                  <div className="p-4 bg-gray-200 rounded-lg">
                     <div className="text-xs uppercase text-gray-500"> Deadline</div>
                     <div className="mt-2 text-lg font-semibold">{projects.sort((a,b)=>new Date(a.deadline)-new Date(b.deadline))[0].deadline}</div>
                   </div>
@@ -610,29 +610,29 @@ const ProjectOverview = () => {
               {/* right visual - MacBook-like card */}
               <div className="col-span-12 lg:col-span-5">
                 <div
-                  className="rounded-3xl   p-6 relative overflow-hidden border border-gray-300"
+                  className="rounded-3xl   p-6 relative overflow-hidden border-r border-gray-300"
                   
                   
                 >
                   {/* decorative top lights */}
-                  <div className="absolute -left-24 -top-24 w-[420px] h-[420px] rounded-full hero-sheen opacity-30 " />
-                  <div className="absolute -right-20 top-8 w-[260px] h-[260px] rounded-full hero-sheen opacity-20 " />
+                   <div className="absolute -left-24 -top-24 w-[420px] h-[420px] rounded-full hero-sheen opacity-30 bg-gradient-to-tr from-blue-300 backdrop-blur-md to-transparent" />
+                <div className="absolute -right-20 top-8 w-[260px] h-[260px] rounded-full hero-sheen opacity-20 bg-gradient-to-br from-blue-400/95 backdrop-blur-md to-transparent" />
 
                   {/* simulated device visual */}
                   <div className="relative">
-                    <div className="w-full h-auto border border-gray-100 rounded-2xl p-4 bg-white">
+                    <div className="w-full h-auto border border-gray-600 rounded-2xl p-4 bg-black">
                       <div className="flex items-center justify-between">
                         <div>
-                          <div className="text-xs text-gray-500 uppercase">Live Project Log</div>
-                          <div className="text-lg text-gray-800 font-semibold mt-1">PROJ-101: Q4 API Security Update</div>
+                          <div className="text-xs text-[#a7b8dd] uppercase">Live Project Log</div>
+                          <div className="text-lg text-gray-100/90 font-semibold mt-1">PROJ-101: Q4 API Security Update</div>
                         </div>
                         <div className="text-right">
                           <div className="text-xs text-gray-500">Budget Spent</div>
-                          <div className="text-xl font-bold text-gray-900">78%</div>
+                          <div className="text-xl font-bold text-[#a7b8dd]">78%</div>
                         </div>
                       </div>
 
-                       <div className="mt-4 rounded-lg border border-gray-100 p-3 bg-gray-900">
+                       <div className="mt-4 rounded-lg border border-gray-200 p-3 bg-gray-900">
                        <div className="flex items-center gap-3">
                        <span className="inline-block w-2 h-2 rounded-full bg-red-400" />
                        <span className="inline-block w-2 h-2 rounded-full bg-yellow-400" />
@@ -651,21 +651,21 @@ const ProjectOverview = () => {
                       </div>
 
                       <div className="mt-4 flex items-center gap-3">
-                        <button className="text-sm inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sky-700 text-white">View Details</button>
-                        <button className="text-sm inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 border border-gray-300">Open Tickets</button>
+                        <button className="text-sm inline-flex items-center gap-2 px-4 py-2 rounded-full  bg-[#6699CC] text-black">View Details</button>
+                        <button className="text-sm inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-200 border border-gray-300">Open Tickets</button>
                       </div>
                     </div>
 
                     {/* small badges */}
                     <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
-                      <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 text-center">Open Tickets <div className="font-semibold">47</div></div>
-                      <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 text-center">Burndown <div className="font-semibold">Stable</div></div>
-                      <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 text-center">Risk Index <div className="font-semibold">3.8 / 5</div></div>
+                      <div className="rounded-lg p-3 bg-gray-400 border border-gray-100 text-center">Open Tickets <div className="font-semibold">47</div></div>
+                      <div className="rounded-lg p-3 bg-gray-400 border border-gray-100 text-center">Burndown <div className="font-semibold">Stable</div></div>
+                      <div className="rounded-lg p-3 bg-gray-400 border border-gray-100 text-center">Risk Index <div className="font-semibold">3.8 / 5</div></div>
                     </div>
                   </div>
 
                   {/* decorative bottom highlight */}
-                  <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white/60 to-transparent pointer-events-none" />
+                
                 </div>
               </div>
             </div>
@@ -679,17 +679,17 @@ const ProjectOverview = () => {
 
         {/* Controls: Search, status filter, sort */}
         <section className="max-w-7xl mx-auto px-6 lg:px-8 -mt-8">
-          <div className="bg-white/80 border border-gray-300 rounded-2xl p-4">
+          <div className="bg-gray-200 border border-gray-300 rounded-2xl p-4">
             <div className="flex flex-col md:flex-row items-center gap-4">
               <label htmlFor="search" className="sr-only">Search projects</label>
               <div className="flex items-center gap-3 flex-1">
-                <div className="px-3 py-2 rounded-lg border border-gray-100 bg-gray-100">
+                <div className="px-3 py-2 rounded-lg border border-gray-200 bg-gray-200">
                   <FontAwesomeIcon icon={faSearch} className="text-gray-500" />
                 </div>
                 <input
                   id="search"
                   ref={inputRef}
-                  className="w-full bg-transparent focus:outline-none text-gray-900 placeholder-gray-500"
+                  className="w-full bg-transparent focus:outline-none text-gray-900 placeholder-gray-700/90"
                   placeholder="Search by ID, name, owner — press / to focus"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -699,12 +699,12 @@ const ProjectOverview = () => {
 
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2">
-                  <div className="text-xs text-gray-500">Status</div>
+                  <div className="text-xs text-gray-700/90">Status</div>
                   <select
                     aria-label="Filter by status"
                     value={filterStatus}
                     onChange={(e) => setFilterStatus(e.target.value.toLowerCase())}
-                      className="px-2 py-1.5 rounded-md border border-gray-300 bg-white text-sm cursor-pointer"
+                      className="px-2 py-1.5 rounded-md border border-gray-300 bg-white/60 text-sm cursor-pointer"
                   >
                     <option value="all">All</option>
                     <option value="on track">On Track</option>
@@ -720,7 +720,7 @@ const ProjectOverview = () => {
                     aria-label="Sort projects"
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="px-2 py-1.5 rounded-md border border-gray-300 bg-white text-sm cursor-pointer"
+                    className="px-2 py-1.5 rounded-md border border-gray-300 bg-white/60 text-sm cursor-pointer"
                   >
                     <option value="budget_desc">Budget (high → low)</option>
                     <option value="budget_asc">Budget (low → high)</option>
@@ -731,8 +731,8 @@ const ProjectOverview = () => {
                 <div className="hidden md:block h-8 w-px bg-gray-100 mx-2" />
 
                 <div className="hidden md:flex items-center gap-2">
-                  <div className="text-xs text-gray-500">View</div>
-                  <div className="inline-flex rounded-md p-1 bg-white border border-gray-100">
+                  <div className="text-xs text-gray-700/90">View</div>
+                  <div className="inline-flex rounded-md p-1 bg-gray-200 border border-gray-100">
                     <button
                       onClick={() => setViewMode("cards")}
                       className={`px-3 py-1 rounded-md text-sm cursor-pointer ${viewMode === "cards" ? "bg-gray-900 text-white" : "bg-white text-gray-700"}`}
@@ -761,23 +761,23 @@ const ProjectOverview = () => {
         <main className="max-w-7xl mx-auto px-6 lg:px-8 py-8">
           {/* Stats strip */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="p-5 bg-gray-100 rounded-2xl ">
-              <div className="text-xs text-gray-500">Total Projects</div>
+            <div className="p-5 bg-gray-200 rounded-2xl ">
+              <div className="text-xs text-gray-600">Total Projects</div>
               <div className="mt-2 text-2xl font-semibold">{projects.length}</div>
               <div className="mt-3 text-sm text-gray-500">Active and In Review</div>
             </div>
-            <div className="p-5 bg-gray-100 rounded-2xl ">
-              <div className="text-xs text-gray-500">Average Team Size</div>
+            <div className="p-5 bg-gray-200 rounded-2xl ">
+              <div className="text-xs text-gray-600">Average Team Size</div>
               <div className="mt-2 text-2xl font-semibold">{Math.round(projects.reduce((s,p)=>s+p.team,0)/projects.length)}</div>
               <div className="mt-3 text-sm text-gray-500">Members across all teams</div>
             </div>
-            <div className="p-5 bg-gray-100 rounded-2xl">
-              <div className="text-xs text-gray-500">Critical Status</div>
+            <div className="p-5 bg-gray-200 rounded-2xl">
+              <div className="text-xs text-gray-600">Critical Status</div>
               <div className="mt-2 text-2xl font-semibold text-red-600">{projects.filter(p => p.status === 'Critical').length}</div>
               <div className="mt-3 text-sm text-gray-500">Require immediate attention</div>
             </div>
-            <div className="p-5 bg-gray-100 rounded-2xl">
-              <div className="text-xs text-gray-500">Total Budget (USD)</div>
+            <div className="p-5 bg-gray-200 rounded-2xl">
+              <div className="text-xs text-gray-600">Total Budget (USD)</div>
               <div className="mt-2 text-2xl font-semibold">{formatNumberShort(projects.reduce((s, p) => s + p.budget, 0))}</div>
               <div className="mt-3 text-sm text-gray-500">Allocated to projects</div>
             </div>
@@ -791,7 +791,7 @@ const ProjectOverview = () => {
                 return (
                   <article
                     key={project.id}
-                    className={`px-4 py-6  bg-white rounded-2xl border border-gray-300  card-reveal ${idx < 6 ? "visible" : ""}`}
+                    className={`px-4 py-6 bg-gray-200 rounded-2xl border border-gray-300 card-reveal ${idx < 6 ? "visible" : ""}`}
                     tabIndex={0}
                     aria-labelledby={`project-${project.id}`}
                   >
