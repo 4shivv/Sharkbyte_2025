@@ -63,7 +63,7 @@ const NavBar = () => {
   return (
     <>
       {!['/login', '/signup', '/new-project'].includes(location.pathname) && (
-        <nav className={`fixed top-0 left-0 right-0 z-50 flex justify-center backdrop-blur-md ${!isMobile ? "bg-black/80" : "bg-[#1B1B1B]"} border-b-[0.2px] border-gray-200 font-inter `}>
+        <nav className={`fixed top-0 left-0 right-0 z-50 flex justify-center backdrop-blur-md ${!isMobile ? "bg-black/80" : "bg-[#1B1B1B]"} font-inter `}>
           <div className="flex items-center justify-between w-full max-w-7xl px-6 py-2.5">
             {/* Brand */}
             <NavLink
@@ -113,10 +113,7 @@ const NavBar = () => {
                       {user?.email}
                     </span>
                     <button
-                      onClick={() => {
-                        logout();
-                        navigate('/');
-                      }}
+                      onClick={logout}
                       className="text-[14px] font-light text-gray-50 hover:text-white transition-all duration-300"
                     >
                       Logout
@@ -181,7 +178,6 @@ const NavBar = () => {
                     <button
                       onClick={() => {
                         logout();
-                        navigate('/');
                         setIsMobileOpen(false);
                       }}
                       className="text-left text-[25px] font-semibold text-gray-100 hover:text-white"

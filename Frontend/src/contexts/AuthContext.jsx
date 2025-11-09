@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { authAPI } from '../services/api';
 
 const AuthContext = createContext(null);
@@ -7,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   // Check if user is authenticated on mount
   useEffect(() => {
@@ -38,6 +40,8 @@ export const AuthProvider = ({ children }) => {
     authAPI.logout();
     setIsAuthenticated(false);
     setUser(null);
+    // Navigate to landing page after logout
+    navigate('/');
   };
 
   const value = {

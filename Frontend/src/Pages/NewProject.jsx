@@ -133,17 +133,17 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
     >
       {/* Modal Content - uses similar styles to the Project Details / History popup (bg-white, rounded-2xl, soft-shadow) */}
       <div 
-        className="bg-black rounded-2xl soft-shadow w-full max-w-lg p-6 lg:p-8 transform transition-transform scale-100 opacity-100"
+        className="bg-gray-200 rounded-2xl soft-shadow w-full max-w-lg p-6 lg:p-8 transform transition-transform scale-100 opacity-100"
         onClick={e => e.stopPropagation()} // Prevent closing on modal content click
       >
         <div className="flex items-center justify-between pb-4 mb-4">
-          <h2 className="text-xl font-bold text-gray-300 flex items-center gap-3">
+          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-3">
             <FontAwesomeIcon icon={faPlus} className="text-[#6699CC] " />
             Start New Project
           </h2>
           <button 
             onClick={onClose} 
-            className="px-2 py-1.5 cursor-pointer text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors rounded-full"
+            className="px-2 py-1.5 cursor-pointer text-gray-400 hover:text-gray-600 hover:bg-gray-300 transition-colors rounded-full"
             aria-label="Close modal"
           >
             <FontAwesomeIcon icon={faXmark} />
@@ -163,7 +163,7 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="mt-1 block w-full px-3 py-1.5 border border-gray-200 rounded-lg text-gray-300"
+              className="mt-1 block w-full px-3 py-1.5 border border-gray-300 rounded-lg text-gray-300"
               placeholder="e.g., Q1 Billing System Upgrade"
             />
           </div>
@@ -179,7 +179,7 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
               value={owner}
               onChange={(e) => setOwner(e.target.value)}
               required
-              className="mt-1 block w-full px-3 py-1.5 border border-gray-200 rounded-lg text-gray-300"
+              className="mt-1 block w-full px-3 py-1.5 border border-gray-300 rounded-lg text-gray-300"
               placeholder="Full Name"
             />
           </div>
@@ -198,7 +198,7 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
                 required
                 min="0"
                 step="1000"
-                className="mt-1 block w-full px-3 py-1.5 border border-gray-200 rounded-lg text-gray-300"
+                className="mt-1 block w-full px-3 py-1.5 border border-gray-300 rounded-lg text-gray-300"
                 placeholder="e.g., 250000"
               />
             </div>
@@ -213,7 +213,7 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
                 onChange={(e) => setTeamSize(e.target.value)}
                 required
                 min="1"
-                className="mt-1 block w-full px-3 py-1.5 border border-gray-200 rounded-lg text-gray-300"
+                className="mt-1 block w-full px-3 py-1.5 border border-gray-300 rounded-lg text-gray-300"
                 placeholder="e.g., 5"
               />
             </div>
@@ -230,7 +230,7 @@ const NewProjectModal = ({ isOpen, onClose, onCreateProject }) => {
               value={deadline}
               onChange={(e) => setDeadline(e.target.value)}
               required
-              className="mt-1 block w-full px-3 py-1.5 border border-gray-200 rounded-lg text-gray-300"
+              className="mt-1 block w-full px-3 py-1.5 border border-gray-300 rounded-lg text-gray-300"
             />
           </div>
 
@@ -495,28 +495,28 @@ const ProjectOverview = () => {
       {selectedProject && (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4 transition-opacity" onClick={closeProject}>
            {/* Simulate the look of the existing modal: Uses soft-shadow and rounded-2xl */}
-          <div className="bg-black rounded-2xl w-full max-w-xl p-6 lg:p-8 transform transition-transform scale-100 opacity-100" onClick={e => e.stopPropagation()}>
+          <div className="bg-gray-200 rounded-2xl w-full max-w-xl p-6 lg:p-8 transform transition-transform scale-100 opacity-100" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between pb-4 mb-4">
-              <h2 className="text-xl font-bold text-gray-300 flex items-center gap-3">
+              <h2 className="text-xl font-bold text-gray-900 flex items-center gap-3">
                 <FontAwesomeIcon icon={faHistory} className="text-sky-700" />
                 Project Details: {selectedProject.id}
               </h2>
               <button 
                 onClick={closeProject} 
-                className="px-2 py-1.5 text-gray-400 cursor-pointer hover:bg-gray-100 hover:text-gray-900 transition-colors rounded-full"
+                className="px-2 py-1.5 text-gray-400 cursor-pointer hover:bg-gray-300 hover:text-gray-900 transition-colors rounded-full"
                 aria-label="Close project details"
               >
                 <FontAwesomeIcon icon={faXmark} />
               </button>
             </div>
             {/* Project Details Content */}
-            <div className="text-sm text-gray-300 space-y-3">
-                <p>Project Name: <strong className="text-gray-400/75">{selectedProject.name}</strong></p>
-                <p>Owner: <strong className="text-gray-400/75">{selectedProject.owner}</strong></p>
-                <p>Budget: <strong className="text-gray-400/75">{formatCurrency(selectedProject.budget)}</strong></p>
-                <p>Team Size: <strong className="text-gray-400/75">{selectedProject.team} members</strong></p>
+            <div className="text-sm text-gray-700 space-y-3">
+                <p>Project Name: <strong className="text-gray-500">{selectedProject.name}</strong></p>
+                <p>Owner: <strong className="text-gray-500">{selectedProject.owner}</strong></p>
+                <p>Budget: <strong className="text-gray-500">{formatCurrency(selectedProject.budget)}</strong></p>
+                <p>Team Size: <strong className="text-gray-500">{selectedProject.team} members</strong></p>
                 <p>Status: <span className={`font-semibold ${getStatusColor(selectedProject.status).text}`}>{selectedProject.status}</span></p>
-                <p>Deadline: <strong className="text-gray-400/75">{selectedProject.deadline}</strong></p>
+                <p>Deadline: <strong className="text-gray-500">{selectedProject.deadline}</strong></p>
                 <div className="mt-4 p-3 bg-gray-200 rounded-lg">
                   <h4 className="font-semibold mb-2 text-gray-800">History Log (Simulated)</h4>
                   <ul className="space-y-1 text-xs text-gray-500">
@@ -528,7 +528,7 @@ const ProjectOverview = () => {
                 </div>
             </div>
             <div className="mt-6 flex justify-end">
-                 <button onClick={closeProject} className="px-4 py-2 cursor-pointer bg-gray-200 rounded-full text-sm font-semibold hover:bg-gray-200">
+                 <button onClick={closeProject} className="px-4 py-2 cursor-pointer bg-gray-300 rounded-full text-sm font-semibold hover:bg-gray-200">
                     Close
                 </button>
             </div>
@@ -548,8 +548,8 @@ const ProjectOverview = () => {
               <div className="col-span-12 lg:col-span-7">
                 
 
-                <h1 className="hero-title text-[42px] md:text-[52px] font-bold text-[#a7b8dd] tracking-tight leading-tight max-w-3xl">
-                  Unified <span className="text-[#2d77c0]">Project Health</span> Overview — <span className="text-[#5c6491] font-medium">real-time insights, effortless management</span>
+                <h1 className="hero-title text-[42px] md:text-[52px] font-bold text-[#CDDBF7] tracking-tight leading-tight max-w-3xl">
+                   <span className="text-[#84B9EE]">Project </span> Overview 
                 </h1>
 
                 <p className="mt-6 text-md text-gray-300/90  max-w-xl">
@@ -584,27 +584,45 @@ const ProjectOverview = () => {
 
                   <div className="ml-auto hidden lg:flex items-center gap-3">
                     <div className="text-xs text-gray-200">Active Projects</div>
-                    <div className="text-2xl text-[#434875] font-semibold">{formatNumberShort(projects.length)}</div>
+                    <div className="text-2xl text-[#D0D4FF] font-semibold">{formatNumberShort(projects.length)}</div>
                   </div>
                 </div>
 
-                {/* subtle visual cues */}
-                <div className="mt-8 grid grid-cols-3 gap-4 max-w-md">
-                  <div className="p-4 bg-gray-200 rounded-lg">
-                    <div className="text-xs uppercase text-gray-500">Total Budget</div>
-                    <div className="mt-2 text-lg font-semibold">{
-                      formatNumberShort(projects.reduce((s, p) => s + p.budget, 0))
-                    }</div>
-                  </div>
-                  <div className="p-4 bg-gray-200 rounded-lg">
-                    <div className="text-xs uppercase text-gray-500">Team Members</div>
-                    <div className="mt-2 text-lg font-semibold">{projects.reduce((s, p) => s + p.team, 0)}</div>
-                  </div>
-                  <div className="p-4 bg-gray-200 rounded-lg">
-                    <div className="text-xs uppercase text-gray-500"> Deadline</div>
-                    <div className="mt-2 text-lg font-semibold">{projects.sort((a,b)=>new Date(a.deadline)-new Date(b.deadline))[0].deadline}</div>
+                <div className="flex flex-col mt-15">
+                  <h1 className="text-gray-400 font-inter text-2xl font-semibold mb-3">
+                    Oversight
+                  </h1>
+
+                  {/* subtle visual cues */}
+                  <div className="mt-2 grid grid-cols-3 gap-4 max-w-lg">
+                    
+                    <div className="p-4 bg-gray-200 rounded-lg">
+                      <div className="text-xs uppercase text-gray-500">Total Budget</div>
+                      <div className="mt-2 text-lg font-semibold">
+                        {formatNumberShort(projects.reduce((s, p) => s + p.budget, 0))}
+                      </div>
+                    </div>
+
+                    <div className="p-4 bg-gray-200 rounded-lg">
+                      <div className="text-xs uppercase text-gray-500">Team Members</div>
+                      <div className="mt-2 text-lg font-semibold">
+                        {projects.reduce((s, p) => s + p.team, 0)}
+                      </div>
+                    </div>
+
+                    <div className="p-4 bg-gray-200 rounded-lg">
+                      <div className="text-xs uppercase text-gray-500">Deadline</div>
+                      <div className="mt-2 text-lg font-semibold">
+                        {
+                          projects.sort((a,b)=>new Date(a.deadline)-new Date(b.deadline))[0].deadline
+                        }
+                      </div>
+                    </div>
+
                   </div>
                 </div>
+
+                
               </div>
 
               {/* right visual - MacBook-like card */}
@@ -679,6 +697,7 @@ const ProjectOverview = () => {
 
         {/* Controls: Search, status filter, sort */}
         <section className="max-w-7xl mx-auto px-6 lg:px-8 -mt-8">
+          <h1 className="text-gray-400 font-inter text-2xl font-semibold mb-6">Search</h1>
           <div className="bg-gray-200 border border-gray-300 rounded-2xl p-4">
             <div className="flex flex-col md:flex-row items-center gap-4">
               <label htmlFor="search" className="sr-only">Search projects</label>
@@ -759,6 +778,7 @@ const ProjectOverview = () => {
 
         {/* Main content: Cards or Table */}
         <main className="max-w-7xl mx-auto px-6 lg:px-8 py-8">
+          <h1 className="text-gray-400 font-inter text-2xl mb-6 font-semibold">At a Glance</h1>
           {/* Stats strip */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div className="p-5 bg-gray-200 rounded-2xl ">

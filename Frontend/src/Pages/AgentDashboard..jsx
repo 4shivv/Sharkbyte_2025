@@ -46,9 +46,9 @@ const mapAgentToUIFormat = (agent, scans = []) => {
   // Get the latest security score from most recent completed scan
   const latestScore = completedScans.length > 0
     ? completedScans[completedScans.length - 1].security_score
-    : 0;
+    : null; // null indicates no completed scans
 
-  const risk = getRiskColor(latestScore);
+  const risk = latestScore !== null ? getRiskColor(latestScore) : { text: "text-gray-600", bg: "bg-gray-100/80", label: "Not Scanned", ring: "ring-gray-200" };
 
   // Get last scan date
   const lastScanDate = scans.length > 0
@@ -559,7 +559,7 @@ const AgentDashboard = () => {
     const q = searchTerm.trim().toLowerCase();
     let filtered = agents.filter((a) => {
       if (filterRisk !== "all") {
-        const riskGroup = getRiskColor(a.score).label.toLowerCase();
+        const riskGroup = a.score !== null ? getRiskColor(a.score).label.toLowerCase() : "not scanned";
         if (filterRisk !== riskGroup) return false;
       }
       if (!q) return true;
@@ -570,8 +570,8 @@ const AgentDashboard = () => {
       );
     });
 
-    if (sortBy === "score_desc") filtered = filtered.sort((x, y) => y.score - x.score);
-    if (sortBy === "score_asc") filtered = filtered.sort((x, y) => x.score - y.score);
+    if (sortBy === "score_desc") filtered = filtered.sort((x, y) => (y.score ?? -1) - (x.score ?? -1));
+    if (sortBy === "score_asc") filtered = filtered.sort((x, y) => (x.score ?? -1) - (y.score ?? -1));
     if (sortBy === "recent") filtered = filtered.sort((x, y) => (new Date(y.lastScan) - new Date(x.lastScan)));
 
     return filtered;
@@ -610,9 +610,9 @@ const AgentDashboard = () => {
     exportTimer.current = setTimeout(() => setShowingExportToast(false), 3500);
   };
 
-  // Navigate to agent details page where scan can be initiated
+  // Navigate to agent details page and auto-start scan
   const scanNow = (agentId) => {
-    navigate(`/agents/${agentId}`);
+    navigate(`/agents/${agentId}?autoScan=true`);
   };
 
   // complex, long inline styles + animations (intentionally verbose)
@@ -692,7 +692,7 @@ const AgentDashboard = () => {
      --------------------------- */
 
   return (
-    <div className="min-h-screen bg-gradient-to-b pt-30 from-black via-black to-gray-900 text-gray-900 antialiased font-inter">
+    <div className="min-h-screen bg-[#010B13] pt-30 from-black via-black to-gray-900 text-gray-900 antialiased font-inter">
       <InlineStyles />
 
       {/* Agent Registration Modal */}
@@ -713,13 +713,13 @@ const AgentDashboard = () => {
 
       
       <header ref={heroRef} className="relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-12 pb-12">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-12">
           <div className="grid grid-cols-12 gap-8 items-center">
             <div className="col-span-12 lg:col-span-7">
               
 
-              <h1 className="hero-title text-[42px] md:text-[52px] font-bold text-[#a7b8dd] tracking-tight leading-tight max-w-3xl">
-                Beautifully simple agent oversight — <span className="text-[#5c6491] font-medium">built for high-trust teams</span>
+              <h1 className="hero-title text-[42px] md:text-[52px] m font-bold text-[#CDDBF7] tracking-tight leading-tight max-w-3xl">
+                 <span className="text-[#84B9EE]">Agent </span> oversight
               </h1>
 
               <p className="mt-6 text-md text-gray-300/90 max-w-xl">
@@ -730,7 +730,7 @@ const AgentDashboard = () => {
               <div className="mt-8 flex flex-wrap gap-4 items-center">
                 <button
                   onClick={openRegisterModal} // UPDATED to open modal
-                  className="flex justify-center items-center gap-3 px-4 py-2.5 bg-[#6699CC] text-black rounded-full text-sm font-semibold cursor-pointer hover:bg-sky-800 transition"
+                  className="flex justify-center items-center gap-3 px-4 py-2.5 bg-[#9BC7F3] text-black rounded-full text-sm font-semibold cursor-pointer hover:bg-sky-800 transition"
                 >
                   <FontAwesomeIcon icon={faPlus} />
                   Register New Agent
@@ -746,7 +746,7 @@ const AgentDashboard = () => {
 
                 <button
                   onClick={() => setViewMode((v) => (v === "cards" ? "table" : "cards"))}
-                  className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-gray-200 border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors text-sm"
+                  className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-gray-400 border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors text-sm"
                 >
                   <FontAwesomeIcon icon={faTachometerAlt} />
                   {viewMode === "cards" ? "Table view" : "Card view"}
@@ -754,16 +754,20 @@ const AgentDashboard = () => {
 
                 <div className="ml-auto hidden lg:flex items-center gap-3">
                   <div className="text-xs text-gray-300">Agents deployed</div>
-                  <div className="text-2xl text-[#434875] font-semibold">{formatNumberShort(agents.length)}</div>
+                  <div className="text-2xl text-[#E6E9FF] font-semibold">{formatNumberShort(agents.length)}</div>
                 </div>
               </div>
-
+            
+              <div className="flex flex-col mt-10">
+                  <h1 className="text-gray-400 font-inter text-2xl font-semibold ">
+                    Overview
+                  </h1>
               {/* subtle visual cues */}
-              <div className="mt-8 grid grid-cols-3 gap-4 max-w-md">
+              <div className="mt-8 grid grid-cols-3 gap-4  max-w-lg">
                 <div className="rounded-lg p-3 bg-gray-200 border border-gray-100 ">
                   <div className="text-xs uppercase text-gray-500">Average Score</div>
                   <div className="mt-2 text-lg font-semibold">
-                    {agents.length > 0 ? Math.round(agents.reduce((s, a) => s + a.score, 0) / agents.length): 0}</div>
+                    {agents.length > 0 ? Math.round(agents.filter(a => a.score !== null).reduce((s, a) => s + a.score, 0) / (agents.filter(a => a.score !== null).length || 1)) : 0}</div>
                 </div>
                 <div className="rounded-lg p-3 bg-gray-200 border border-gray-100 ">
                   <div className="text-xs uppercase text-gray-500">Total Scans</div>
@@ -776,6 +780,7 @@ const AgentDashboard = () => {
                   <div className="mt-2 text-lg font-semibold">
                     {agents.length > 0 ? agents.sort((a,b)=>new Date(b.lastScan||0)-new Date(a.lastScan||0))[0].lastScan : 'Never'}
                   </div>
+                </div>
                 </div>
               </div>
             </div>
@@ -801,7 +806,7 @@ const AgentDashboard = () => {
                       </div>
                       <div className="text-right flex items-center gap-3 justify-center">
                         <div className="text-xs text-gray-500">Risk</div>
-                        <div className="px-3 py-1 rounded-full bg-green-50 text-green-800 text-sm border border-green-100">Low</div>
+                        <div className="px-3 py-1 rounded-full bg-green-100 text-green-800 text-sm border border-green-100">Low</div>
 
                       </div>
                     </div>
@@ -851,7 +856,8 @@ const AgentDashboard = () => {
       </header>
 
       {/* Controls: Search, risk filter, sort */}
-      <section className="max-w-7xl mx-auto px-6 lg:px-8 -mt-8">
+      <section className="max-w-7xl mx-auto px-6 lg:px-8 ">
+      <h1 className="text-gray-400 font-inter text-2xl font-semibold mb-6">Search</h1>
         <div className="bg-gray-200 border border-gray-300 rounded-2xl p-4">
           <div className="flex flex-col md:flex-row items-center gap-4">
             <label htmlFor="search" className="sr-only">Search agents</label>
@@ -932,6 +938,7 @@ const AgentDashboard = () => {
 
       {/* Main content: Cards or Table */}
       <main className="max-w-7xl mx-auto px-6 lg:px-8 py-8">
+      <h1 className="text-gray-400 font-inter text-2xl mb-6 font-semibold">At a Glance</h1>
         {/* Stats strip */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="p-5 bg-gray-200 rounded-2xl">
@@ -941,18 +948,18 @@ const AgentDashboard = () => {
           </div>
           <div className="p-5 bg-gray-200 rounded-2xl">
             <div className="text-sm text-gray-600">Avg Security Score</div>
-            <div className="mt-2 text-2xl font-semibold">{agents.length > 0 ? Math.round(agents.reduce((s,a)=>s+a.score,0)/agents.length) : 0}</div>
+            <div className="mt-2 text-2xl font-semibold">{agents.filter(a => a.score !== null).length > 0 ? Math.round(agents.filter(a => a.score !== null).reduce((s,a)=>s+a.score,0)/agents.filter(a => a.score !== null).length) : 'N/A'}</div>
             <div className="mt-3 text-xs text-gray-500">Higher is safer</div>
           </div>
           <div className="p-5 bg-gray-200 rounded-2xl">
-            <div className="text-sm text-gray-500">Scans / day</div>
-            <div className="mt-2 text-2xl font-semibold">1.4k</div>
-            <div className="mt-3 text-xs text-gray-500">Automated & scheduled</div>
+            <div className="text-sm text-gray-500">Total Scans</div>
+            <div className="mt-2 text-2xl font-semibold">{agents.length > 0 ? agents.reduce((s, a) => s + (a.scans || 0), 0) : 0}</div>
+            <div className="mt-3 text-xs text-gray-500">Across all agents</div>
           </div>
           <div className="p-5 bg-gray-200 rounded-2xl">
-            <div className="text-sm text-gray-600">Exported</div>
-            <div className="mt-2 text-2xl font-semibold">512</div>
-            <div className="mt-3 text-xs text-gray-500">Reports generated</div>
+            <div className="text-sm text-gray-600">Critical Risk</div>
+            <div className="mt-2 text-2xl font-semibold">{agents.filter(a => a.score !== null && a.score <= 40).length}</div>
+            <div className="mt-3 text-xs text-gray-500">Agents need attention</div>
           </div>
         </div>
 
@@ -978,7 +985,7 @@ const AgentDashboard = () => {
         {viewMode === "cards" && visibleAgents.length > 0 && (
           <section aria-label="Agent cards" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {visibleAgents.map((agent, idx) => {
-              const risk = getRiskColor(agent.score);
+              const risk = agent.score !== null ? getRiskColor(agent.score) : { text: "text-gray-600", bg: "bg-gray-100/80", label: "Not Scanned", ring: "ring-gray-200" };
               return (
                 <article
                   key={agent.id}
@@ -1013,7 +1020,7 @@ const AgentDashboard = () => {
                       <div className="mt-4 flex items-center justify-between gap-3">
                         <div>
                           <div className="text-xs text-gray-500">Security score</div>
-                          <div className={`text-2xl font-bold ${risk.text}`}>{agent.score}</div>
+                          <div className={`text-2xl font-bold ${risk.text}`}>{agent.score !== null ? agent.score : 'N/A'}</div>
                         </div>
 
                         <div className="text-xs text-gray-500 text-left">
@@ -1081,7 +1088,7 @@ const AgentDashboard = () => {
                 </thead>
                 <tbody>
                   {visibleAgents.map((a, i) => {
-                    const risk = getRiskColor(a.score);
+                    const risk = a.score !== null ? getRiskColor(a.score) : { text: "text-gray-600", bg: "bg-gray-100/80", label: "Not Scanned", ring: "ring-gray-200" };
                     return (
                       <tr
                         key={a.id}
@@ -1103,7 +1110,7 @@ const AgentDashboard = () => {
                         <td className="px-6 py-4 text-sm text-gray-600">{a.owner}</td>
 
                         <td className="px-6 py-4">
-                          <div className="text-sm font-semibold">{a.score}</div>
+                          <div className="text-sm font-semibold">{a.score !== null ? a.score : 'N/A'}</div>
                           <div className="text-xs text-gray-400">{risk.label}</div>
                         </td>
 
@@ -1126,32 +1133,121 @@ const AgentDashboard = () => {
         {/* Large visual analytics block (SVG chart + long caption) */}
         <section className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 p-6 bg-gray-200 rounded-2xl ">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-4">
               <div>
-                <div className="text-xs text-gray-600">Risk over time</div>
-                {/* Placeholder for SVG Chart */}
-                <div className="h-64 w-full p-3 bg-gray-300 rounded-lg mt-4 flex items-center justify-center text-gray-500">
-                    [Placeholder for complex Risk/Score trend chart visualization]
-              </div>     
+                <div className="text-xs text-gray-600 uppercase">Risk Trend Analysis</div>
+                <h3 className="text-lg font-semibold mt-1">Security Score Over Time</h3>
+              </div>
+              <div className="flex items-center gap-2 text-xs">
+                <span className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full bg-green-500"></span>
+                  Low Risk
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
+                  Medium
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full bg-orange-500"></span>
+                  High
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="w-3 h-3 rounded-full bg-red-500"></span>
+                  Critical
+                </span>
+              </div>
             </div>
+            <div className="h-64 bg-white rounded-lg p-4 relative">
+              {/* Y-axis labels */}
+              <div className="absolute left-2 top-4 bottom-12 flex flex-col justify-between text-xs text-gray-500">
+                <span>100</span>
+                <span>80</span>
+                <span>60</span>
+                <span>40</span>
+                <span>20</span>
+                <span>0</span>
+              </div>
+
+              {/* Chart area */}
+              <div className="ml-8 h-full relative">
+                {/* Grid lines */}
+                <div className="absolute inset-0 flex flex-col justify-between">
+                  {[...Array(6)].map((_, i) => (
+                    <div key={i} className="border-t border-gray-200"></div>
+                  ))}
+                </div>
+
+                {/* Fake line chart using SVG */}
+                <svg className="w-full h-full" viewBox="0 0 400 200" preserveAspectRatio="none">
+                  {/* Critical zone background */}
+                  <rect x="0" y="160" width="400" height="40" fill="rgba(239, 68, 68, 0.05)" />
+
+                  {/* Line path - simulating improving security over time */}
+                  <polyline
+                    points="0,120 50,115 100,110 150,95 200,85 250,75 300,70 350,65 400,60"
+                    fill="none"
+                    stroke="#3b82f6"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+
+                  {/* Data points */}
+                  {[
+                    {x: 0, y: 120},
+                    {x: 50, y: 115},
+                    {x: 100, y: 110},
+                    {x: 150, y: 95},
+                    {x: 200, y: 85},
+                    {x: 250, y: 75},
+                    {x: 300, y: 70},
+                    {x: 350, y: 65},
+                    {x: 400, y: 60}
+                  ].map((point, i) => (
+                    <circle
+                      key={i}
+                      cx={point.x}
+                      cy={point.y}
+                      r="4"
+                      fill="#3b82f6"
+                      className="hover:r-6 transition-all"
+                    />
+                  ))}
+                </svg>
+
+                {/* X-axis labels */}
+                <div className="absolute -bottom-6 left-0 right-0 flex justify-between text-xs text-gray-500">
+                  <span>Nov 1</span>
+                  <span>Nov 3</span>
+                  <span>Nov 5</span>
+                  <span>Nov 7</span>
+                  <span>Nov 9</span>
+                </div>
+              </div>
             </div>
           </div>
           <div className="lg:col-span-1 p-6 bg-gray-200 rounded-2xl">
             <div className="text-xs text-gray-600">Security Insights</div>
             <h3 className="text-lg font-semibold mt-1">Immediate Action Items</h3>
             <ul className="mt-4 space-y-3 text-sm">
-                <li className="p-3 bg-white rounded-lg border border-gray-200 flex items-center gap-3">
-                    <FontAwesomeIcon icon={faEdit} className="text-orange-500" />
-                    Agent **AGNT-002** needs prompt sanitization update.
-                </li>
-                <li className="p-3 bg-white rounded-lg border border-gray-200 flex items-center gap-3">
-                    <FontAwesomeIcon icon={faShieldHalved} className="text-red-500" />
-                    Review RAG source access for **AGNT-006** (High Risk).
-                </li>
-                <li className="p-3 bg-white rounded-lg border border-gray-200 flex items-center gap-3">
+                {agents.filter(a => a.score !== null && a.score <= 60).slice(0, 2).map(agent => (
+                  <li key={agent.id} className="p-3 bg-white rounded-lg border border-gray-200 flex items-center gap-3">
+                    <FontAwesomeIcon icon={faShieldHalved} className={agent.score <= 40 ? "text-red-500" : "text-orange-500"} />
+                    <span className="flex-1">Agent <strong>{agent.name}</strong> ({getRiskColor(agent.score).label} Risk) - Review security scan</span>
+                  </li>
+                ))}
+                {agents.filter(a => a.score === null || a.scans === 0).slice(0, 1).map(agent => (
+                  <li key={agent.id} className="p-3 bg-white rounded-lg border border-gray-200 flex items-center gap-3">
                     <FontAwesomeIcon icon={faHistory} className="text-sky-700" />
-                    Schedule next compliance scan for all Low-Risk agents.
-                </li>
+                    <span className="flex-1">Agent <strong>{agent.name}</strong> needs initial scan</span>
+                  </li>
+                ))}
+                {agents.filter(a => a.score !== null && a.score <= 60).length === 0 && agents.filter(a => a.score === null || a.scans === 0).length === 0 && (
+                  <li className="p-3 bg-white rounded-lg border border-gray-200 flex items-center gap-3">
+                    <FontAwesomeIcon icon={faShieldHalved} className="text-green-500" />
+                    <span className="flex-1">All agents are in good security standing</span>
+                  </li>
+                )}
             </ul>
             </div>
         </section>

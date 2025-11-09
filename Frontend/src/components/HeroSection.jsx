@@ -158,18 +158,18 @@ const HeroPage = () => {
       {/* Skip link */}
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:opacity-100 focus:absolute focus:top-4 focus:left-4 bg-white p-2 rounded shadow z-50"
+        className="sr-only focus:not-sr-only focus:opacity-100 focus:absolute focus:top-4 focus:left-4 bg-gray-900 p-2 rounded shadow z-50"
       >
         Skip to content
       </a>
 
       
 
-      <main id="main" className="pt-20">
+      <main id="main" className="pt-20 bg-[#010B13]">
         {/* Hero */}
         <section
           ref={heroRef}
-          className="relative min-h-[88vh] flex items-center justify-center overflow-hidden px-6"
+          className="relative min-h-[88vh] flex items-center justify-center overflow-hidden px-6 "
           aria-labelledby="hero-heading"
         >
           {/* complex bg layers */}
@@ -193,16 +193,16 @@ const HeroPage = () => {
             <div className="col-span-12 lg:col-span-7">
               <div className="mb-4 inline-flex items-center gap-3 rounded-full bg-gray-100/70 px-4 py-1.5 border border-gray-200 text-sm">
                 <FontAwesomeIcon icon={faShieldHalved} className="text-sky-600" />
-                <span className="font-medium text-gray-700">AgentGuard Platform</span>
+                <span className="font-medium text-gray-800">AgentGuard Platform</span>
               </div>
 
-              <h1 id="hero-heading" className="text-[2.8rem] md:text-[4.2rem] leading-tight font-bold tracking-tight text-gray-900 max-w-3xl">
-                Operationalizing <span className="text-sky-700">Agentic</span> Zero Trust
+              <h1 id="hero-heading" className="text-[2.8rem] md:text-[4.2rem] leading-tight font-bold tracking-tight text-white max-w-3xl">
+                Operationalizing <span className="text-[#9BC7F3]">Agentic</span> Zero Trust
                 <br />
-                <span className="text-gray-500/95 font-medium">for AI Deployment</span>
+                <span className="text-gray-50/50 font-medium">for AI Deployment</span>
               </h1>
 
-              <p className="mt-6 text-lg text-gray-600 max-w-2xl leading-relaxed">
+              <p className="mt-6 text-lg text-gray-400 max-w-2xl leading-relaxed">
                 Automatically red-team your agent system prompts for instruction hierarchy weaknesses and data leakage risks — from sandboxing to audit trails.
               </p>
 
@@ -212,12 +212,12 @@ const HeroPage = () => {
                   <FontAwesomeIcon icon={faChevronRight} />
                 </Link>
 
-                <Link to="/login" className="inline-flex items-center gap-3 px-4 py-2.5 bg-white text-gray-800 rounded-full text-sm font-semibold border border-gray-200 hover:bg-gray-50 transition">
+                <Link to="/login" className="inline-flex items-center gap-3 px-4 py-2 bg-white text-gray-800 rounded-full text-sm font-semibold border border-gray-200 hover:bg-gray-50 transition">
                   Sign In
                   <FontAwesomeIcon icon={faChevronRight} />
                 </Link>
 
-                <button onClick={() => setModalOpen(true)} className="inline-flex items-center gap-2 px-4 py-2.5 text-sm rounded-full bg-gray-50 hover:bg-gray-100 cursor-pointer border border-gray-200">
+                <button onClick={() => setModalOpen(true)} className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full bg-gray-50 hover:bg-gray-100 cursor-pointer border border-gray-200">
                   <FontAwesomeIcon icon={faPlay} />
                   Watch Demo
                 </button>
@@ -301,7 +301,7 @@ const HeroPage = () => {
           {/* scroll arrow */}
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30">
             <button onClick={() => document.querySelector("#features")?.scrollIntoView({ behavior: "smooth" })} className="cursor-pointer hover:scale-110 transition-transform" aria-label="Scroll to features">
-              <FontAwesomeIcon icon={faChevronDown} className="animate-bounce text-gray-600 text-2xl" />
+              <FontAwesomeIcon icon={faChevronDown} className="animate-bounce text-gray-100 text-2xl" />
             </button>
           </div>
         </section>
@@ -310,8 +310,8 @@ const HeroPage = () => {
         <section id="features" className="py-20">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="text-center mb-12">
-              <h2 className="text-2xl font-extrabold text-gray-900">Platform highlights</h2>
-              <p className="mt-3 text-gray-600 max-w-2xl mx-auto">Powerful, automated red-teaming built for modern agentic systems — introspection, containment, and remediation built-in.</p>
+              <h2 className="text-2xl font-extrabold text-gray-100">Platform highlights</h2>
+              <p className="mt-3 text-gray-400 max-w-2xl mx-auto">Powerful, automated red-teaming built for modern agentic systems — introspection, containment, and remediation built-in.</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -407,12 +407,12 @@ const HeroPage = () => {
         <section className="py-20">
           <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-12 gap-8 items-center">
             <div className="md:col-span-7">
-              <h3 className="text-3xl font-extrabold text-gray-900">Why instruction hierarchy matters</h3>
-              <p className="mt-4 text-gray-600 max-w-xl">
+              <h3 className="text-3xl font-extrabold text-gray-100">Why instruction hierarchy matters</h3>
+              <p className="mt-4 text-gray-400 max-w-xl">
                 Agents chain instructions. A small mis-ordered step or permissive "system" instruction can cascade into large data leaks or privilege escalations.
               </p>
 
-              <ol className="mt-6 space-y-3 text-gray-600 pl-4 list-decimal">
+              <ol className="mt-6 space-y-3 text-gray-400 pl-4 list-decimal">
                 <li>Map instruction flows and high-sensitivity tokens.</li>
                 <li>Identify implicit role delegation and authority gaps.</li>
                 <li>Suggest containment wrappers and runtime checks.</li>
@@ -420,7 +420,7 @@ const HeroPage = () => {
 
               <div className="mt-6 flex gap-4">
                 <Link to="/platform" className="inline-flex items-center gap-3 px-4 py-2.5 bg-sky-700 text-white rounded-full text-sm font-semibold tracking-wide cursor-pointer">Platform details</Link>
-                <Link to="/contact" className="inline-flex items-center gap-3 px-4 py-2.5 bg-transparent text-black border border-gray-300 rounded-full text-sm font-semibold tracking-wide cursor-pointer">Contact Sales</Link>
+                <Link to="/contact" className="inline-flex items-center gap-3 px-4 py-2.5 bg-transparent text-gray-100 border border-gray-50 rounded-full text-sm font-semibold tracking-wide cursor-pointer">Contact Sales</Link>
               </div>
             </div>
 
@@ -455,9 +455,9 @@ const HeroPage = () => {
         </section>
 
         {/* FAQ accordion */}
-        <section className="py-16">
-          <div className="max-w-[900px] mx-auto px-6">
-            <h3 className="text-xl font-semibold text-gray-900 mb-6">Frequently asked questions</h3>
+        <section className="py-16 text-gray-100 ">
+          <div className="max-w-[900px] mx-auto px-6 text-gray-100 ">
+            <h3 className="text-xl font-semibold text-gray-100 mb-6">Frequently asked questions</h3>
             <FAQ />
           </div>
         </section>

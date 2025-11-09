@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { agentAPI, scanAPI } from '../services/api';
 
 const AgentDetails = () => {
   const { agentId } = useParams();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [agent, setAgent] = useState(null);
   const [scans, setScans] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -39,6 +40,16 @@ const AgentDetails = () => {
       console.error('Error fetching scans:', err);
     }
   };
+
+  // Auto-start scan if autoScan parameter is present
+  useEffect(() => {
+    if (searchParams.get('autoScan') === 'true' && agent && !scanningStatus) {
+      // Remove the autoScan parameter from URL
+      setSearchParams({});
+      // Start the scan
+      handleStartScan();
+    }
+  }, [agent, searchParams]);
 
   // FR-3.1: Initiate security scan
   const handleStartScan = async () => {
@@ -141,31 +152,31 @@ const AgentDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-black to-gray-900 text-gray-900 pt-[8%] p-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-b from-black via-black to-gray-900 text-gray-900 pt-[8%] pb-12 px-6">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-10">
           <button
             onClick={() => navigate('/agent-dashboard')}
-            className="text-[#a7b8dd] hover:text-[#6699CC] mb-4 cursor-pointer"
+            className="text-[#a7b8dd] hover:text-[#6699CC] mb-6 cursor-pointer inline-flex items-center gap-2 transition-colors"
           >
             ← Back to Dashboard
           </button>
-          <h1 className="text-4xl font-bold mb-2 text-[#a7b8dd]">{agent?.agent_name}</h1>
-          <p className="text-gray-300">Owner: {agent?.owner}</p>
+          <h1 className="text-5xl font-bold mb-3 text-[#a7b8dd]">{agent?.agent_name}</h1>
+          <p className="text-gray-300 text-lg">Owner: <span className="font-semibold">{agent?.owner}</span></p>
         </div>
 
         {/* Agent Details Card */}
-        <div className="bg-gray-200 rounded-lg p-6 mb-8 border border-gray-300">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-900">Agent Details</h2>
-          <div className="space-y-4">
-            <div>
-              <label className="text-gray-600 text-sm">Description</label>
-              <p className="text-gray-900">{agent?.description || 'No description provided'}</p>
+        <div className="bg-gray-200 rounded-2xl p-8 mb-8 border border-gray-300 shadow-lg">
+          <h2 className="text-3xl font-bold mb-6 text-gray-900">Agent Details</h2>
+          <div className="grid grid-cols-1 gap-6">
+            <div className="bg-white p-6 rounded-xl border border-gray-300">
+              <label className="text-gray-300 text-sm font-semibold uppercase tracking-wide mb-2 block">Description</label>
+              <p className="text-gray-900 text-base leading-relaxed">{agent?.description || 'No description provided'}</p>
             </div>
-            <div>
-              <label className="text-gray-600 text-sm">System Prompt</label>
-              <pre className="bg-gray-100 p-4 rounded mt-2 text-sm overflow-x-auto border border-gray-300 text-gray-900">
+            <div className="bg-white p-6 rounded-xl border border-gray-300 ">
+              <label className="text-gray-600 text-sm font-semibold uppercase tracking-wide mb-3 block">System Prompt</label>
+              <pre className="bg-gray-50 p-5 rounded-lg text-sm overflow-x-auto border border-gray-200 text-gray-900 leading-relaxed font-mono">
                 {agent?.system_prompt || 'No system prompt configured'}
               </pre>
             </div>
@@ -173,32 +184,20 @@ const AgentDetails = () => {
         </div>
 
         {/* Security Scan Section */}
-        <div className="bg-gray-200 rounded-lg p-6 mb-8 border border-gray-300">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-semibold text-gray-900">Security Scanning</h2>
-            <button
-              onClick={handleStartScan}
-              disabled={scanningStatus !== null || !agent?.system_prompt}
-              className={`px-6 py-3 rounded-full font-semibold transition-colors ${
-                scanningStatus !== null || !agent?.system_prompt
-                  ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                  : 'bg-[#6699CC] hover:bg-sky-800 text-black cursor-pointer'
-              }`}
-            >
-              {scanningStatus === 'initiating' && 'Initiating Scan...'}
-              {scanningStatus === 'polling' && 'Scan in Progress...'}
-              {scanningStatus === null && 'Start Security Scan'}
-            </button>
+        <div className="bg-gray-200 rounded-2xl p-8 mb-8 border border-gray-300">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-3xl font-bold text-gray-900">Security Scanning</h2>
+            
           </div>
 
           {error && (
-            <div className="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded mb-4">
-              {error}
+            <div className="bg-red-100 border-l-4 border-red-500 text-red-700 px-6 py-4 rounded-lg mb-6 ">
+              <p className="font-medium">{error}</p>
             </div>
           )}
 
           {scanningStatus === 'polling' && (
-            <div className="bg-blue-100 border border-blue-300 text-blue-700 px-4 py-3 rounded mb-4">
+            <div className="bg-blue-100 border-l-4 border-blue-500 text-blue-700 px-6 py-4 rounded-lg mb-6">
               <div className="flex items-center">
                 <svg className="animate-spin h-5 w-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -210,44 +209,67 @@ const AgentDetails = () => {
           )}
 
           {/* Scan History */}
-          <div>
-            <div className="flex justify-between items-center mb-3">
-              <h3 className="text-xl font-semibold text-gray-900">Scan History</h3>
+          <div className="mt-8">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-2xl font-semibold text-gray-500">Scan History</h3>
               {scans.length > 0 && (
                 <button
-                  onClick={() => navigate(`/agents/${agentId}/history`)}
-                  className="px-4 py-2 bg-[#6699CC] hover:bg-sky-800 rounded-full text-sm font-medium transition-colors text-black cursor-pointer"
-                >
-                  View Full History
-                </button>
+                onClick={() => navigate(`/agents/${agentId}/history`)}
+                className="px-6 py-2.5 bg-[#9BC7F3] hover:bg-sky-800 rounded-full text-sm font-semibold transition-all text-black cursor-pointer"
+              >
+                View Full History
+              </button>
               )}
+              <button
+              onClick={handleStartScan}
+              disabled={scanningStatus !== null || !agent?.system_prompt}
+              className={`px-8 py-3 rounded-full font-semibold transition-all shadow-md hover:shadow-lg ${
+                scanningStatus !== null || !agent?.system_prompt
+                  ? 'bg-[#9BC7F3] text-gray-600 cursor-not-allowed'
+                  : 'bg-[#9BC7F3 ] text-black cursor-pointer transform-all'
+              }`}
+            >
+              {scanningStatus === 'initiating' && 'Initiating Scan...'}
+              {scanningStatus === 'polling' && 'Scan in Progress...'}
+              {scanningStatus === null && 'Start Security Scan'}
+            </button>
             </div>
+            
             {scans.length === 0 ? (
-              <p className="text-gray-600">No scans performed yet</p>
+              <div className="bg-white p-12 rounded-xl border border-gray-300 text-center ">
+                <p className="text-gray-600 text-lg">No scans performed yet</p>
+                <p className="text-gray-500 mt-2 text-sm">Run your first security scan to get started</p>
+              </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {scans.map((scan) => (
                   <div
                     key={scan.id}
                     onClick={() => scan.status === 'completed' && navigate(`/scans/${scan.id}`)}
-                    className={`bg-gray-100 p-4 rounded-lg border border-gray-300 ${
-                      scan.status === 'completed' ? 'cursor-pointer hover:bg-gray-50' : ''
+                    className={`bg-gray-50 p-6 rounded-4xl border border-gray-200  transition-all ${
+                      scan.status === 'completed' ? 'cursor-pointer  transform-all' : ''
                     }`}
                   >
                     <div className="flex justify-between items-center">
-                      <div>
-                        <span className={`inline-block px-3 py-1 rounded-full text-sm ${getStatusColor(scan.status)}`}>
-                          {scan.status.toUpperCase()}
-                        </span>
-                        <span className="ml-4 text-gray-600 text-sm">
-                          {new Date(scan.createdAt).toLocaleString()}
-                        </span>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <span className={`inline-block px-4 py-1.5 rounded-full text-xs font-bold ${getStatusColor(scan.status)}`}>
+                            {scan.status.toUpperCase()}
+                          </span>
+                          <span className="text-gray-500 text-sm">
+                            {new Date(scan.createdAt).toLocaleString()}
+                          </span>
+                        </div>
                       </div>
                       {scan.security_score !== null && (
-                        <div className="text-2xl font-bold text-gray-900">
-                          Score: <span className={scan.security_score >= 70 ? 'text-green-600' : scan.security_score >= 50 ? 'text-yellow-600' : 'text-red-600'}>
-                            {scan.security_score}/100
-                          </span>
+                        <div className="text-right">
+                          <div className="text-sm text-gray-600 mb-1 font-medium">Security Score</div>
+                          <div className="text-3xl font-bold">
+                            <span className={scan.security_score >= 70 ? 'text-green-600' : scan.security_score >= 50 ? 'text-yellow-600' : 'text-red-600'}>
+                              {scan.security_score}
+                            </span>
+                            <span className="text-gray-400 text-lg">/100</span>
+                          </div>
                         </div>
                       )}
                     </div>
