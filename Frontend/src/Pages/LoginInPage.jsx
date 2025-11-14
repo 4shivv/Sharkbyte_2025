@@ -32,12 +32,12 @@ const LoginInPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-[#100C08] p-4">
-      <div className="w-full max-w-md bg-white dark:bg-[#1a1a1a] shadow-2xl rounded-2xl p-8 space-y-8 border border-gray-200 dark:border-gray-800 transition-all duration-300">
+    <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-[#010B13] p-4">
+      <div className="w-full max-w-md bg-white dark:bg-[#0A1628] shadow-2xl rounded-3xl p-8 space-y-8 border border-gray-200 dark:border-gray-800 transition-all duration-300">
         
         {/* Header */}
         <div className="flex flex-col items-center">
-          <FontAwesomeIcon icon={faShieldHalved} className="text-4xl text-[#1a1a1a] dark:text-gray-100 mb-3" />
+          <FontAwesomeIcon icon={faShieldHalved} className="text-4xl text-[#1a1a1a] dark:text-blue-400/80 mb-3" />
           <h2 className="text-3xl font-extrabold text-[#1a1a1a] dark:text-white font-inter">
             Welcome Back
           </h2>
@@ -76,7 +76,7 @@ const LoginInPage = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
-                className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#1a1a1a] focus:border-[#1a1a1a] sm:text-sm dark:bg-[#2b2b2b] dark:border-gray-700 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md  placeholder-gray-400 focus:outline-none focus:ring-[#1a1a1a] focus:border-[#506488] sm:text-sm dark:bg-[#1c1e2485] dark:border-gray-700 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
                 placeholder="usernname@organization.com"
               />
             </div>
@@ -103,7 +103,7 @@ const LoginInPage = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
-                className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#1a1a1a] focus:border-[#1a1a1a] sm:text-sm dark:bg-[#2b2b2b] dark:border-gray-700 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md  placeholder-gray-400 focus:outline-none focus:ring-[#1a1a1a] focus:border-[#506488] sm:text-sm dark:bg-[#1c1e2485] dark:border-gray-700 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
                 placeholder="••••••••"
               />
             </div>
@@ -114,7 +114,7 @@ const LoginInPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="cursor-pointer w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-[#a7b8dd] hover:bg-[#5c6491] focus:outline-none focus:ring-2  focus:ring-[#434875] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="cursor-pointer w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-sky-600 hover:bg-sky-500 focus:outline-none focus:ring-2  focus:ring-[#434875] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                             
             >
               <FontAwesomeIcon icon={faSignInAlt} className="mr-2 h-4 w-4" />
