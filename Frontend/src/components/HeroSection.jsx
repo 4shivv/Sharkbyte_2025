@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -154,11 +153,11 @@ const HeroPage = () => {
 
   return (
     <div className="font-inter">
-    <div className="min-h-screen w-screen font-inter antialiased text-gray-900 bg-white">
+    <div className="min-h-screen w-screen font-inter antialiased text-gray-100 bg-[#010B13]">
       {/* Skip link */}
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:opacity-100 focus:absolute focus:top-4 focus:left-4 bg-gray-900 p-2 rounded shadow z-50"
+        className="sr-only focus:not-sr-only focus:opacity-100 focus:absolute focus:top-4 focus:left-4 bg-sky-600 text-white p-2 rounded shadow z-50"
       >
         Skip to content
       </a>
@@ -174,13 +173,13 @@ const HeroPage = () => {
         >
           {/* complex bg layers */}
           <div aria-hidden className="absolute inset-0 -z-20 pointer-events-none" style={{ transform: `translate3d(${mouse.x * 40}px, ${mouse.y * 24}px, 0)` }}>
-            <div className="absolute left-[-12%] top-[-15%] w-[1200px] h-[1200px] rounded-full bg-gradient-to-r from-sky-50 via-white to-transparent opacity-70 blur-[100px]" />
-            <div className="absolute right-[-10%] bottom-[-10%] w-[900px] h-[900px] rounded-full bg-gradient-to-tr from-pink-50 via-white to-transparent opacity-60 blur-[80px]" />
+            <div className="absolute left-[-12%] top-[-15%] w-[1200px] h-[1200px] rounded-full bg-gradient-to-r from-sky-500/10 via-sky-400/5 to-transparent opacity-70 blur-[100px]" />
+            <div className="absolute right-[-10%] bottom-[-10%] w-[900px] h-[900px] rounded-full bg-gradient-to-tr from-purple-500/10 via-purple-400/5 to-transparent opacity-60 blur-[80px]" />
             <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="heroGlass" x1="0" x2="1">
-                  <stop offset="0%" stopColor="#fff" stopOpacity="0.14" />
-                  <stop offset="100%" stopColor="#fff" stopOpacity="0" />
+                  <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.05" />
+                  <stop offset="100%" stopColor="#7c3aed" stopOpacity="0.02" />
                 </linearGradient>
               </defs>
               <rect width="100%" height="100%" fill="url(#heroGlass)" />
@@ -191,15 +190,15 @@ const HeroPage = () => {
 
           <div className="max-w-[1200px] w-full mx-auto py-24 grid grid-cols-12 gap-8 items-center">
             <div className="col-span-12 lg:col-span-7">
-              <div className="mb-4 inline-flex items-center gap-3 rounded-full bg-gray-100/70 px-4 py-1.5 border border-gray-200 text-sm">
-                <FontAwesomeIcon icon={faShieldHalved} className="text-sky-600" />
-                <span className="font-medium text-gray-800">AgentGuard Platform</span>
+              <div className="mb-4 inline-flex items-center gap-3 rounded-full bg-sky-500/10 px-4 py-1.5 border border-sky-500/20 text-sm">
+                <FontAwesomeIcon icon={faShieldHalved} className="text-sky-400" />
+                <span className="font-medium text-sky-100">AgentGuard Platform</span>
               </div>
 
               <h1 id="hero-heading" className="text-[2.8rem] md:text-[4.2rem] leading-tight font-bold tracking-tight text-white max-w-3xl">
-                Operationalizing <span className="text-[#9BC7F3]">Agentic</span> Zero Trust
+                Operationalizing <span className="text-[#87CEFA]">Agentic</span> Zero Trust
                 <br />
-                <span className="text-gray-50/50 font-medium">for AI Deployment</span>
+              
               </h1>
 
               <p className="mt-6 text-lg text-gray-400 max-w-2xl leading-relaxed">
@@ -207,17 +206,17 @@ const HeroPage = () => {
               </p>
 
               <div className="mt-8 flex flex-wrap gap-4 items-center">
-                <Link to="/signup" className="inline-flex items-center gap-3 px-4 py-2.5 bg-sky-700 text-white rounded-full text-sm font-semibold tracking-wide cursor-pointer transition-color duration-200 hover:bg-sky-800">
+                <Link to="/signup" className="inline-flex items-center gap-3 px-4 py-2.5 bg-sky-600 text-white rounded-full text-sm font-semibold tracking-wide cursor-pointer transition-all duration-200 hover:bg-sky-500 hover:shadow-lg hover:shadow-sky-500/20">
                   Get Started
                   <FontAwesomeIcon icon={faChevronRight} />
                 </Link>
 
-                <Link to="/login" className="inline-flex items-center gap-3 px-4 py-2 bg-white text-gray-800 rounded-full text-sm font-semibold border border-gray-200 hover:bg-gray-50 transition">
+                <Link to="/login" className="inline-flex items-center gap-3 px-4 py-2 bg-white/5 text-gray-200 rounded-full text-sm font-semibold border border-white/10 hover:bg-white/10 hover:border-white/20 transition">
                   Sign In
                   <FontAwesomeIcon icon={faChevronRight} />
                 </Link>
 
-                <button onClick={() => setModalOpen(true)} className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full bg-gray-50 hover:bg-gray-100 cursor-pointer border border-gray-200">
+                <button onClick={() => setModalOpen(true)} className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full bg-white/5 hover:bg-white/10 cursor-pointer border border-white/10 hover:border-white/20 text-gray-300 transition">
                   <FontAwesomeIcon icon={faPlay} />
                   Watch Demo
                 </button>
@@ -225,42 +224,42 @@ const HeroPage = () => {
 
               <div className="mt-10 flex flex-wrap gap-6 items-center text-sm text-gray-500">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">G</div>
-                  <span>Used by Gov & Fintech teams</span>
+                  <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400">G</div>
+                  <span className="text-gray-400">Used by Gov & Fintech teams</span>
                 </div>
                 <div className="flex items-center gap-2 opacity-80">
-                  <FontAwesomeIcon icon={faChartLine} />
-                  <span>Reduce detection time by <strong>5x</strong></span>
+                  <FontAwesomeIcon icon={faChartLine} className="text-gray-400" />
+                  <span className="text-gray-400">Reduce detection time by <strong className="text-sky-400">5x</strong></span>
                 </div>
               </div>
             </div>
 
             {/* Right visual */}
             <div className="col-span-12 lg:col-span-5 relative">
-              <div className="rounded-3xl p-1 bg-white border border-gray-300" >
-                <div className="bg-white rounded-3xl p-6 lg:p-8">
+              <div className="rounded-3xl p-1" >
+                <div className="bg-[#0A1628] rounded-3xl p-6 lg:p-8 border border-white/10 ">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <div className="text-xs text-gray-400 uppercase tracking-wider">Live Scan</div>
-                      <div className="mt-2 text-lg font-semibold text-gray-900">Instruction Hierarchy Audit</div>
-                      <div className="mt-1 text-sm text-gray-500">Find prompt chain issues and secrets risk automatically.</div>
+                      <div className="text-xs text-gray-500 uppercase tracking-wider">Live Scan</div>
+                      <div className="mt-2 text-lg font-semibold text-gray-100">Instruction Hierarchy Audit</div>
+                      <div className="mt-1 text-sm text-gray-400">Find prompt chain issues and secrets risk automatically.</div>
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <div className="text-xs text-gray-400 text-right">Risk</div>
-                      <div className="px-3 py-1 rounded-full bg-amber-50 text-amber-800 text-sm border border-amber-100">Medium</div>
+                      <div className="text-xs text-gray-500 text-right">Risk</div>
+                      <div className="px-3 py-1 rounded-full bg-amber-500/10 text-amber-300 text-sm border border-amber-500/20">Medium</div>
                     </div>
                   </div>
 
-                  <div className="mt-6 bg-gray-900 text-gray-100 rounded-lg p-3 font-mono text-xs">
+                  <div className="mt-6 bg-[#050A14] text-gray-100 rounded-lg p-3 font-mono text-xs border border-white/5">
                     <div className="flex items-center gap-3">
                       <span className="inline-block w-2 h-2 rounded-full bg-red-400" />
                       <span className="inline-block w-2 h-2 rounded-full bg-yellow-400" />
                       <span className="inline-block w-2 h-2 rounded-full bg-green-400" />
-                      <div className="ml-auto text-[10px] text-gray-400">Live</div>
+                      <div className="ml-auto text-[10px] text-gray-500">Live</div>
                     </div>
 
-                    <pre className="mt-3 text-xs overflow-x-auto">
+                    <pre className="mt-3 text-xs overflow-x-auto text-gray-300">
 {`> scanning prompt chain...
 > finding instruction hierarchy misconfig...
 > potential data leak detected at step 3
@@ -271,10 +270,10 @@ const HeroPage = () => {
                   </div>
 
                   <div className="mt-6 flex items-center gap-3">
-                    <button onClick={() => navigate("/collab")} className="text-sm inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-700 text-white">
+                    <button onClick={() => navigate("/collab")} className="text-sm inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-600 text-white hover:bg-sky-500 transition">
                       Scan
                     </button>
-                    <Link to="/learn" className="text-sm inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gray-50 border border-gray-200">
+                    <Link to="/learn" className="text-sm inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 transition">
                       Learn more
                     </Link>
                   </div>
@@ -282,16 +281,16 @@ const HeroPage = () => {
               </div>
 
               <div className="mt-6 grid grid-cols-3 gap-3 text-xs">
-                <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 text-center">
-                  <div className="font-semibold">99.9%</div>
+                <div className="rounded-lg p-3 bg-white/5 border border-white/10 text-center">
+                  <div className="font-semibold text-gray-100">99.9%</div>
                   <div className="text-gray-500 mt-1">Uptime</div>
                 </div>
-                <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 text-center">
-                  <div className="font-semibold">12ms</div>
+                <div className="rounded-lg p-3 bg-white/5 border border-white/10 text-center">
+                  <div className="font-semibold text-gray-100">12ms</div>
                   <div className="text-gray-500 mt-1">Avg Response</div>
                 </div>
-                <div className="rounded-lg p-3 bg-gray-100 border border-gray-100 text-center">
-                  <div className="font-semibold">2.1k</div>
+                <div className="rounded-lg p-3 bg-white/5 border border-white/10 text-center">
+                  <div className="font-semibold text-gray-100">2.1k</div>
                   <div className="text-gray-500 mt-1">Scans / day</div>
                 </div>
               </div>
@@ -301,13 +300,13 @@ const HeroPage = () => {
           {/* scroll arrow */}
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30">
             <button onClick={() => document.querySelector("#features")?.scrollIntoView({ behavior: "smooth" })} className="cursor-pointer hover:scale-110 transition-transform" aria-label="Scroll to features">
-              <FontAwesomeIcon icon={faChevronDown} className="animate-bounce text-gray-100 text-2xl" />
+              <FontAwesomeIcon icon={faChevronDown} className="animate-bounce text-gray-400 text-2xl" />
             </button>
           </div>
         </section>
 
         {/* Features */}
-        <section id="features" className="py-20">
+        <section id="features" className="py-20 bg-[#010B13]">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="text-center mb-12">
               <h2 className="text-2xl font-extrabold text-gray-100">Platform highlights</h2>
@@ -323,28 +322,28 @@ const HeroPage = () => {
         </section>
 
         {/* Carousel / live examples */}
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-[#0A1628]">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h3 className="text-xl font-semibold text-gray-900">Live scan examples</h3>
-                <p className="text-sm text-gray-600 mt-1">Real traces from agent runs — redacted for privacy.</p>
+                <h3 className="text-xl font-semibold text-gray-100">Live scan examples</h3>
+                <p className="text-sm text-gray-400 mt-1">Real traces from agent runs — redacted for privacy.</p>
               </div>
 
               <div className="flex items-center gap-3">
-                <button onClick={() => setCarouselIndex(0)} className="px-3 py-2 rounded-md border border-gray-200 text-sm">All</button>
-                <button className="px-3 py-2 rounded-md border border-gray-200 text-sm">Finance</button>
-                <button className="px-3 py-2 rounded-md border border-gray-200 text-sm">Health</button>
+                <button onClick={() => setCarouselIndex(0)} className="px-3 py-2 rounded-md border border-white/10 bg-white/5 text-sm text-gray-300 hover:bg-white/10 transition">All</button>
+                <button className="px-3 py-2 rounded-md border border-white/10 bg-white/5 text-sm text-gray-300 hover:bg-white/10 transition">Finance</button>
+                <button className="px-3 py-2 rounded-md border border-white/10 bg-white/5 text-sm text-gray-300 hover:bg-white/10 transition">Health</button>
               </div>
             </div>
 
             <div className="relative">
-              <div className="overflow-hidden rounded-2xl bg-white border border-gray-200 p-6 ">
+              <div className="overflow-hidden rounded-2xl bg-[#050A14] border border-white/10 p-6 ">
                 <div className="flex items-center gap-6">
                   <div className="w-3/5">
-                    <div className="h-44 overflow-hidden rounded-lg bg-gradient-to-br from-white to-gray-50 p-4">
+                    <div className="h-44 overflow-hidden rounded-lg bg-gradient-to-br from-sky-500/10 to-purple-500/5 p-4 border border-white/5">
                       {/* simulated visual — plenty of SVG detail */}
-                      <svg viewBox="0 0 800 220" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
+                      <svg viewBox="0 0 800 220" className="w-full h-full rounded" preserveAspectRatio="xMidYMid slice">
                         <defs>
                           <linearGradient id="gA" x1="0" x2="1">
                             <stop offset="0%" stopColor="#7dd3fc" stopOpacity="0.3" />
@@ -359,24 +358,24 @@ const HeroPage = () => {
                     </div>
 
                     <div className="mt-4">
-                      <h4 className="text-lg font-semibold">{carouselItems[carouselIndex].title}</h4>
-                      <div className="text-sm text-gray-500 mt-1">{carouselItems[carouselIndex].subtitle} · <span className="font-medium text-gray-700">{carouselItems[carouselIndex].badge}</span></div>
-                      <p className="mt-3 text-sm text-gray-600">{carouselItems[carouselIndex].detail}</p>
+                      <h4 className="text-lg font-semibold text-gray-100">{carouselItems[carouselIndex].title}</h4>
+                      <div className="text-sm text-gray-400 mt-1">{carouselItems[carouselIndex].subtitle} · <span className="font-medium text-sky-400">{carouselItems[carouselIndex].badge}</span></div>
+                      <p className="mt-3 text-sm text-gray-400">{carouselItems[carouselIndex].detail}</p>
                     </div>
                   </div>
 
                   <div className="w-2/5">
                     <div className="grid grid-cols-2 gap-3">
                       {Array.from({ length: 4 }).map((_, i) => (
-                        <div key={i} className="rounded-lg p-3 bg-gray-50 border border-gray-100 text-xs">
-                          <div className="font-semibold">Agent Run #{2300 + i}</div>
+                        <div key={i} className="rounded-lg p-3 bg-white/5 border border-white/10 text-xs">
+                          <div className="font-semibold text-gray-200">Agent Run #{2300 + i}</div>
                           <div className="text-gray-500 mt-1">Scanned 2h ago</div>
-                          <div className="mt-3 text-xs text-gray-600 font-mono bg-white p-2 rounded">{`> step${i + 1}: check prompt -> flagged`}</div>
+                          <div className="mt-3 text-xs text-gray-400 font-mono bg-[#050A14] p-2 rounded border border-white/5">{`> step${i + 1}: check prompt -> flagged`}</div>
                           <div className="mt-3 flex items-center justify-between">
                             <div className="text-xs text-gray-500">Runtime: 32s</div>
                             <div className="flex items-center gap-2">
-                              <button className="text-xs px-2 py-1 rounded-full bg-white border border-gray-300">View</button>
-                              <button className="text-xs px-2 py-1 rounded-full bg-sky-700 text-white">Contain</button>
+                              <button className="text-xs px-2 py-1 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 transition">View</button>
+                              <button className="text-xs px-2 py-1 rounded-full bg-sky-600 text-white hover:bg-sky-500 transition">Contain</button>
                             </div>
                           </div>
                         </div>
@@ -387,11 +386,11 @@ const HeroPage = () => {
 
                 <div className="mt-4 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <button onClick={() => setCarouselIndex((i) => (i - 1 + carouselItems.length) % carouselItems.length)} aria-label="Prev" className="p-2 rounded hover:bg-gray-100">
+                    <button onClick={() => setCarouselIndex((i) => (i - 1 + carouselItems.length) % carouselItems.length)} aria-label="Prev" className="p-2 rounded hover:bg-white/5 text-gray-400 hover:text-gray-200 transition">
                       <FontAwesomeIcon icon={faChevronLeft} />
                     </button>
                     <div className="text-sm text-gray-500">{carouselIndex + 1} / {carouselItems.length}</div>
-                    <button onClick={() => setCarouselIndex((i) => (i + 1) % carouselItems.length)} aria-label="Next" className="p-2 rounded hover:bg-gray-100">
+                    <button onClick={() => setCarouselIndex((i) => (i + 1) % carouselItems.length)} aria-label="Next" className="p-2 rounded hover:bg-white/5 text-gray-400 hover:text-gray-200 transition">
                       <FontAwesomeIcon icon={faChevronRight} />
                     </button>
                   </div>
@@ -404,7 +403,7 @@ const HeroPage = () => {
         </section>
 
         {/* Two column deep dive */}
-        <section className="py-20">
+        <section className="py-20 bg-[#010B13]">
           <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-12 gap-8 items-center">
             <div className="md:col-span-7">
               <h3 className="text-3xl font-extrabold text-gray-100">Why instruction hierarchy matters</h3>
@@ -419,13 +418,13 @@ const HeroPage = () => {
               </ol>
 
               <div className="mt-6 flex gap-4">
-                <Link to="/platform" className="inline-flex items-center gap-3 px-4 py-2.5 bg-sky-700 text-white rounded-full text-sm font-semibold tracking-wide cursor-pointer">Platform details</Link>
-                <Link to="/contact" className="inline-flex items-center gap-3 px-4 py-2.5 bg-transparent text-gray-100 border border-gray-50 rounded-full text-sm font-semibold tracking-wide cursor-pointer">Contact Sales</Link>
+                <Link to="/platform" className="inline-flex items-center gap-3 px-4 py-2.5 bg-sky-600 text-white rounded-full text-sm font-semibold tracking-wide cursor-pointer hover:bg-sky-500 transition">Platform details</Link>
+                <Link to="/contact" className="inline-flex items-center gap-3 px-4 py-2.5 bg-transparent text-gray-100 border border-white/20 rounded-full text-sm font-semibold tracking-wide cursor-pointer hover:bg-white/5 transition">Contact Sales</Link>
               </div>
             </div>
 
             <div className="md:col-span-5">
-              <div className="rounded-3xl p-6 bg-gradient-to-tr from-white to-gray-50 border border-gray-200 ">
+              <div className="rounded-3xl p-6 bg-gradient-to-tr from-sky-500/10 to-purple-500/5 border border-white/10">
                 <svg viewBox="0 0 600 360" className="w-full h-auto" preserveAspectRatio="xMidYMid slice">
                   <g fill="none" strokeWidth="2" strokeLinecap="round">
                     <path d="M40 320 L80 80 L160 120 L260 40 L360 160 L500 60" stroke="#60A5FA" opacity="0.9" />
@@ -433,7 +432,7 @@ const HeroPage = () => {
                   </g>
                 </svg>
 
-                <div className="mt-4 text-sm text-gray-600">
+                <div className="mt-4 text-sm text-gray-400">
                   The visualization above shows instruction call paths and flagged hops — red lines are high risk.
                 </div>
               </div>
@@ -442,36 +441,36 @@ const HeroPage = () => {
         </section>
 
         {/* CTA */}
-        <section className="py-20 bg-[#F5F5F5]">
+        <section className="py-20 bg-[#0A1628]">
           <div className="max-w-[1200px] mx-auto px-6 text-center">
-            <h4 className="text-2xl font-extrabold">Start hardening your agent deployments</h4>
-            <p className="mt-2 text-gray-600 max-w-2xl mx-auto">Evaluate risks in minutes — not days. Safe-by-default policies you can audit and export.</p>
+            <h4 className="text-2xl font-extrabold text-gray-100">Start hardening your agent deployments</h4>
+            <p className="mt-2 text-gray-400 max-w-2xl mx-auto">Evaluate risks in minutes — not days. Safe-by-default policies you can audit and export.</p>
 
             <div className="mt-6 flex justify-center gap-4">
-              <Link to="/signup" className="flex items-center justify-center px-4 py-2 text-sm bg-sky-700 text-white rounded-full font-semibold hover:bg-sky-800 transition">Get started free</Link>
-              <Link to="/login" className="px-5 py-2 border rounded-full text-sm border-gray-300 hover:bg-gray-50 transition">Sign in</Link>
+              <Link to="/signup" className="flex items-center justify-center px-4 py-2 text-sm bg-sky-600 text-white rounded-full font-semibold hover:bg-sky-500 hover:shadow-lg hover:shadow-sky-500/20 transition">Get started free</Link>
+              <Link to="/login" className="px-5 py-2 border rounded-full text-sm border-white/20 bg-white/5 hover:bg-white/10 text-gray-200 transition">Sign in</Link>
             </div>
           </div>
         </section>
 
         {/* FAQ accordion */}
-        <section className="py-16 text-gray-100 ">
-          <div className="max-w-[900px] mx-auto px-6 text-gray-100 ">
+        <section className="py-16 bg-[#010B13]">
+          <div className="max-w-[900px] mx-auto px-6">
             <h3 className="text-xl font-semibold text-gray-100 mb-6">Frequently asked questions</h3>
             <FAQ />
           </div>
         </section>
 
         {/* Footer */}
-        <footer className=" bg-[#F5F5F5] borde border-t border-gray-100 py-12">
+        <footer className="bg-[#0A1628] border-t border-white/10 py-12">
           <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 md:w-12 rounded-full bg-gray-900 text-white flex items-center justify-center">
+                <div className="w-10 h-10 md:w-12 rounded-full bg-sky-600 text-white flex items-center justify-center">
                   <FontAwesomeIcon icon={faShieldHalved} />
                 </div>
                 <div>
-                  <div className="font-semibold">AgentGuard</div>
+                  <div className="font-semibold text-gray-100">AgentGuard</div>
                   <div className="text-sm text-gray-500">Operationalized security for AI agents</div>
                 </div>
               </div>
@@ -480,33 +479,33 @@ const HeroPage = () => {
             </div>
 
             <div>
-              <div className="font-semibold mb-3">Product</div>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li><Link to="/platform" className="hover:underline">Platform</Link></li>
-                <li><Link to="/docs" className="hover:underline">Docs</Link></li>
-                <li><Link to="/pricing" className="hover:underline">Pricing</Link></li>
+              <div className="font-semibold mb-3 text-gray-200">Product</div>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><Link to="/platform" className="hover:text-gray-200 transition">Platform</Link></li>
+                <li><Link to="/docs" className="hover:text-gray-200 transition">Docs</Link></li>
+                <li><Link to="/pricing" className="hover:text-gray-200 transition">Pricing</Link></li>
               </ul>
             </div>
 
             <div>
-              <div className="font-semibold mb-3">Company</div>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li><Link to="/about" className="hover:underline">About</Link></li>
-                <li><Link to="/careers" className="hover:underline">Careers</Link></li>
-                <li><Link to="/press" className="hover:underline">Press</Link></li>
+              <div className="font-semibold mb-3 text-gray-200">Company</div>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><Link to="/about" className="hover:text-gray-200 transition">About</Link></li>
+                <li><Link to="/careers" className="hover:text-gray-200 transition">Careers</Link></li>
+                <li><Link to="/press" className="hover:text-gray-200 transition">Press</Link></li>
               </ul>
             </div>
 
             <div>
-              <div className="flex items-center  font-semibold mb-3 gap-2">
+              <div className="flex items-center font-semibold mb-3 gap-2 text-gray-200">
                 <FontAwesomeIcon icon={faEnvelope} />
                 Contact Us
                
               </div>
               
               <form onSubmit={(e) => { e.preventDefault(); alert("Subscribed (demo)"); }} className="flex gap-2">
-                <input id="searchInput" aria-label="Email" className="flex-1 px-3 py-2 border border-gray-300 rounded-xl text-sm" placeholder="you@example.com" />
-                <button className="px-3 py-2 bg-gray-900 text-white rounded-full text-sm">Subscribe</button>
+                <input id="searchInput" aria-label="Email" className="flex-1 px-3 py-2 border border-white/10 bg-white/5 rounded-xl text-sm text-gray-200 placeholder-gray-500 focus:bg-white/10 focus:border-white/20" placeholder="you@example.com" />
+                <button className="px-3 py-2 bg-sky-600 text-white rounded-full text-sm hover:bg-sky-500 transition">Subscribe</button>
               </form>
 
               
@@ -589,7 +588,7 @@ const HeroPage = () => {
 
 function NavLink({ to, children }) {
   return (
-    <Link to={to} className="nav-link px-2 py-2 rounded hover:bg-gray-100">
+    <Link to={to} className="nav-link px-2 py-2 rounded hover:bg-white/5 text-gray-300 hover:text-gray-100 transition">
       {children}
     </Link>
   );
@@ -597,10 +596,10 @@ function NavLink({ to, children }) {
 
 function FloatingBadge({ icon, label, color = "red" }) {
   const colorClass = {
-    red: { bg: "bg-red-50", text: "text-red-600", border: "border-red-100" },
-    purple: { bg: "bg-purple-50", text: "text-purple-600", border: "border-purple-100" },
-    blue: { bg: "bg-blue-50", text: "text-blue-600", border: "border-blue-100" },
-  }[color] || { bg: "bg-gray-50", text: "text-gray-700", border: "border-gray-100" };
+    red: { bg: "bg-red-500/10", text: "text-red-400", border: "border-red-500/20" },
+    purple: { bg: "bg-purple-500/10", text: "text-purple-400", border: "border-purple-500/20" },
+    blue: { bg: "bg-blue-500/10", text: "text-blue-400", border: "border-blue-500/20" },
+  }[color] || { bg: "bg-white/5", text: "text-gray-400", border: "border-white/10" };
 
   return (
     <div className="flex flex-col items-center gap-2 micro-2">
@@ -617,22 +616,22 @@ function FeatureCard({ icon, title, desc, addRef }) {
   const ref = useRef(null);
   useEffect(() => { if (ref.current && addRef) addRef(ref.current); }, [addRef]);
   return (
-    <article ref={ref} className="reveal-card rounded-2xl p-6 bg-white border border-gray-300 transition-all" tabIndex={0} aria-labelledby={`feature-${title}`}>
+    <article ref={ref} className="reveal-card rounded-2xl p-6 bg-[#0A1628] border border-white/10 transition-all hover:border-white/20" tabIndex={0} aria-labelledby={`feature-${title}`}>
       <div className="flex items-start gap-4">
-        <div className="p-3 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center">
-          <FontAwesomeIcon icon={icon} className="text-2xl text-gray-700" />
+        <div className="p-3 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
+          <FontAwesomeIcon icon={icon} className="text-2xl text-sky-400" />
         </div>
 
         <div className="flex-1">
-          <h4 id={`feature-${title}`} className="text-lg font-semibold text-gray-900">{title}</h4>
-          <p className="text-sm text-gray-600 mt-2">{desc}</p>
+          <h4 id={`feature-${title}`} className="text-lg font-semibold text-gray-100">{title}</h4>
+          <p className="text-sm text-gray-400 mt-2">{desc}</p>
 
           <div className="mt-4 flex items-center gap-3">
-            <button className="text-xs flex px-2 py-1.5 rounded-full border border-gray-300 cursor-pointer">Learn </button>
-            <button className="text-xs flex px-3 py-1.5 rounded-full bg-sky-700 text-white cursor-pointer">Try it</button>
-            <div className="flex items-center gap-2 ml-auto text-xs text-gray-400">
+            <button className="text-xs flex px-2 py-1.5 rounded-full border border-white/10 bg-white/5 cursor-pointer text-gray-300 hover:bg-white/10 transition">Learn </button>
+            <button className="text-xs flex px-3 py-1.5 rounded-full bg-sky-600 text-white cursor-pointer hover:bg-sky-500 transition">Try it</button>
+            <div className="flex items-center gap-2 ml-auto text-xs text-gray-500">
               <span>Latency</span>
-              <span className="px-2.5 py-1 rounded-full bg-gray-100 border text-gray-700">12ms</span>
+              <span className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400">12ms</span>
             </div>
           </div>
         </div>
@@ -652,27 +651,27 @@ function VideoModal({ onClose }) {
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center modal-backdrop" role="dialog" aria-modal="true" aria-label="Overview video">
-      <div className="w-full max-w-4xl mx-4 modal-card bg-white p-4 md:p-6">
+      <div className="w-full max-w-4xl mx-4 modal-card bg-[#0A1628] border border-white/10 p-4 md:p-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded bg-gray-100 flex items-center justify-center"><FontAwesomeIcon icon={faPlay} /></div>
+            <div className="w-10 h-10 rounded bg-white/5 border border-white/10 flex items-center justify-center text-sky-400"><FontAwesomeIcon icon={faPlay} /></div>
             <div>
-              <div className="font-semibold">AgentGuard overview</div>
+              <div className="font-semibold text-gray-100">AgentGuard overview</div>
               <div className="text-sm text-gray-500">A quick 90s intro</div>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <button onClick={() => { navigator.clipboard?.writeText(window.location.href); }} className="px-3 py-1.5 rounded-full border border-gray-300 text-sm cursor-pointer">Copy link</button>
-            <button onClick={onClose} className="px-3 py-1.5 rounded-full text-sm text-white bg-gray-900 border cursor-pointer">Close</button>
+            <button onClick={() => { navigator.clipboard?.writeText(window.location.href); }} className="px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-sm cursor-pointer text-gray-300 hover:bg-white/10 transition">Copy link</button>
+            <button onClick={onClose} className="px-3 py-1.5 rounded-full text-sm text-white bg-sky-600 border cursor-pointer hover:bg-sky-500 transition">Close</button>
           </div>
         </div>
 
-        <div className="mt-4 bg-black rounded overflow-hidden aspect-[16/9]">
+        <div className="mt-4 bg-black rounded overflow-hidden aspect-[16/9] border border-white/5">
           {/* placeholder video iframe-like block */}
           <div className="w-full h-full flex items-center justify-center text-white text-sm">Video (placeholder)</div>
         </div>
 
-        <div className="mt-4 text-sm text-gray-600">Press Esc to close.</div>
+        <div className="mt-4 text-sm text-gray-400">Press Esc to close.</div>
       </div>
     </div>
   );
@@ -687,20 +686,19 @@ function FAQ() {
   ];
   const [open, setOpen] = useState(0);
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 cursor-pointer">
       {items.map((it, i) => (
-        <div key={i} className="border border-gray-100 rounded-lg">
-          <button onClick={() => setOpen(open === i ? -1 : i)} className="w-full flex items-center justify-between px-4 py-3 text-left">
+        <div key={i} className="border border-white/10 cursor-pointer bg-white/5 rounded-2xl hover:border-white/20 transition ">
+          <button onClick={() => setOpen(open === i ? -1 : i)} className="w-full flex items-center cursor-pointer justify-between px-4 py-3 text-left">
             <div>
-              <div className="font-medium">{it.q}</div>
-              <div className="text-sm text-gray-500">{open === i ? "Open" : "Closed"}</div>
+              <div className="font-medium text-gray-100">{it.q}</div>
             </div>
-            <div className="text-gray-500">
+            <div className="text-gray-400">
               <FontAwesomeIcon icon={open === i ? faChevronUp : faChevronDown} />
             </div>
           </button>
           <div className={`px-4 pb-4 transition-all ${open === i ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0 overflow-hidden"}`}>
-            <div className="pt-2 text-sm text-gray-600">{it.a}</div>
+            <div className="pt-2 text-sm text-gray-400">{it.a}</div>
           </div>
         </div>
       ))}

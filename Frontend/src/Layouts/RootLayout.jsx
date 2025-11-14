@@ -23,7 +23,7 @@ export const RootLayout = () => {
         <NavBar/>
         <Outlet/>
         <div className="fixed bottom-6 rounded-full  right-6 text-md text-gray-600 z-10 hover:text-gray-500 px-1.5 py-2 cursor-pointer hover:bg-gray-100 transition-colors">
-          <FontAwesomeIcon icon={faCircleQuestion} className="text-2xl" />
+          <FontAwesomeIcon icon={faCircleQuestion} className="text-2xl text-white" />
         </div>
     </ScreenContext.Provider>
   )
