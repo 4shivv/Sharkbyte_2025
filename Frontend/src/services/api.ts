@@ -137,13 +137,13 @@ api.interceptors.response.use(
 export const authAPI = {
   // FR-1.1: Register a new user with email and password
   register: async (data: RegisterRequest): Promise<AuthResponse> => {
-    const response = await api.post<AuthResponse>('/auth/register', data);
+    const response = await api.post<AuthResponse>('/api/auth/register', data);
     return response.data;
   },
 
   // FR-1.2: Login user with credentials and return JWT
   login: async (data: LoginRequest): Promise<AuthResponse> => {
-    const response = await api.post<AuthResponse>('/auth/login', data);
+    const response = await api.post<AuthResponse>('/api/auth/login', data);
     // Store token and user data
     if (response.data.token) {
       localStorage.setItem('authToken', response.data.token);
@@ -171,25 +171,25 @@ export const authAPI = {
 export const agentAPI = {
   // FR-2.6: Get all agents for authenticated user
   getAll: async (): Promise<Agent[]> => {
-    const response = await api.get<Agent[]>('/agents');
+    const response = await api.get<Agent[]>('/api/agents');
     return response.data;
   },
 
   // FR-2.1, FR-2.2, FR-2.3, FR-2.4: Create new agent with mandatory ID, owner, description, and system prompt
   create: async (agentData: CreateAgentRequest): Promise<Agent> => {
-    const response = await api.post<Agent>('/agents', agentData);
+    const response = await api.post<Agent>('/api/agents', agentData);
     return response.data;
   },
 
   // Get single agent by ID
   getById: async (id: string): Promise<Agent> => {
-    const response = await api.get<Agent>(`/agents/${id}`);
+    const response = await api.get<Agent>(`/api/agents/${id}`);
     return response.data;
   },
 
   // FR-2.5: Update agent details (owner, description, system_prompt)
   update: async (id: string, agentData: UpdateAgentRequest): Promise<Agent> => {
-    const response = await api.put<Agent>(`/agents/${id}`, agentData);
+    const response = await api.put<Agent>(`/api/agents/${id}`, agentData);
     return response.data;
   },
 };
@@ -198,25 +198,25 @@ export const agentAPI = {
 export const scanAPI = {
   // FR-3.1: Initiate security scan for an agent
   initiateScan: async (agentId: string): Promise<InitiateScanResponse> => {
-    const response = await api.post<InitiateScanResponse>(`/agents/${agentId}/scan`);
+    const response = await api.post<InitiateScanResponse>(`/api/agents/${agentId}/scan`);
     return response.data;
   },
 
   // FR-3.8: Get scan result by ID
   getScanResult: async (scanId: string): Promise<Scan> => {
-    const response = await api.get<Scan>(`/scans/${scanId}`);
+    const response = await api.get<Scan>(`/api/scans/${scanId}`);
     return response.data;
   },
 
   // Get all scans for an agent
   getAgentScans: async (agentId: string): Promise<Scan[]> => {
-    const response = await api.get<Scan[]>(`/agents/${agentId}/scans`);
+    const response = await api.get<Scan[]>(`/api/agents/${agentId}/scans`);
     return response.data;
   },
 
   // FR-4.7: Generate hardened prompt using Gemini API
   remediatePrompt: async (scanId: string): Promise<RemediationResponse> => {
-    const response = await api.post<RemediationResponse>(`/scans/${scanId}/remediate`);
+    const response = await api.post<RemediationResponse>(`/api/scans/${scanId}/remediate`);
     return response.data;
   },
 };
